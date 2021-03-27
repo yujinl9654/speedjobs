@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "jwt.secret-key",
+      "type": "java.lang.String",
+      "description": "Description for jwt.secret-key."
+    },
+    {
+      "name": "jwt.access-validity-in-ms",
+      "type": "java.lang.Long",
+      "description": "Description for jwt.access-validity-in-ms."
+    },
+    {
+      "name": "jwt.refresh-validity-in-ms",
+      "type": "java.lang.Long",
+      "description": "Description for jwt.refresh-validity-in-ms."
+    }
+  ]
+}
