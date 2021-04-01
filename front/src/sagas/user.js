@@ -13,9 +13,18 @@ import {
 } from '../reducers/user';
 
 function logInAPI(data) {
-  return axios.post('/auth/login', data);
+  // 로그인
+  console.log(data);
+  axios.post('/auth/login', data);
+  // .then((response) => {
+  //   return response;
+  // })
+  // .catch((err) => {
+  //   return new Error(err);
+  // });
 }
 
+// 보안용
 function logInAfterApi(data) {
   // console.log(data);
   // eslint-disable-next-line
@@ -24,12 +33,14 @@ function logInAfterApi(data) {
 }
 
 function getUserApi() {
+  // 로그인된 정보를 조회
   return axios.get('/user/me');
 }
 
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data);
+    console.log(result);
 
     logInAfterApi(result.data);
 
