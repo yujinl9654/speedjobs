@@ -73,11 +73,8 @@ export default function LikeList(props) {
             {/* 태그 end*/}
 
             {/* 게시글*/}
-            <div
-              className={'col-12 col-lg-10'}
-              style={{ paddingLeft: '80px', paddingRight: '25px' }}
-            >
-              {mapPost}
+            <div className={'col-12 col-lg-10'}>
+              <div className={'container-fluid'}>{mapPost}</div>
             </div>
             {/* 게시글 end*/}
           </div>
