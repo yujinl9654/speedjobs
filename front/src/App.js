@@ -9,7 +9,6 @@ import Header from './components/includes/Header';
 import Footer from './components/includes/Footer';
 import Home from './components/pages/Home';
 import Recruitment from './components/pages/Recruitment';
-import RecruitNew from './components/pages/RecruitNew';
 import RecruitmentDetail from './components/pages/RecruitmentDetail';
 import Community from './components/pages/Community';
 import PostDetail from './components/pages/PostDetail';
@@ -19,6 +18,7 @@ import RecruitLike from './components/pages/RecruitLike';
 import CommuLike from './components/pages/CommuLike';
 import MemberRegistration from './components/pages/MemberRegistration';
 import { loginInterceptor } from './auth/interceptor';
+import { ME_REQUEST } from './reducers/user';
 
 const Container = styled.div`
   padding-bottom: 40px;
@@ -28,11 +28,23 @@ const Container = styled.div`
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const [refresh] = useCookies(['REFRESH_TOKEN']);
+  const [refresh, setRefresh, removeRefresh] = useCookies(['REFRESH_TOKEN']);
   // 리프레시 토큰발급 함수 인터셉터 사용
   useEffect(() => {
-    loginInterceptor(refresh);
-  }, [refresh]);
+    console.log('리프레시');
+    setRefresh('toRefresh', 'toRefresh');
+    removeRefresh('toRefresh');
+    loginInterceptor(refresh, removeRefresh);
+  }, [refresh, removeRefresh, setRefresh, user.logInDone]);
+  //  유저 상태 유지
+  useEffect(() => {
+    console.log('상태유지');
+    if (!user.meDone) {
+      dispatch({
+        type: ME_REQUEST,
+      });
+    }
+  }, [dispatch, user.meDone]);
   // 메타데이터설정 아이폰일경우 화면크기 조정
   useEffect(() => {
     const meta = document.createElement('meta');
@@ -57,7 +69,6 @@ function App() {
           <Route exact path={'/likelist/community'} component={CommuLike} />
           <Route exact path={'/likelist/recruit'} component={RecruitLike} />
           <Route exact path={'/registration'} component={MemberRegistration} />
-          <Route exact path={'/recruitnew'} component={RecruitNew} />
         </Container>
         <Footer />
       </BrowserRouter>
