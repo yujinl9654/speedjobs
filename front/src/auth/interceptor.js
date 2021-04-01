@@ -58,6 +58,7 @@ export const loginInterceptor = (refresh, removeRefresh) => {
           });
         resolve(res);
       }
+      reject(error);
     });
   };
   axios.interceptors.request.eject(requestInterceptorConfig);
