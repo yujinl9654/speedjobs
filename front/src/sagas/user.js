@@ -16,14 +16,11 @@ import {
 } from '../reducers/user';
 
 function logInAPI(data) {
-  axios
+  const res = axios
     .post('/auth/login', data)
-    .then((response) => {
-      return response;
-    })
-    .catch((err) => {
-      return new Error(err);
-    });
+    .then((response) => response)
+    .catch((err) => new Error(err));
+  return res;
 }
 
 function logInAfterApi(data) {
