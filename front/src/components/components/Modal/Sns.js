@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Google, Linkedin, Github } from 'react-bootstrap-icons';
-import { RiKakaoTalkLine } from 'react-icons/all';
 
 const MySns = styled.div`
   text-align: center;
@@ -48,9 +47,6 @@ export default function Sns(props) {
         <div className="logo">
           <a href="http://localhost:8081/oauth2/authorization/google">
             <Google onClick={() => props.setSns(true)} />
-          </a>
-          <a href="http://localhost:8081/oauth2/authorization/kakao">
-            <RiKakaoTalkLine onClick={() => props.setSns(true)} />
           </a>
           <a href="http://localhost:8081/oauth2/authorization/github">
             <Github onClick={() => props.setSns(true)} />

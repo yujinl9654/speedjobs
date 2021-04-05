@@ -147,7 +147,7 @@ export function CommentsForm(props) {
           maxLength="300"
           rows="4"
           value={comForm.content}
-          placeholder="댓글을 입력해주세요."
+          placeholder="내용을 입력해주세요."
           onKeyPress={cal}
           onKeyDown={cal}
           onKeyUp={cal}
