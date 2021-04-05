@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import { Google, Linkedin, Github } from 'react-bootstrap-icons';
 import { RiKakaoTalkLine } from 'react-icons/all';
 
