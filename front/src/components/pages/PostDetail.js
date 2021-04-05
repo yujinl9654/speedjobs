@@ -6,7 +6,7 @@ import {
   StyledLike,
   TagBody,
 } from '../components/Styled';
-import PostDetailComment from './PostDetailComment';
+import PostDetailComment from '../components/comment/PostDetailComment';
 
 export default function PostDetail(props) {
   const history = useHistory();
