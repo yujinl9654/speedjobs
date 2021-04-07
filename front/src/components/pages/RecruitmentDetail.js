@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { StyledButton, StyledHeaderDiv } from '../components/Styled';
@@ -100,6 +100,7 @@ export default function RecruitmentDetail(props) {
           </div>
           {/* 요약 end*/}
           {/* 채팅컴포넌트*/}
+          <ChatIcon />
           <div
             className={'col-lg-5 col-12'}
             style={{ padding: '15px 5px 0px' }}
@@ -110,6 +111,10 @@ export default function RecruitmentDetail(props) {
             </Chatting>
           </div>
         </div>
+        {/* <StyledButton hcenter wide>*/}
+        {/*  지원*/}
+        {/* </StyledButton>*/}
+        {/* 본문end*/}
       </div>
     </>
   );

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import {
   PostTextArea,
@@ -9,10 +9,37 @@ import {
   StyledHeaderDiv,
   TagBody,
 } from '../components/Styled';
+import { POST_ADD_REQUEST } from '../../reducers/post';
 
 export default function PostAdd(props) {
+  const [form, setForm] = useState({ title: '', content: '' });
+  const post = useSelector((state) => state.post);
+  const dispatch = useDispatch();
   const history = useHistory();
-  const [postForm, setPostForm] = useState({ content: '', title: '' });
+  const onChangHandler = useCallback((e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }, []);
+  useEffect(() => {
+    if (post.postAddDone) {
+      history.goBack();
+    }
+  }, [post, history]);
+  const onSubmitHandler = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (form.title === '' || form.content === '') {
+        if (form.title === '') {
+          alert('제목을 입력하세요');
+        } else if (form.content === '') {
+          alert('내용을 입력하세요');
+        }
+      } else {
+        dispatch({ type: POST_ADD_REQUEST, data: form });
+      }
+    },
+    [dispatch, form]
+  );
+
   return (
     <div
       className="container text-left"
@@ -30,10 +57,9 @@ export default function PostAdd(props) {
           >
             <div className={'col-md-8 col-6 p-0'} style={{ marginTop: '14px' }}>
               <PostTitleInput
+                onChange={(e) => onChangHandler(e)}
+                name={'title'}
                 placeholder={'제목을 입력해주세요'}
-                onChange={(e) =>
-                  setPostForm({ ...postForm, title: e.target.value })
-                }
               />
             </div>
             <div
@@ -43,12 +69,8 @@ export default function PostAdd(props) {
               <StyledButton
                 wide
                 style={{ letterSpacing: '10px', paddingLeft: '20px' }}
-                onClick={() => {
-                  // history.goBack()
-                  axios.post('/post/new', postForm).catch((err) => {
-                    console.log('error');
-                  });
-                  // console.log(axios.get('/post/paging?page=0&size=3'));
+                onClick={(e) => {
+                  onSubmitHandler(e);
                 }}
               >
                 등록
@@ -63,11 +85,10 @@ export default function PostAdd(props) {
           {/* 태그*/}
           {/* 본문*/}
           <PostTextArea
+            name={'content'}
+            onChange={(e) => onChangHandler(e)}
             placeholder="내용을 입력하세요"
             rows={'20'}
-            onChange={(e) =>
-              setPostForm({ ...postForm, content: e.target.value })
-            }
           />
           <div style={{ marginTop: '40px' }}>
             <TagBody grey>백엔드</TagBody>
