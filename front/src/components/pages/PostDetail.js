@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router';
+import { HeartFill, ShareFill } from 'react-bootstrap-icons';
 import {
   StyledButton,
   StyledHeaderDiv,
@@ -8,12 +9,8 @@ import {
 } from '../components/Styled';
 import PostDetailComment from '../components/comment/PostDetailComment';
 
-
 export default function PostDetail(props) {
   const history = useHistory();
-  useEffect(() => {
-    window.scroll(0, 0);
-  }, []);
   return (
     <>
       <div
@@ -104,7 +101,22 @@ export default function PostDetail(props) {
           </div>
         </div>
         {/* 찜 공유*/}
-        <StyledLike></StyledLike>
+        <StyledLike>
+          <div style={{ width: '100%', textAlign: 'center' }}>
+            <span>
+              <HeartFill></HeartFill>
+            </span>
+          </div>
+          <div style={{ width: '100%', textAlign: 'center', fontSize: '10px' }}>
+            99+
+          </div>
+          <div style={{ width: '100%', textAlign: 'center' }}>
+            <span>
+              <ShareFill></ShareFill>
+            </span>
+          </div>
+        </StyledLike>
+        <PostDetailComment></PostDetailComment>
       </div>
     </>
   );

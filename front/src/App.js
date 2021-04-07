@@ -21,6 +21,7 @@ import { loginInterceptor } from './auth/interceptor';
 import { ME_REQUEST } from './reducers/user';
 import PostAdd from './components/pages/PostAdd';
 import RecruitAdd from './components/pages/RecruitAdd';
+import ScrollToTop from './components/includes/ScrollToTop';
 
 const Container = styled.div`
   padding-bottom: 40px;
@@ -71,13 +72,14 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <ScrollToTop></ScrollToTop>
         <Header />
         <Container>
           <Route exact path={'/community'} component={Community} />
           <Route exact path={'/'} component={Home} />
           <Route exact path={'/recruit'} component={Recruitment} />
           <Route exact path={'/recruit/detail'} component={RecruitmentDetail} />
-  <Route path={'/community/post/:id'} component={PostDetail} />
+          <Route path={'/community/post/:id'} component={PostDetail} />
           <Route exact path={'/profile'} component={Profile} />
           <Route exact path={'/resume'} component={Resume} />
           <Route exact path={'/likelist/community'} component={CommuLike} />
