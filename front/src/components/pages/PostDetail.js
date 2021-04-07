@@ -8,6 +8,7 @@ import {
 } from '../components/Styled';
 import PostDetailComment from '../components/comment/PostDetailComment';
 
+
 export default function PostDetail(props) {
   const history = useHistory();
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function PostDetail(props) {
             style={{ paddingTop: '15px' }}
           >
             <div className={'col-md-8 col-4 p-0'} style={{ marginTop: '14px' }}>
-              <h5>더미제목</h5>
+              <h5>{props.match.params.id}</h5>
             </div>
             <div className={'col-md-3 col-4 text-right'}>
               <StyledButton
@@ -101,8 +102,6 @@ export default function PostDetail(props) {
             안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요
             안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요
           </div>
-
-          <PostDetailComment></PostDetailComment>
         </div>
         {/* 찜 공유*/}
         <StyledLike></StyledLike>
