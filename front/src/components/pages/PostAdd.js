@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router';
 import {
@@ -45,14 +45,9 @@ export default function PostAdd(props) {
                 style={{ letterSpacing: '10px', paddingLeft: '20px' }}
                 onClick={() => {
                   // history.goBack()
-                  axios
-                    .post('/post/new', {
-                      content: '상휘천재',
-                      title: '우후후후ㅜ후',
-                    })
-                    .catch((err) => {
-                      console.log('error');
-                    });
+                  axios.post('/post/new', postForm).catch((err) => {
+                    console.log('error');
+                  });
                   // console.log(axios.get('/post/paging?page=0&size=3'));
                 }}
               >

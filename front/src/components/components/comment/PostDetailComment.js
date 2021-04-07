@@ -23,8 +23,8 @@ export default function PostDetailComment(props) {
   const mapComment = dummyComment.map((comment) => (
     <Comment
       writer={comment.title}
-      content={comment.content}
-      date="9999-99-99"
+      content={comment.postDetail.content}
+      date={`${comment.createdDate[0]}/${comment.createdDate[1]}/${comment.createdDate[2]}`}
     ></Comment>
   ));
 
@@ -49,9 +49,9 @@ export default function PostDetailComment(props) {
   useEffect(() => {
     if (comment.commentAddDone) {
       console.log('AddData= ', comment.commentAddData);
-      setDummyComment((prev) => newDummy.concat(prev));
+      // setDummyComment((prev) => newDummy.concat(prev));
       dispatch({
-        type: COMMENT_ADD_DONE,
+        type: COMMENT_GET_REQUEST,
       });
     } else if (comment.commentGetDone) {
       const getArr = comment.commentGetData.content;
@@ -60,7 +60,7 @@ export default function PostDetailComment(props) {
         type: COMMENT_GET_DONE,
       });
     }
-  }, [comment, dispatch, newDummy]);
+  }, [comment, dispatch]);
 
   return (
     <>

@@ -8,7 +8,6 @@ import {
 } from '../components/Styled';
 import PostDetailComment from '../components/comment/PostDetailComment';
 
-
 export default function PostDetail(props) {
   const history = useHistory();
   useEffect(() => {
