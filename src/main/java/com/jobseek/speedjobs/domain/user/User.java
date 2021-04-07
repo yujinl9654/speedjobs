@@ -1,22 +1,24 @@
 package com.jobseek.speedjobs.domain.user;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.jobseek.speedjobs.domain.BaseTimeEntity;
 
+import com.jobseek.speedjobs.domain.corporation.Corporation;
+import com.jobseek.speedjobs.domain.member.Member;
+import com.jobseek.speedjobs.domain.post.Post;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @ToString
 @Getter
@@ -29,6 +31,7 @@ public class User extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Long id;
 
 	private String name;
@@ -49,6 +52,15 @@ public class User extends BaseTimeEntity {
 
 	@Column(name = "oauth_id")
 	private String oauthId;
+
+	@OneToOne(mappedBy = "user", fetch = LAZY, cascade = ALL)
+	private Member member;
+
+	@OneToOne(mappedBy = "user", fetch = LAZY, cascade = ALL)
+	private Corporation corporation;
+
+	@OneToMany(mappedBy = "user", cascade = ALL)
+	private List<Post> postList = new ArrayList<>();
 
 	public User update(String name, String picture) {
 		this.name = name;
