@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import {
   PostTextArea,
@@ -11,6 +11,8 @@ import {
 
 export default function PostAdd(props) {
   const history = useHistory();
+  const [postForm, setPostForm] = useState({ content: '', title: '' });
+
   return (
     <div
       className="container text-left"
@@ -27,7 +29,12 @@ export default function PostAdd(props) {
             style={{ paddingTop: '15px' }}
           >
             <div className={'col-md-8 col-6 p-0'} style={{ marginTop: '14px' }}>
-              <PostTitleInput placeholder={'제목을 입력해주세요'} />
+              <PostTitleInput
+                placeholder={'제목을 입력해주세요'}
+                onChange={(e) =>
+                  setPostForm({ ...postForm, title: e.target.value })
+                }
+              />
             </div>
             <div
               className={'col-md-4 col-6 text-right'}
@@ -49,7 +56,13 @@ export default function PostAdd(props) {
           <PostWriterDate>작성자 2020-01-01</PostWriterDate>
           {/* 태그*/}
           {/* 본문*/}
-          <PostTextArea placeholder="내용을 입력하세요" rows={'20'} />
+          <PostTextArea
+            placeholder="내용을 입력하세요"
+            rows={'20'}
+            onChange={(e) =>
+              setPostForm({ ...postForm, content: e.target.value })
+            }
+          />
           <div style={{ marginTop: '40px' }}>
             <TagBody grey>백엔드</TagBody>
             <TagBody grey>백엔드</TagBody>

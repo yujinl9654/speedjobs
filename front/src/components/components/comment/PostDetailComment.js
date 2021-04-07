@@ -1,6 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import styled from 'styled-components';
 import Comment, { CommentsForm } from './Comment';
+import {
+  COMMENT_ADD_DONE,
+  COMMENT_ADD_REQUEST,
+  COMMENT_GET_DONE,
+  COMMENT_GET_REQUEST,
+} from '../../../reducers/comment';
 
 const BlogComment = styled.div`
   position: relative;
@@ -11,39 +19,48 @@ const BlogComment = styled.div`
 const CommentList = styled.div``;
 
 export default function PostDetailComment(props) {
-  const dummy = () => {
-    const dummyArr = [];
-
-    for (let i = 0; i < 10; i++) {
-      dummyArr.push({
-        writer: i + '번 작성자',
-        content: i + '번 작성자가 적은 댓글입니다.',
-        date: '2020-01-01',
-      });
-    }
-    return dummyArr;
-  };
-
-  const [dummyComment, setDummyComment] = useState(dummy);
-
+  const [dummyComment, setDummyComment] = useState([]);
   const mapComment = dummyComment.map((comment) => (
     <Comment
-      writer={comment.writer}
+      writer={comment.title}
       content={comment.content}
-      date={comment.date}
+      date="9999-99-99"
     ></Comment>
   ));
 
-  const addComment = (comment) => {
-    const newComment = [
-      {
-        writer: comment.writer,
-        content: comment.content,
-        date: comment.date,
-      },
-    ];
-    setDummyComment((prev) => newComment.concat(prev));
+  const [newDummy, setNewDummy] = useState([]);
+  const comment = useSelector((state) => state.comment);
+  const dispatch = useDispatch();
+  const addComment = (newCom) => {
+    dispatch({
+      type: COMMENT_ADD_REQUEST,
+      data: newCom,
+    });
+    setNewDummy([newCom]);
   };
+  useEffect(() => {
+    if (!comment.commentGetLoading) {
+      dispatch({
+        type: COMMENT_GET_REQUEST,
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (comment.commentAddDone) {
+      console.log('AddData= ', comment.commentAddData);
+      setDummyComment((prev) => newDummy.concat(prev));
+      dispatch({
+        type: COMMENT_ADD_DONE,
+      });
+    } else if (comment.commentGetDone) {
+      const getArr = comment.commentGetData.content;
+      setDummyComment([...getArr]);
+      dispatch({
+        type: COMMENT_GET_DONE,
+      });
+    }
+  }, [comment, dispatch, newDummy]);
 
   return (
     <>
