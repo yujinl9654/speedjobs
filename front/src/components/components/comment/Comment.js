@@ -52,7 +52,7 @@ const A1 = styled.a`
   text-decoration: none;
 `;
 
-const P1 = styled.p`
+const P1 = styled.div`
   font-size: 14px;
   color: #4e5564;
   padding-bottom: 10px;

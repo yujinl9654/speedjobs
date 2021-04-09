@@ -99,8 +99,6 @@ export default function PostDetail(props) {
             안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요
             안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요
           </div>
-
-          <PostDetailComment></PostDetailComment>
         </div>
         {/* 찜 공유*/}
         <StyledLike>
@@ -118,7 +116,7 @@ export default function PostDetail(props) {
             </span>
           </div>
         </StyledLike>
-        <PostDetailComment></PostDetailComment>
+        <PostDetailComment />
       </div>
     </>
   );
