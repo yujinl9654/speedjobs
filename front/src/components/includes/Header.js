@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Justify, PersonCircle, Search } from 'react-bootstrap-icons';
+import { PersonCircle, Search } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 } from 'uuid';
@@ -15,6 +15,7 @@ import {
   LOG_OUT_DONE,
 } from '../../reducers/user';
 import { POST_ADD_DONE } from '../../reducers/post';
+import { RECRUIT_ADD_DONE } from '../../reducers/recruit';
 
 // 네비바스타일
 const NavBar = styled.div`
@@ -79,10 +80,14 @@ export default function Header(props) {
   // 팝업 동작 인식
   useEffect(() => {
     // 회원가입
+
     if (state.user.signUpDone) {
       setPopModal(true);
     } // 로그인
-    else if (state.user.logInDone && !state.user.logInWelcomed) {
+    else if (state.recruit.recruitAddDone) {
+      dispatch({ type: RECRUIT_ADD_DONE });
+      addPop({ type: 'green', id: v4(), text: '공고가 등록되었습니다' });
+    } else if (state.user.logInDone && !state.user.logInWelcomed) {
       // v4 는 아이디를 자동으로 넣어줍니다
       // 확실한 아이디가 있을경우 비추입니다
       addPop({ type: 'login', id: v4(), text: state.user.me.name });
@@ -126,9 +131,7 @@ export default function Header(props) {
         <NavSearch>
           <Search></Search>
         </NavSearch>
-        <NavMenu>
-          <Justify></Justify>
-        </NavMenu>
+        <NavMenu></NavMenu>
         <RightContainer>
           <NavDrop>
             <PersonCircle></PersonCircle>
