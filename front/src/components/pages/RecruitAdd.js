@@ -40,7 +40,7 @@ export default function RecruitAdd() {
         setForm({ content: '', title: '' });
       }
     },
-    [dispatch, form, recruit]
+    [dispatch, form, recruit.content, recruit.title]
   );
 
   return (

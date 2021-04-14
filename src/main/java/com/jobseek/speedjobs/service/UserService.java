@@ -95,7 +95,7 @@ public class UserService {
 	public void update(Long id, MemberUpdateRequest request) {
 		User user = userRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("없는 유저입니다."));
-		user.setPassword(request.getPassword());
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		user.setPicture(request.getPicture());
 		user.setContact(request.getContact());
 		Member member = user.getMember();
