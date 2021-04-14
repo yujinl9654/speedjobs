@@ -7,7 +7,7 @@ import {
 } from '../components/Styled';
 import SideMenu from '../components/SideMenu';
 import ProfileContents from '../components/Profile/ProfileContents';
-import ProfileImage from '../components/Profile/ProfileImage';
+import ProfileImage2 from '../components/Profile/ProfileImage2';
 
 export default function Profile() {
   return (
@@ -41,7 +41,7 @@ export default function Profile() {
             </StyledLeftLayout>
             <StyledArticle className={'col-12 col-lg-10'}>
               <div className={'container-fluid'}>
-                <ProfileImage />
+                <ProfileImage2 />
                 <ProfileContents />
               </div>
             </StyledArticle>
