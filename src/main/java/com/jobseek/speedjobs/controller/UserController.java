@@ -1,10 +1,15 @@
 package com.jobseek.speedjobs.controller;
 
+import com.jobseek.speedjobs.domain.member.Member;
+import com.jobseek.speedjobs.dto.user.UserCheckRequest;
+import com.jobseek.speedjobs.dto.user.company.CompanyInfoResponse;
+import com.jobseek.speedjobs.dto.user.member.MemberInfoResponse;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +31,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Api(tags = {"User"})
 @RequiredArgsConstructor
 @RestController
@@ -53,6 +59,27 @@ public class UserController {
 	@GetMapping("/me")
 	public ResponseEntity<UserInfoResponse> getLoginUserInfo(@LoginUser User user) {
 		return ResponseEntity.ok(UserInfoResponse.from(user));
+	}
+
+	@ApiOperation(value = "회원 비밀번호 확인", notes = "로그인된 회원의 비밀번호를 확인한다.")
+	@PostMapping("/check")
+	public ResponseEntity<Void> checkLoginUserPassword(@Valid @RequestBody UserCheckRequest request,
+		@LoginUser User user) {
+		log.info("user info - {}", user);
+		userService.validateUserCheckRequest(request, user);
+		return ResponseEntity.noContent().build();
+	}
+
+	@ApiOperation(value = "개인회원 상세정보 조회", notes = "개인회원의 상세정보를 조회한다.")
+	@GetMapping("/member/{id}")
+	public ResponseEntity<MemberInfoResponse> getMemberDetail(@LoginUser User user) {
+		return ResponseEntity.ok(userService.getMember(user));
+	}
+
+	@ApiOperation(value = "기업회원 상세정보 조회", notes = "기업회원의 상세정보를 조회한다.")
+	@GetMapping("/company/{id}")
+	public ResponseEntity<CompanyInfoResponse> getCompanyDetail(@LoginUser User user) {
+		return ResponseEntity.ok(userService.getCompany(user));
 	}
 
 	@ApiOperation(value = "개인회원 정보 수정", notes = "자신의 정보를 수정한다.")

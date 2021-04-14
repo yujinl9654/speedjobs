@@ -1,6 +1,8 @@
 package com.jobseek.speedjobs.service;
 
-import java.util.Optional;
+import com.jobseek.speedjobs.dto.user.UserCheckRequest;
+import com.jobseek.speedjobs.dto.user.company.CompanyInfoResponse;
+import com.jobseek.speedjobs.dto.user.member.MemberInfoResponse;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -10,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jobseek.speedjobs.common.exception.NotExistException;
 import com.jobseek.speedjobs.domain.member.Member;
-import com.jobseek.speedjobs.domain.user.Provider;
 import com.jobseek.speedjobs.domain.user.Role;
 import com.jobseek.speedjobs.domain.user.User;
 import com.jobseek.speedjobs.domain.user.UserRepository;
@@ -47,7 +48,7 @@ public class UserService {
 
 	@Transactional
 	public Long saveCustomUser(String key) {
-		UserSaveRequest request = (UserSaveRequest)redisUtil.get(key)
+		UserSaveRequest request = (UserSaveRequest) redisUtil.get(key)
 			.orElseThrow(() -> new NotExistException("이미 처리된 요청이거나 시간초과되었습니다."));
 		redisUtil.delete(key);
 		User user = request.toEntity(passwordEncoder);
@@ -68,6 +69,26 @@ public class UserService {
 		if (userRepository.existsByEmail(request.getEmail())) {
 			throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
 		}
+	}
+
+	public void validateUserCheckRequest(UserCheckRequest request, User user) {
+		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+			throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+		}
+	}
+
+	public MemberInfoResponse getMember(User user) {
+		if (user.getRole() != Role.ROLE_MEMBER) {
+			throw new IllegalArgumentException("개인회원이 아닙니다.");
+		}
+		return MemberInfoResponse.of(user);
+	}
+
+	public CompanyInfoResponse getCompany(User user) {
+		if (user.getRole() != Role.ROLE_COMPANY) {
+			throw new IllegalArgumentException("기업회원이 아닙니다.");
+		}
+		return CompanyInfoResponse.of(user);
 	}
 
 	@Transactional
