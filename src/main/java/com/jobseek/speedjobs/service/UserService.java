@@ -59,11 +59,25 @@ public class UserService {
 		final String nameReg = "^[a-zA-Z가-힣]{2,15}$";
 		final String emailReg = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 		final String passwordReg = "^[a-zA-Z0-9_\\-!#$%.]{8,20}$";
+		final String contactReg = "^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$";
+		final String companyNameReg = "^[a-zA-Z가-힣]{2,30}$";
+		final String homepageReg = "^(http|https)\\://[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,6}(/\\S*)?$";
+		final String registrationNumReg = "^[0-9]{3}-[0-9]{2}-[0-9]{5}$";
 
 		if (!Pattern.matches(nameReg, request.getName()) ||
 			!Pattern.matches(emailReg, request.getEmail()) ||
 			!Pattern.matches(passwordReg, request.getPassword())) {
 			throw new IllegalArgumentException("회원가입 형식에 맞지 않습니다.");
+		}
+
+		if (request.getRole() == Role.ROLE_COMPANY) {
+			if (!Pattern.matches(contactReg, request.getContact()) ||
+				!Pattern.matches(companyNameReg, request.getCompanyName()) ||
+				!Pattern.matches(homepageReg, request.getHomepage()) ||
+				!Pattern.matches(registrationNumReg, request.getRegistrationNumber())
+			) {
+				throw new IllegalArgumentException("회원가입 형식에 맞지 않습니다.");
+			}
 		}
 
 		if (userRepository.existsByEmail(request.getEmail())) {
@@ -77,16 +91,20 @@ public class UserService {
 		}
 	}
 
-	public MemberInfoResponse getMember(User user) {
+	public MemberInfoResponse getMember(Long id, User user) {
 		if (user.getRole() != Role.ROLE_MEMBER) {
 			throw new IllegalArgumentException("개인회원이 아닙니다.");
+		} else if (id != user.getId()) {
+			throw new IllegalArgumentException("올바른 경로가 아닙니다.");
 		}
 		return MemberInfoResponse.of(user);
 	}
 
-	public CompanyInfoResponse getCompany(User user) {
+	public CompanyInfoResponse getCompany(Long id, User user) {
 		if (user.getRole() != Role.ROLE_COMPANY) {
 			throw new IllegalArgumentException("기업회원이 아닙니다.");
+		} else if (id != user.getId()) {
+			throw new IllegalArgumentException("올바른 경로가 아닙니다.");
 		}
 		return CompanyInfoResponse.of(user);
 	}
