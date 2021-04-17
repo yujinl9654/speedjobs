@@ -2,18 +2,20 @@ package com.jobseek.speedjobs.dto.post;
 
 import com.jobseek.speedjobs.domain.post.Post;
 import com.jobseek.speedjobs.domain.post.PostDetail;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.jobseek.speedjobs.domain.tag.Tag;
+import com.jobseek.speedjobs.domain.user.User;
+import lombok.*;
 
-@ToString
+import java.util.Set;
+
+@Setter
 @Getter
 @NoArgsConstructor
 public class PostSaveDto {
 
 	private String title;
 	private String content;
+	private Set<Long> tagIds;
 
 	@Builder
 	public PostSaveDto(String title, String content) {
@@ -22,7 +24,10 @@ public class PostSaveDto {
 	}
 
 	public Post toEntity() {
-		return Post.builder().title(title).postDetail(PostDetail.from(content)).build();
+		Post post = new Post();
+		post.setTitle(title);
+		post.setPostDetail(PostDetail.from(content));
+		return post;
 	}
 
 }

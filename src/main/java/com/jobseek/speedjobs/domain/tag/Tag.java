@@ -1,14 +1,11 @@
 package com.jobseek.speedjobs.domain.tag;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
@@ -29,11 +26,22 @@ public class Tag {
 	private Type type;
 
 	@Column(unique = true, length = 50)
-	private String tagName;
+	private String name;
 
-	@OneToMany(mappedBy = "tag", fetch = LAZY, cascade = ALL)
-	private List<BoardTag> boardTags = new ArrayList<>();
+	@OneToMany(mappedBy = "tag", fetch = LAZY, cascade = PERSIST)
+	private Set<PostTag> postTags = new HashSet<>();
 
-	@OneToMany(mappedBy = "tag", fetch = LAZY, cascade = ALL)
-	private List<RecruitTags> recruitTags = new ArrayList<>();
+	@OneToMany(mappedBy = "tag", fetch = LAZY, cascade = PERSIST)
+	private Set<RecruitTags> recruitTags = new HashSet<>();
+
+	@Builder
+	public Tag(Type type, String name) {
+		this.type = type;
+		this.name = name;
+	}
+
+	public void addPostTag(PostTag postTag) {
+		postTags.add(postTag);
+		postTag.setTag(this);
+	}
 }
