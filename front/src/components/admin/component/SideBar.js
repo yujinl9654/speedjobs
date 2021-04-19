@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { Squeeze } from 'hamburger-react';
 
 const SideBarBody = styled.div`
   position: fixed;
