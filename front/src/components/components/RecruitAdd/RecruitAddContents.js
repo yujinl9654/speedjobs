@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Tags from '../Tags';
-import AnnouncementDate from './AnnouncementDate';
 import CompanySummaryInfo from './CompanySummaryInfo';
 import AnnouncementInfo from './AnnouncementInfo';
 
@@ -14,20 +13,11 @@ export default function RecruitAddContents({ onChange }) {
     <>
       {/* 작성자 */}
       <div style={{ margin: '10px 0px 20px 0px' }}>작성자 2020-01-01</div>
-      {/* 공고 날짜 */}
-      <AnnouncementDate />
       {/* 회사 요약정보 */}
       <CompanySummaryInfo onChange={onChange} />
       {/* 공고정보 */}
-      <AnnouncementInfo />
+      <AnnouncementInfo onChange={onChange} />
       {/* 태그*/}
-      <div
-        style={{
-          marginTop: '20px',
-        }}
-      >
-        <Tags tagList={tags}>직무추가</Tags>
-      </div>
     </>
   );
 }
