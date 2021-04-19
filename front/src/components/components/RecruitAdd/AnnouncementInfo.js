@@ -70,14 +70,14 @@ export default function AnnouncementInfo({ onChange }) {
       const event = { target: { name: 'startRecruit', value: e } };
       onChange(event);
     },
-    [startDate]
+    [onChange]
   );
   const FinishDateHandler = useCallback(
     (e) => {
       const event = { target: { name: 'finishRecruit', value: e } };
       onChange(event);
     },
-    [finishDate]
+    [onChange]
   );
 
   const [tags] = useState([

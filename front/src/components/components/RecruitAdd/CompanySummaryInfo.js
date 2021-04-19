@@ -44,7 +44,7 @@ export default function CompanySummaryInfo({ onChange }) {
         type: COMPANY_GET_DONE,
       });
     }
-  }, [company]);
+  }, [company, dispatch]);
 
   return (
     <>

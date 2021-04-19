@@ -123,4 +123,11 @@ public class UserService {
 		member.setIntro(request.getIntro());
 	}
 
+	@Transactional
+	public void delete(Long id) {
+		User user = userRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("없는 유저입니다."));
+		userRepository.delete(user);
+	}
+
 }

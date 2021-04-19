@@ -23,14 +23,14 @@ export default function RecruitAdd() {
   const history = useHistory();
   const onChangHandler = useCallback(
     (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value })),
-    [form]
+    []
   );
   const onSubmitHandler = useCallback(
     (e) => {
       e.preventDefault();
       dispatch({ type: RECRUIT_ADD_REQUEST, data: form });
     },
-    [form]
+    [form, dispatch]
   );
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   StyledArticle,
   StyledButton,
@@ -7,6 +6,7 @@ import {
   StyledLeftLayout,
 } from '../components/Styled';
 import SideMenu from '../components/SideMenu';
+import ProfileModify from '../components/Profile/ProfileContents';
 
 export default function Profile() {
   return (
@@ -24,11 +24,9 @@ export default function Profile() {
               className={'col-md-3 col-4 text-right'}
               style={{ paddingRight: '0' }}
             >
-              <Link to="profile/modify">
-                <StyledButton style={{ marginRight: '0' }} wide>
-                  개인정보 수정
-                </StyledButton>
-              </Link>
+              <StyledButton style={{ marginRight: '0' }} wide>
+                개인정보 저장
+              </StyledButton>
             </div>
           </div>
         </StyledHeaderDiv>
@@ -42,7 +40,7 @@ export default function Profile() {
             </StyledLeftLayout>
             <StyledArticle className={'col-12 col-lg-10'}>
               <div className={'container-fluid'}>
-                <div>개인정보 조회 페이지</div>
+                <ProfileModify />
               </div>
             </StyledArticle>
           </div>

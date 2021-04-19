@@ -1,14 +1,8 @@
-import React, { useState } from 'react';
-import Tags from '../Tags';
+import React from 'react';
 import CompanySummaryInfo from './CompanySummaryInfo';
 import AnnouncementInfo from './AnnouncementInfo';
 
 export default function RecruitAddContents({ onChange }) {
-  const [tags] = useState([
-    { name: 'Backend', id: 0, selected: false },
-    { name: 'Frontend', id: 1, selected: false },
-    { name: 'Fullstack', id: 2, selected: false },
-  ]);
   return (
     <>
       {/* 작성자 */}
