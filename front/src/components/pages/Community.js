@@ -44,12 +44,31 @@ export default function Community(props) {
   const [, setLoading] = useState(false);
   const [postList, setPostList] = useState([]);
 
-  const [tags] = useState([
-    { name: 'backEnd', id: 0, selected: false },
-    { name: 'frontEnd', id: 1, selected: false },
-    { name: 'machineLearning', id: 2, selected: false },
-    { name: 'infra', id: 3, selected: false },
-  ]);
+  // const [tags] = useState([
+  //   { name: 'backEnd', id: 0, selected: false },
+  //   { name: 'frontEnd', id: 1, selected: false },
+  //   { name: 'machineLearning', id: 2, selected: false },
+  //   { name: 'infra', id: 3, selected: false },
+  // ]);
+  const [taglist, setTaglist] = useState([]);
+  const tagss = useSelector((state) => state.tag);
+  useEffect(() => {
+    if (tagss.tagGetData) {
+      const temp = Array.from(tagss.tagGetData.tags.POSITION);
+      // const res = [];
+      console.log(temp);
+      // temp.forEach((item) => {
+      //   res.concat([...res, { ...item, item }]);
+      //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+      // });
+      const tt = temp.map((t) => {
+        return { ...t, selected: false };
+      });
+      console.log(tt);
+      setTaglist((p) => [...p, ...tt]);
+    }
+  }, [tagss.tagGetData]);
+
   useEffect(() => {
     const currentObserver = observe.current;
     const divElm = targetRef.current;
@@ -87,57 +106,49 @@ export default function Community(props) {
       date={`${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`}
       fav="미구현"
       key={pl.id}
-    ></Post>
+    />
   ));
 
   return (
     <>
       <Banner />
       <div className={'container'}>
-        {/* 레이아웃 구분선*/}
-        <div className={'row justify-content-center'}>
-          {/* 태그 레이아웃 */}
-          <StyledLeftLayout className={'col-12 col-lg-3 text-left'}>
-            <Tags tagList={tags}>filter</Tags>
-          </StyledLeftLayout>
-          {/* 태그 end*/}
-
-          {/* 게시글*/}
-          <div ref={rootRef} className={'col-12 col-lg-9'}>
+        {/* 게시글*/}
+        <div ref={rootRef}>
+          <div
+            className={'text-right'}
+            style={{
+              position: 'relative',
+              height: '60px',
+            }}
+          >
             <div
-              className={'text-right'}
-              style={{
-                position: 'relative',
-                height: '60px',
-              }}
+              className={'row justify-content-end'}
+              style={{ padding: '10px', paddingTop: '0' }}
             >
-              <div
-                className={'row justify-content-end'}
-                style={{ padding: '10px', paddingTop: '0' }}
-              >
-                {me[0].role === 'ROLE_MEMBER' ? (
-                  <TagBody
-                    style={{ marginTop: '0', border: '1px solid #f5df4d' }}
-                    onClick={() => {
-                      history.push('./community/add');
-                    }}
-                  >
-                    글쓰기
-                  </TagBody>
-                ) : (
-                  ''
-                )}
-              </div>
+              <Tags tagList={taglist}>filter</Tags>
+              {user.me !== null ? (
+                <TagBody
+                  style={{ marginTop: '0', border: '1px solid #f5df4d' }}
+                  onClick={() => {
+                    history.push('./community/add');
+                  }}
+                >
+                  글쓰기
+                </TagBody>
+              ) : (
+                ''
+              )}
             </div>
-            {mapPost}
           </div>
-          {/* 게시글 end*/}
+          {mapPost}
         </div>
-        <div
-          style={{ top: '50px', position: 'relative', marginBottom: '100px' }}
-          ref={targetRef}
-        ></div>
+        {/* 게시글 end*/}
       </div>
+      <div
+        style={{ top: '50px', position: 'relative', marginBottom: '100px' }}
+        ref={targetRef}
+      ></div>
     </>
   );
 }

@@ -19,9 +19,9 @@ import javax.persistence.Table;
 
 import com.jobseek.speedjobs.domain.BaseTimeEntity;
 import com.jobseek.speedjobs.domain.company.Company;
-import com.jobseek.speedjobs.domain.likelist.CompanyLikeList;
-import com.jobseek.speedjobs.domain.likelist.PostLikeList;
-import com.jobseek.speedjobs.domain.likelist.RecruitLikeList;
+import com.jobseek.speedjobs.domain.likelist.CompanyLike;
+import com.jobseek.speedjobs.domain.likelist.PostLike;
+import com.jobseek.speedjobs.domain.likelist.RecruitLike;
 import com.jobseek.speedjobs.domain.member.Member;
 import com.jobseek.speedjobs.domain.message.Message;
 import com.jobseek.speedjobs.domain.post.Comment;
@@ -33,12 +33,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
+@ToString
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
@@ -79,13 +81,13 @@ public class User extends BaseTimeEntity {
 	private List<Post> postList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", fetch = LAZY, cascade = ALL)
-	private List<CompanyLikeList> companyLikeLists = new ArrayList<>();
+	private List<CompanyLike> companyLikes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", fetch = LAZY, cascade = ALL)
-	private List<RecruitLikeList> recruitLikeLists = new ArrayList<>();
+	private List<RecruitLike> recruitLikes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", fetch = LAZY, cascade = ALL)
-	private List<PostLikeList> postLikeLists = new ArrayList<>();
+	private List<PostLike> postLikes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", fetch = LAZY, cascade = ALL)
 	private List<Comment> commentList = new ArrayList<>();

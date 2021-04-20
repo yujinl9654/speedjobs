@@ -1,12 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 import {
+  ProfileDiv,
   StyledButton,
   StyledHeaderDiv,
+  StyledHeaderMargin,
   StyledLeftLayout,
 } from '../components/Styled';
 import SideMenu from '../components/SideMenu';
 import RecruitCard from '../components/RecruitCard';
 import Line from '../components/Line';
+import Tags from '../components/Tags';
 
 export default function CommunityLike(props) {
   const [update, setUpdate] = useState(0);
@@ -50,29 +55,48 @@ export default function CommunityLike(props) {
             temp.favorite = fav;
             setUpdate(update + 1);
           }}
-        ></RecruitCard>
+        />
         <Line margin={'20px'} />
       </div>
     );
   });
 
+  const [taglist, setTaglist] = useState([]);
+  const tagss = useSelector((state) => state.tag);
+  useEffect(() => {
+    if (tagss.tagGetData) {
+      const temp = Array.from(tagss.tagGetData.tags.POSITION);
+      // const res = [];
+      console.log(temp);
+      // temp.forEach((item) => {
+      //   res.concat([...res, { ...item, item }]);
+      //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+      // });
+      const tt = temp.map((t) => {
+        return { ...t, selected: false };
+      });
+      console.log(tt);
+      setTaglist((p) => [...p, ...tt]);
+    }
+  }, [tagss.tagGetData]);
+
   return (
     <>
       <div className={'container text-left'}>
         <StyledHeaderDiv padding>
-          <div className={'container row justify-content-end'}>
+          <StyledHeaderMargin className={'container row justify-content-end'}>
             <div
               className={'col-md-9 col-8'}
               style={{ marginTop: '14px', paddingTop: '5px' }}
             >
               <h5>공고 찜목록</h5>
             </div>
-            <div className={'col-md-3 col-4 text-right'}>
+            <div className={'col-md-3 col-4 text-right pr-0'}>
               <StyledButton wide>수정</StyledButton>
             </div>
-          </div>
+          </StyledHeaderMargin>
         </StyledHeaderDiv>
-        <div style={{ marginTop: '100px' }}>
+        <div className="container" style={{ marginTop: '70px' }}>
           <div className="row justify-content-center">
             <StyledLeftLayout
               borderNone
@@ -80,13 +104,15 @@ export default function CommunityLike(props) {
             >
               <SideMenu />
             </StyledLeftLayout>
-            <div
+            <ProfileDiv
               className={'col-12 col-lg-10'}
-              style={{ paddingLeft: '60px', paddingRight: '60px' }}
+              style={{ paddingLeft: '30px' }}
             >
+              <Tags tagList={taglist}>직무</Tags>
+
               {/* {mapPost}*/}
               {dummyOut}
-            </div>
+            </ProfileDiv>
           </div>
         </div>
       </div>
