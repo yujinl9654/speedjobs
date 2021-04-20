@@ -5,8 +5,6 @@ import userSaga from './user';
 import commentSaga from './comment';
 import postSage from './post';
 import recruitSaga from './recruit';
-import address from '../auth/address';
-import profileSaga from './profile';
 import companySaga from './company';
 
 axios.defaults.baseURL = 'http://localhost:8081/api';

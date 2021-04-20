@@ -1,7 +1,7 @@
 import React from 'react';
-import TitleCards from './home/TitleCards';
 import AnnounceCard from './home/AnnounceCard';
 import Banner from '../components/banner/Banner';
+import TitleCardsSm from './home/TitleCardsSm';
 
 export default function Home(props) {
   return (
@@ -9,7 +9,8 @@ export default function Home(props) {
       <Banner></Banner>
       <div className="container">
         {/* 타이틀*/}
-        <TitleCards></TitleCards>
+        <TitleCardsSm></TitleCardsSm>
+
         {/* 공고*/}
         <AnnounceCard></AnnounceCard>
       </div>

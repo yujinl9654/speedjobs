@@ -59,7 +59,7 @@ public class UserService {
 	private void validateUserSaveRequest(UserSaveRequest request) {
 		final String nameReg = "^[a-zA-Z가-힣]{2,15}$";
 		final String emailReg = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
-		final String passwordReg = "^[a-zA-Z0-9_\\-!#$%.]{8,20}$";
+		final String passwordReg = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,20}$";
 		final String contactReg = "^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$";
 		final String companyNameReg = "^[a-zA-Z가-힣]{2,30}$";
 		final String homepageReg = "^(http|https)\\://[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,6}(/\\S*)?$";
