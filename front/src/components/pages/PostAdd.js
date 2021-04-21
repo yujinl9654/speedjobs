@@ -13,7 +13,7 @@ import Tags from '../components/Tags';
 
 export default function PostAdd() {
   const [form, setForm] = useState({ title: '', content: '' });
-  const post = useSelector((state) => state.post);
+  const { post, user } = useSelector((state) => state);
   const dispatch = useDispatch();
   const history = useHistory();
   const onChangHandler = useCallback((e) => {
@@ -48,23 +48,24 @@ export default function PostAdd() {
       const temp = Array.from(tagss.tagGetData.tags.POSITION);
       const temp2 = Array.from(tagss.tagGetData.tags.SKILL);
 
-      console.log(temp);
-      // temp.forEach((item) => {
-      //   res.concat([...res, { ...item, item }]);
-      //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-      // });
       const tt = temp.map((t) => {
         return { ...t, selected: false };
       });
       setTaglist((p) => [...p, ...tt]);
-      console.log(tt);
       const tt2 = temp2.map((t) => {
         return { ...t, selected: false };
       });
-      console.log(tt2);
       setTaglist2((p) => [...p, ...tt2]);
     }
   }, [tagss.tagGetData]);
+
+  const [author, setAuthor] = useState('');
+  useEffect(() => {
+    if (user.me !== null) {
+      console.log('me= ', user.me.name);
+      setAuthor(user.me.name);
+    }
+  }, [user.me]);
 
   return (
     <div
@@ -109,7 +110,7 @@ export default function PostAdd() {
         </StyledHeaderDiv>
         {/* 작성자*/}
         <div className={'container'}>
-          <PostWriterDate>작성자 2020-01-01</PostWriterDate>
+          <PostWriterDate>{author} 2020-01-01</PostWriterDate>
           {/* 태그*/}
           {/* 본문*/}
           <PostTextArea

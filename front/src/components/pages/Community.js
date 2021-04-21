@@ -39,32 +39,17 @@ export default function Community(props) {
   };
   const rootRef = useRef();
   const { post, user } = useSelector((state) => state);
-  const me = useState({ ...user.me });
 
   const [, setLoading] = useState(false);
   const [postList, setPostList] = useState([]);
-
-  // const [tags] = useState([
-  //   { name: 'backEnd', id: 0, selected: false },
-  //   { name: 'frontEnd', id: 1, selected: false },
-  //   { name: 'machineLearning', id: 2, selected: false },
-  //   { name: 'infra', id: 3, selected: false },
-  // ]);
   const [taglist, setTaglist] = useState([]);
   const tagss = useSelector((state) => state.tag);
   useEffect(() => {
     if (tagss.tagGetData) {
       const temp = Array.from(tagss.tagGetData.tags.POSITION);
-      // const res = [];
-      console.log(temp);
-      // temp.forEach((item) => {
-      //   res.concat([...res, { ...item, item }]);
-      //   console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-      // });
       const tt = temp.map((t) => {
         return { ...t, selected: false };
       });
-      console.log(tt);
       setTaglist((p) => [...p, ...tt]);
     }
   }, [tagss.tagGetData]);
@@ -113,42 +98,47 @@ export default function Community(props) {
     <>
       <Banner />
       <div className={'container'}>
-        {/* 게시글*/}
-        <div ref={rootRef}>
-          <div
-            className={'text-right'}
-            style={{
-              position: 'relative',
-              height: '60px',
-            }}
-          >
+        <div className={'row justify-content-center'}>
+          <StyledLeftLayout className={'col-12 col-lg-3 text-left'}>
+            <Tags tagList={taglist}>직무</Tags>
+          </StyledLeftLayout>
+
+          {/* 게시글*/}
+          <div ref={rootRef} className={'col-12 col-lg-9'}>
             <div
-              className={'row justify-content-end'}
-              style={{ padding: '10px', paddingTop: '0' }}
+              className={'text-right'}
+              style={{
+                position: 'relative',
+                height: '60px',
+              }}
             >
-              <Tags tagList={taglist}>filter</Tags>
-              {user.me !== null ? (
-                <TagBody
-                  style={{ marginTop: '0', border: '1px solid #f5df4d' }}
-                  onClick={() => {
-                    history.push('./community/add');
-                  }}
-                >
-                  글쓰기
-                </TagBody>
-              ) : (
-                ''
-              )}
+              <div
+                className={'row justify-content-end'}
+                style={{ padding: '10px', paddingTop: '0' }}
+              >
+                {user.me !== null ? (
+                  <TagBody
+                    style={{ marginTop: '0', border: '1px solid #f5df4d' }}
+                    onClick={() => {
+                      history.push('./community/add');
+                    }}
+                  >
+                    글쓰기
+                  </TagBody>
+                ) : (
+                  ''
+                )}
+              </div>
             </div>
+            {mapPost}
           </div>
-          {mapPost}
+          {/* 게시글 end*/}
         </div>
-        {/* 게시글 end*/}
+        <div
+          style={{ top: '50px', position: 'relative', marginBottom: '100px' }}
+          ref={targetRef}
+        />{' '}
       </div>
-      <div
-        style={{ top: '50px', position: 'relative', marginBottom: '100px' }}
-        ref={targetRef}
-      ></div>
     </>
   );
 }
