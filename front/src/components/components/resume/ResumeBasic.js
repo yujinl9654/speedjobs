@@ -38,6 +38,7 @@ const StyledDatePicker = styled(DatePicker)`
   &:focus {
     outline: none;
   }
+
 `;
 
 const InputTel = styled.input`
@@ -50,7 +51,20 @@ const InputTel = styled.input`
   &:focus {
     outline: none;
   }
+
 `;
+
+// const InputTel = styled.input`
+//   width: 100%;
+//   height: 35px;
+//   border-radius: 27px;
+//   border: 1px solid silver;
+//   padding: 0 20px 3px;
+//   margin-bottom: 5px;
+//   &:focus {
+//     outline: none;
+//   }
+// `;
 
 export default function ResumeBasic() {
   const [img, setImage] = useState(
