@@ -8,7 +8,6 @@ import { ToggleOff } from '@styled-icons/bootstrap/ToggleOff';
 import { ToggleOn } from '@styled-icons/bootstrap/ToggleOn';
 import {
   Private,
-  ProfileImg,
   ResumeImg,
   ResumeTitles,
   StyledHeaderMargin,
@@ -35,19 +34,6 @@ const StyledDatePicker = styled(DatePicker)`
   margin-bottom: 5px;
   padding-left: 15px;
 
-  &:focus {
-    outline: none;
-  }
-
-`;
-
-const InputTel = styled.input`
-  width: 100%;
-  height: 35px;
-  border-radius: 27px;
-  border: 1px solid silver;
-  padding: 0 20px 3px;
-  margin-bottom: 5px;
   &:focus {
     outline: none;
   }

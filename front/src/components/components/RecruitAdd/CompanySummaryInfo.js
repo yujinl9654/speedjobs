@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { COMPANY_GET_DONE } from '../../../reducers/company';
 
-
 const Info = styled.div`
   color: #a1a1a1;
   margin-right: 5px;
