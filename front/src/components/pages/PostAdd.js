@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import {
   PostTextArea,
   PostTitleInput,
-  PostWriterDate,
+  // PostWriterDate,
   StyledButton,
   StyledHeaderDiv,
 } from '../components/Styled';
