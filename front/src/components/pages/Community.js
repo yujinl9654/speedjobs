@@ -83,17 +83,19 @@ export default function Community(props) {
     }
   }, [post, setPostList, setLoading, page, dispatch]);
 
-  const mapPost = postList.map((pl) => (
-    <Post
-      id={pl.id}
-      tags={['backEnd']}
-      title={pl.title}
-      writer="아직미구현"
-      date={`${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`}
-      fav="미구현"
-      key={pl.id}
-    />
-  ));
+  const mapPost = postList
+    .map((pl) => (
+      <Post
+        id={pl.id}
+        tags={['backEnd']}
+        title={pl.title}
+        writer={pl.author}
+        date={`${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`}
+        fav="미구현"
+        key={pl.id}
+      />
+    ))
+    .reverse();
 
   return (
     <>
