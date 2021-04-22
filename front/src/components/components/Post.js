@@ -3,7 +3,15 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import { TagBody } from './Styled';
 
-export default function Post({ title, tags, writer, date, fav, id }) {
+export default function Post({
+  title,
+  tags,
+  writer,
+  viewCount,
+  date,
+  fav,
+  id,
+}) {
   // 태그 맵
   const mapTags = tags.map((tag) => (
     <TagBody grey sm key={tag}>
@@ -21,7 +29,16 @@ export default function Post({ title, tags, writer, date, fav, id }) {
           padding: '10px',
         }}
       >
-        <h4 style={{ marginBottom: '30px', marginTop: '10px' }}>
+        <h4
+          style={{
+            marginBottom: '30px',
+            marginTop: '10px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: '80%',
+          }}
+        >
           <Link to={`./community/post/${id}`}>{title}</Link>
         </h4>
         {mapTags}
@@ -35,7 +52,10 @@ export default function Post({ title, tags, writer, date, fav, id }) {
         >
           <div>{writer}</div>
           <div style={{ marginBottom: '20px' }}>{date}</div>
-          {fav ? <HeartFill></HeartFill> : <Heart></Heart>}
+          <div style={{ display: 'inline-block' }}>{viewCount}</div>
+          <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+            {fav ? <HeartFill></HeartFill> : <Heart></Heart>}
+          </div>
         </div>
       </div>
     </>

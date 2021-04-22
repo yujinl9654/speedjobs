@@ -62,7 +62,6 @@ export default function PostAdd() {
   const [author, setAuthor] = useState('');
   useEffect(() => {
     if (user.me !== null) {
-      console.log('me= ', user.me.name);
       setAuthor(user.me.name);
     }
   }, [user.me]);
@@ -76,7 +75,6 @@ export default function PostAdd() {
       }}
     >
       <form>
-        {/* 헤더*/}
         <StyledHeaderDiv fix>
           <div
             className={'container row justify-content-end'}
@@ -87,6 +85,7 @@ export default function PostAdd() {
                 onChange={(e) => onChangHandler(e)}
                 name={'title'}
                 placeholder={'제목을 입력해주세요'}
+                maxLength="35"
               />
             </div>
             <div
@@ -108,11 +107,8 @@ export default function PostAdd() {
             </div>
           </div>
         </StyledHeaderDiv>
-        {/* 작성자*/}
         <div className={'container'}>
           <PostWriterDate>{author} 2020-01-01</PostWriterDate>
-          {/* 태그*/}
-          {/* 본문*/}
           <PostTextArea
             name={'content'}
             onChange={(e) => onChangHandler(e)}

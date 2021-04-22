@@ -90,6 +90,7 @@ export default function Community(props) {
         tags={['backEnd']}
         title={pl.title}
         writer={pl.author}
+        viewCount={pl.viewCount}
         date={`${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`}
         fav="미구현"
         key={pl.id}

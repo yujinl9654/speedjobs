@@ -23,6 +23,7 @@ const PostTextarea = styled.textarea`
   border: none;
   resize: none;
   outline: none;
+  overflow-y: hidden;
 `;
 
 export default function PostDetail(props) {
