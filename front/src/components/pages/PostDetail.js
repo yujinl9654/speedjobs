@@ -43,9 +43,7 @@ export default function PostDetail(props) {
       data: id,
     });
   }, [dispatch, id]);
-  useEffect(() => {
-    console.log(location.state);
-  }, []);
+
   useEffect(() => {
     if (post.postGetDone) {
       setContent({
@@ -113,59 +111,46 @@ export default function PostDetail(props) {
         </StyledHeaderDiv>
         {/* 작성자*/}
         <div className={'container'}>
-          <div
-            style={{
-              margin: '10px 0px 20px 0px',
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div style={{ margin: '10px 0px 20px 0px' }}>
-              {location.state.writer} {location.state.date}
-            </div>
-            <div style={{ display: 'inline-block' }}>
-              {content.author}{' '}
-              {content.createdDate &&
-                `${content.createdDate[0]}-${content.createdDate[1]}-${content.createdDate[2]}`}
-            </div>
-            <div style={{ display: 'inline-block' }}>
-              <StyledButton white>수정</StyledButton>
-              <StyledButton white onClick={() => DeleteHandler()}>
-                삭제
-              </StyledButton>
-            </div>
-          </div>
-          {/* 태그*/}
-          <div>
-            {location.state.tags.map((t) => (
-              <TagBody grey>{t.name}</TagBody>
-            ))}
-          </div>
-          {/* 본문*/}
-          <div style={{ whiteSpace: 'pre-line', width: '100%' }}>
-            <autoheight-textarea>
-              <PostTextarea value={content.content} />
-            </autoheight-textarea>
+          <div style={{ margin: '10px 0px 20px 0px' }}>
+            {location.state.writer} {location.state.date}
           </div>
         </div>
-        {/* 찜 공유*/}
-        <StyledLike>
-          <div style={{ width: '100%', textAlign: 'center' }}>
-            <span>
-              <HeartFill></HeartFill>
-            </span>
-          </div>
-          <div style={{ width: '100%', textAlign: 'center', fontSize: '10px' }}>
-            99+
-          </div>
-          <div style={{ width: '100%', textAlign: 'center' }}>
-            <span>
-              <ShareFill></ShareFill>
-            </span>
-          </div>
-        </StyledLike>
+        {/* 태그*/}
+        <div>
+          {location.state.tags.map((t) => (
+            <TagBody grey>{t.name}</TagBody>
+          ))}
+        </div>
+        {/* 본문*/}
+        <div style={{ whiteSpace: 'pre-line', width: '100%' }}>
+          <autoheight-textarea>
+            <PostTextarea value={content.content} />
+          </autoheight-textarea>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <StyledButton white>수정</StyledButton>
+          <StyledButton white onClick={() => DeleteHandler()}>
+            삭제
+          </StyledButton>
+        </div>
         <PostDetailComment id={id} />
       </div>
+      {/* 찜 공유*/}
+      <StyledLike>
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <span>
+            <HeartFill></HeartFill>
+          </span>
+        </div>
+        <div style={{ width: '100%', textAlign: 'center', fontSize: '10px' }}>
+          99+
+        </div>
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <span>
+            <ShareFill></ShareFill>
+          </span>
+        </div>
+      </StyledLike>
     </>
   );
 }

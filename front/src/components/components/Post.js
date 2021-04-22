@@ -1,6 +1,6 @@
 import { Heart, HeartFill } from 'react-bootstrap-icons';
+import { EyeShow } from '@styled-icons/fluentui-system-filled/EyeShow';
 import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
 import React, { useCallback } from 'react';
 import { TagBody } from './Styled';
 import { Blank } from '../pages/Community';
@@ -62,7 +62,10 @@ export default function Post({
         >
           <div>{writer}</div>
           <div style={{ marginBottom: '20px' }}>{date}</div>
-          <div style={{ display: 'inline-block' }}>{viewCount}</div>
+          <div style={{ display: 'inline-block' }}>
+            {/* <EyeShow />*/}
+            {viewCount}
+          </div>
           <div style={{ display: 'inline-block', marginLeft: '10px' }}>
             {fav ? <HeartFill></HeartFill> : <Heart></Heart>}
           </div>

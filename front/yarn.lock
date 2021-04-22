@@ -1689,6 +1689,14 @@
     "@babel/runtime" "^7.13.10"
     "@styled-icons/styled-icon" "^10.6.0"
 
+"@styled-icons/fluentui-system-filled@^10.33.0":
+  version "10.33.0"
+  resolved "https://registry.yarnpkg.com/@styled-icons/fluentui-system-filled/-/fluentui-system-filled-10.33.0.tgz#77eac72eb233c79c371d7dbb2f4cb642cf9133c6"
+  integrity sha512-K+r/HkfPug1FkBrAZPgfcOzIQUrlwtLEq7vrjZxijJCW+mdOlJzz3vs02jb5Z+zy+LsGPK7HmSi1HF5lGw4/Uw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@styled-icons/styled-icon" "^10.6.0"
+
 "@styled-icons/fluentui-system-regular@10.31.0":
   version "10.31.0"
   resolved "https://registry.npmjs.org/@styled-icons/fluentui-system-regular/-/fluentui-system-regular-10.31.0.tgz"

@@ -12,7 +12,7 @@ import {
 const BlogComment = styled.div`
   position: relative;
   overflow: auto;
-  padding: 40px 10px 0 0;
+  padding-right: 10px;
 `;
 
 const CommentList = styled.div``;
