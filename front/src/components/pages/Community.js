@@ -138,6 +138,7 @@ export default function Community(props) {
               )}
             </div>
           </div>
+          <div style={{ height: '30px' }}></div>
           {mapPost}
         </div>
         {/* 게시글 end*/}

@@ -35,7 +35,7 @@ export default function Post({
         fav,
       },
     });
-  }, []);
+  }, [date, fav, history, id, tags, type, writer]);
 
   return (
     <>
