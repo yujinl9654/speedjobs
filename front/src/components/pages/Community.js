@@ -1,11 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import Banner from '../components/banner/Banner';
 import Tags from '../components/Tags';
 import { TagBody } from '../components/Styled';
 import Post from '../components/Post';
 import { POST_LIST_DONE, POST_LIST_REQUEST } from '../../reducers/post';
+
+export const Blank = styled.div`
+  display: inline-block;
+  width: 1px;
+  height: 25px;
+`;
 
 export default function Community(props) {
   const history = useHistory();
@@ -83,21 +90,19 @@ export default function Community(props) {
     }
   }, [post, setPostList, setLoading, page, dispatch]);
 
-  const mapPost = postList
-    .map((pl) => (
-      <Post
-        type={'community'}
-        id={pl.id}
-        tags={['backEnd']}
-        title={pl.title}
-        writer={pl.author}
-        viewCount={pl.viewCount}
-        date={`${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`}
-        fav="미구현"
-        key={pl.id}
-      />
-    ))
-    .reverse();
+  const mapPost = postList.map((pl) => (
+    <Post
+      type={'community'}
+      id={pl.id}
+      tags={[...(pl.tags.SKILL ?? []), ...(pl.tags.POSITION ?? [])]}
+      title={pl.title}
+      writer={pl.author}
+      viewCount={pl.viewCount}
+      date={`${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`}
+      fav="미구현"
+      key={pl.id}
+    />
+  ));
 
   return (
     <>
@@ -116,7 +121,9 @@ export default function Community(props) {
               className={'row justify-content-between'}
               style={{ padding: '10px', paddingTop: '0' }}
             >
-              <Tags tagList={taglist}>filter</Tags>
+              <Tags tagList={taglist} selected={setTaglist}>
+                filter
+              </Tags>
               {user.me !== null ? (
                 <TagBody
                   style={{ marginTop: '0', border: '1px solid #f5df4d' }}

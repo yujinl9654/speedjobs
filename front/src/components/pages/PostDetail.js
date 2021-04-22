@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { HeartFill, ShareFill } from 'react-bootstrap-icons';
@@ -30,6 +30,7 @@ const PostTextarea = styled.textarea`
 export default function PostDetail(props) {
   const history = useHistory();
   const { id } = useParams();
+  const location = useLocation();
   const post = useSelector((state) => state.post);
   const [content, setContent] = useState({
     title: '',
@@ -42,7 +43,9 @@ export default function PostDetail(props) {
       data: id,
     });
   }, [dispatch, id]);
-
+  useEffect(() => {
+    console.log(location.state);
+  }, []);
   useEffect(() => {
     if (post.postGetDone) {
       setContent({
@@ -117,6 +120,9 @@ export default function PostDetail(props) {
               justifyContent: 'space-between',
             }}
           >
+            <div style={{ margin: '10px 0px 20px 0px' }}>
+              {location.state.writer} {location.state.date}
+            </div>
             <div style={{ display: 'inline-block' }}>
               {content.author}{' '}
               {content.createdDate &&
@@ -131,13 +137,12 @@ export default function PostDetail(props) {
           </div>
           {/* 태그*/}
           <div>
-            <TagBody grey>백엔드</TagBody>
-            <TagBody grey>백엔드</TagBody>
-            <TagBody grey>백엔드</TagBody>
-            <TagBody grey>백엔드</TagBody>
+            {location.state.tags.map((t) => (
+              <TagBody grey>{t.name}</TagBody>
+            ))}
           </div>
           {/* 본문*/}
-          <div>
+          <div style={{ whiteSpace: 'pre-line', width: '100%' }}>
             <autoheight-textarea>
               <PostTextarea value={content.content} />
             </autoheight-textarea>
