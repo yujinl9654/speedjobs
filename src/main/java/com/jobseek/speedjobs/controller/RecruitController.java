@@ -1,6 +1,7 @@
 package com.jobseek.speedjobs.controller;
 
 import com.jobseek.speedjobs.config.auth.LoginUser;
+import com.jobseek.speedjobs.domain.tag.Tag;
 import com.jobseek.speedjobs.domain.user.User;
 import com.jobseek.speedjobs.dto.post.PostRequest;
 import com.jobseek.speedjobs.dto.recruit.RecruitRequest;
@@ -9,8 +10,15 @@ import com.jobseek.speedjobs.service.RecruitService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +39,7 @@ public class RecruitController {
 	private final RecruitService recruitService;
 
 	@ApiOperation(value = "공고 등록", notes = "공고를 등록한다.")
-	@PreAuthorize("hasAnyRole('COMPANY', 'ADMIN')")
+	@PreAuthorize("hasRole('COMPANY')")
 	@PostMapping
 	public ResponseEntity<Void> saveRecruit(@LoginUser User user,
 		@Valid @RequestBody RecruitRequest recruitRequest) {
@@ -61,5 +69,17 @@ public class RecruitController {
 	@GetMapping("/{recruitId}")
 	public ResponseEntity<RecruitResponse> readRecruit(@PathVariable Long recruitId) {
 		return ResponseEntity.ok().body(recruitService.readById(recruitId));
+	}
+
+	@ApiOperation(value = "공고 전체 조회", notes = "공고를 전체 조회한다")
+	@GetMapping
+	public ResponseEntity<List<RecruitResponse>> readAllRecruits() {
+		return ResponseEntity.ok().body(recruitService.readAll());
+	}
+
+	@ApiOperation(value = "공고 페이징 조회", notes = "공고를 페이징으로 조회한다")
+	@GetMapping("/paging")
+	public Page<RecruitResponse> readRecruitsByPage(final Pageable pageable) {
+		return recruitService.readByPage(pageable);
 	}
 }

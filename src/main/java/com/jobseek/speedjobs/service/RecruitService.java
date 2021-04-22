@@ -3,6 +3,8 @@ package com.jobseek.speedjobs.service;
 import static com.jobseek.speedjobs.domain.user.Role.ROLE_ADMIN;
 
 import com.jobseek.speedjobs.common.exception.UnauthorizedException;
+import com.jobseek.speedjobs.domain.company.Company;
+import com.jobseek.speedjobs.domain.company.CompanyRepository;
 import com.jobseek.speedjobs.domain.recruit.Recruit;
 import com.jobseek.speedjobs.domain.recruit.RecruitRepository;
 import com.jobseek.speedjobs.domain.tag.RecruitTag;
@@ -16,6 +18,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +31,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecruitService {
 
 	private final RecruitRepository recruitRepository;
+	private final CompanyRepository companyRepository;
 	private final TagRepository tagRepository;
 
 	@Transactional
 	public Long save(RecruitRequest recruitRequest, User user) {
 		Recruit recruit = recruitRequest.toEntity();
-		recruit.setCompany(user.getCompany());
+		Company company = companyRepository.findById(user.getId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 기업회원입니다."));
+		recruit.setCompany(company);
 		List<Tag> tags = getTagsById(recruitRequest.getTagIds());
 		createRecruitTags(recruit, tags);
 		return recruitRepository.save(recruit).getId();
@@ -40,8 +48,10 @@ public class RecruitService {
 	@Transactional
 	public void update(Long recruitId, User user, RecruitRequest recruitRequest) {
 		Recruit recruit = recruitRepository.findById(recruitId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 공곽 없습니다."));
-		if(recruit.getCompany().getId() != user.getCompany().getId()) {
+			.orElseThrow(() -> new IllegalArgumentException("해당 공고가 없습니다."));
+		Company company = companyRepository.findById(user.getId())
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 기업회원입니다."));
+		if (recruit.getCompany().getId() != user.getId()) {
 			throw new UnauthorizedException("권한이 없습니다.");
 		}
 		List<Tag> tags = getTagsById(recruitRequest.getTagIds());
@@ -51,7 +61,8 @@ public class RecruitService {
 	@Transactional
 	public void delete(Long recruitId, User user) {
 		Recruit recruit = recruitRepository.findById(recruitId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다.  recruitId=" + recruitId));
+			.orElseThrow(
+				() -> new IllegalArgumentException("해당 게시글이 없습니다.  recruitId=" + recruitId));
 		if (user.getRole() != ROLE_ADMIN && recruit.getCompany().getId() != user.getId()) {
 			throw new UnauthorizedException("권한이 없습니다.");
 		}
@@ -65,6 +76,12 @@ public class RecruitService {
 		return RecruitResponse.of(recruit, TagResponses.mappedByType(tags));
 	}
 
+	public List<RecruitResponse> readAll() {
+		return recruitRepository.findAllDesc().stream()
+			.map(RecruitResponse::new)
+			.collect(Collectors.toList());
+	}
+
 	private void createRecruitTags(Recruit recruit, List<Tag> tags) {
 		tags.forEach(tag -> RecruitTag.createRecruitTag(recruit, tag));
 	}
@@ -74,5 +91,14 @@ public class RecruitService {
 			.map(tagId -> tagRepository.findById(tagId)
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 태그입니다.")))
 			.collect(Collectors.toList());
+	}
+
+	public Page<RecruitResponse> readByPage(Pageable pageable) {
+		Page<Recruit> page = recruitRepository.findAll(pageable);
+		int totalElements = (int) page.getTotalElements();
+		return new PageImpl<>(page.stream()
+			.map(recruit -> RecruitResponse
+				.of(recruit, TagResponses.mappedByType(recruit.getRecruitTags().getTags())))
+			.collect(Collectors.toList()), pageable, totalElements);
 	}
 }
