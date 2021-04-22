@@ -11,6 +11,7 @@ export default function Post({
   date,
   fav,
   id,
+  type,
 }) {
   // 태그 맵
   const mapTags = tags.map((tag) => (

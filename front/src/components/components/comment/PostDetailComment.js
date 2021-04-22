@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import styled from 'styled-components';
 import Comment, { CommentsForm } from './Comment';
 import {

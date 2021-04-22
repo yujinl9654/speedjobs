@@ -11,9 +11,11 @@ import {
 } from '../components/Styled';
 import PostDetailComment from '../components/comment/PostDetailComment';
 import {
+  POST_DELETE_DONE,
+  POST_DELETE_REQUEST,
   POST_GET_DONE,
   POST_GET_REQUEST,
-  POST_LIST_DONE,
+  POST_LIST_REQUEST,
 } from '../../reducers/post';
 
 const PostTextarea = styled.textarea`
@@ -40,40 +42,38 @@ export default function PostDetail(props) {
       data: id,
     });
   }, [dispatch, id]);
+
   useEffect(() => {
     if (post.postGetDone) {
-      console.log(post.post);
       setContent({
         title: post.post.title,
         content: post.post.content,
+        author: post.post.author,
+        createdDate: post.post.createdDate,
       });
       dispatch({
         type: POST_GET_DONE,
       });
     }
-    if (post.postListDone) {
-      setList([...post.postList.content]);
+  }, [post, id, dispatch]);
 
-      dispatch({
-        type: POST_LIST_DONE,
-      });
-    }
-  }, [post, data, id, list, dispatch]);
-
-  // 게시글 작성자, 작성일자 불러오기
+  const DeleteHandler = () => {
+    dispatch({
+      type: POST_DELETE_REQUEST,
+      data: id,
+    });
+  };
   useEffect(() => {
-    if (list !== null) {
-      for (let i = 0; i < list.length; i++) {
-        if (list[i].id.toString() === id) {
-          setData((prev) => ({
-            ...prev,
-            author: list[i].author,
-            createdDate: list[i].createdDate,
-          }));
-        }
-      }
+    if (post.postDeleteDone) {
+      dispatch({
+        type: POST_DELETE_DONE,
+      });
+      history.goBack();
     }
-  }, [list, data.author, data.createdDate, id]);
+    dispatch({
+      type: POST_LIST_REQUEST,
+    });
+  }, [dispatch, history, post.postDeleteDone]);
 
   return (
     <>
@@ -110,7 +110,25 @@ export default function PostDetail(props) {
         </StyledHeaderDiv>
         {/* 작성자*/}
         <div className={'container'}>
-          <div style={{ margin: '10px 0px 20px 0px' }}>작성자 2020-01-01</div>
+          <div
+            style={{
+              margin: '10px 0px 20px 0px',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div style={{ display: 'inline-block' }}>
+              {content.author}{' '}
+              {content.createdDate &&
+                `${content.createdDate[0]}-${content.createdDate[1]}-${content.createdDate[2]}`}
+            </div>
+            <div style={{ display: 'inline-block' }}>
+              <StyledButton white>수정</StyledButton>
+              <StyledButton white onClick={() => DeleteHandler()}>
+                삭제
+              </StyledButton>
+            </div>
+          </div>
           {/* 태그*/}
           <div>
             <TagBody grey>백엔드</TagBody>

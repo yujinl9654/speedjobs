@@ -110,7 +110,7 @@ export default function PostAdd() {
           </div>
         </StyledHeaderDiv>
         <div className={'container'}>
-          <PostWriterDate>author 2020-01-01</PostWriterDate>
+          {/* <PostWriterDate>Author 2020-01-01</PostWriterDate>*/}
           <PostTextArea
             name={'content'}
             onChange={(e) => onChangHandler(e)}
