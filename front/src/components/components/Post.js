@@ -29,17 +29,14 @@ export default function Post({
           padding: '10px',
         }}
       >
-        <h4
-          style={{
-            marginBottom: '30px',
-            marginTop: '10px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            width: '80%',
-          }}
-        >
-          <Link to={`./community/post/${id}`}>{title}</Link>
+        <h4 style={{ marginBottom: '30px', marginTop: '10px' }}>
+          <Link
+            to={`./${
+              type === 'community' ? 'community/post' : 'recruit/detail'
+            }/${id}`}
+          >
+            {title}
+          </Link>
         </h4>
         {mapTags}
         <div
