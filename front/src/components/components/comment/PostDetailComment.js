@@ -25,7 +25,7 @@ export default function PostDetailComment(props) {
       writer={comment.author}
       content={comment.content}
       date={`${comment.createdDate[0]}/${comment.createdDate[1]}/${comment.createdDate[2]}`}
-      img={comment.img}
+      img={comment.picture}
       onClick={() => deleteHandler(comment.id, props.id)}
     />
   ));

@@ -121,7 +121,7 @@ export default function Comment({ writer, content, date, img, onClick }) {
     'http://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
   );
   useEffect(() => {
-    if (img !== undefined) {
+    if (img !== null) {
       setImage(img);
     }
   }, [img]);
