@@ -11,7 +11,7 @@ export default function Post({
   writer,
   commentCount,
   viewCount,
-  likeCount,
+  favoriteCount,
   date,
   fav,
   id,
@@ -71,7 +71,7 @@ export default function Post({
             <EyeShow style={{ width: '25px' }} /> {viewCount}
           </div>
           <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-            {fav ? <HeartFill /> : <Heart />} {likeCount}
+            {fav ? <HeartFill /> : <Heart />} {favoriteCount}
           </div>
         </div>
       </div>

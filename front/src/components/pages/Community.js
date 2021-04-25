@@ -99,7 +99,7 @@ export default function Community(props) {
       writer={pl.author}
       commentCount={pl.commentCount}
       viewCount={pl.viewCount}
-      likeCount={pl.likeCount}
+      favoriteCount={pl.favoriteCount}
       date={`${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`}
       fav="미구현"
       key={pl.id}
