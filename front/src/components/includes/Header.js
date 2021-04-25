@@ -83,7 +83,6 @@ export default function Header(props) {
   // 팝업 동작 인식
   useEffect(() => {
     // 회원가입
-
     if (state.user.signUpDone) {
       setPopModal(true);
       dispatch({ type: SIGN_UP_DONE });
@@ -94,7 +93,7 @@ export default function Header(props) {
     } else if (state.user.logInDone && !state.user.logInWelcomed) {
       // v4 는 아이디를 자동으로 넣어줍니다
       // 확실한 아이디가 있을경우 비추입니다
-      addPop({ type: 'login', id: v4(), text: state.user.me.name });
+      addPop({ type: 'login', id: v4(), text: state.user.me.nickname });
       dispatch({ type: LOG_IN_WELCOMED });
     } else if (state.user.signUpError !== null) {
       // 회원가입오류
@@ -145,7 +144,10 @@ export default function Header(props) {
         <PopUpBox>{mapPop}</PopUpBox>
         {popModal && (
           <>
-            <ModalAlert setPopModal={setPopModal}></ModalAlert>
+            <ModalAlert
+              setPopModal={setPopModal}
+              text="등록하신 이메일을 확인해주세요."
+            ></ModalAlert>
             <Background onClick={() => setPopModal(false)}></Background>
           </>
         )}

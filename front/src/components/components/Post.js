@@ -1,5 +1,5 @@
-import { Heart, HeartFill } from 'react-bootstrap-icons';
-// import { EyeShow } from '@styled-icons/fluentui-system-filled/EyeShow';
+import { ChatSquareQuote, Heart, HeartFill } from 'react-bootstrap-icons';
+import { EyeShow } from '@styled-icons/fluentui-system-filled/EyeShow';
 import { useHistory } from 'react-router';
 import React, { useCallback } from 'react';
 import { TagBody } from './Styled';
@@ -9,7 +9,9 @@ export default function Post({
   title,
   tags,
   writer,
+  commentCount,
   viewCount,
+  favoriteCount,
   date,
   fav,
   id,
@@ -63,11 +65,13 @@ export default function Post({
           <div>{writer}</div>
           <div style={{ marginBottom: '20px' }}>{date}</div>
           <div style={{ display: 'inline-block' }}>
-            {/* <EyeShow />*/}
-            {viewCount}
+            <ChatSquareQuote style={{ width: '25px' }} /> {commentCount}
           </div>
           <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-            {fav ? <HeartFill></HeartFill> : <Heart></Heart>}
+            <EyeShow style={{ width: '25px' }} /> {viewCount}
+          </div>
+          <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+            {fav ? <HeartFill /> : <Heart />} {favoriteCount}
           </div>
         </div>
       </div>
