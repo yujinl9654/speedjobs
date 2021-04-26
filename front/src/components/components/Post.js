@@ -2,8 +2,21 @@ import { ChatSquareQuote, Heart, HeartFill } from 'react-bootstrap-icons';
 import { EyeShow } from '@styled-icons/fluentui-system-filled/EyeShow';
 import { useHistory } from 'react-router';
 import React, { useCallback } from 'react';
+import styled from 'styled-components';
 import { TagBody } from './Styled';
 import { Blank } from '../pages/Community';
+
+const PostTitle = styled.div`
+  margin-bottom: 30px;
+  margin-top: 10px;
+  font-size: 25px;
+  font-weight: lighter;
+  width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: justify;
+  white-space: nowrap;
+`;
 
 export default function Post({
   title,
@@ -49,9 +62,7 @@ export default function Post({
           padding: '10px',
         }}
       >
-        <h4 style={{ marginBottom: '30px', marginTop: '10px' }}>
-          <span onClick={onClickHandler}>{title}</span>
-        </h4>
+        <PostTitle onClick={onClickHandler}>{title}</PostTitle>
         <Blank />
         {mapTags}
         <div

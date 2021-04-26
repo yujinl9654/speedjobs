@@ -12,6 +12,7 @@ import {
   COMMENT_GET_SUCCESS,
 } from '../reducers/comment';
 
+// 댓글 추가
 function* addComment(action) {
   try {
     const result = yield call(addCommentAPI, action.data);
@@ -37,6 +38,7 @@ function addCommentAPI(data) {
   return res;
 }
 
+// 댓글 목록
 function* getComment(action) {
   try {
     const result = yield call(getCommentAPI, action.data);
@@ -56,6 +58,7 @@ function getCommentAPI(data) {
   return axios.get(`/post/${data}/paging?size=1&page=99&sort=id,DESC`);
 }
 
+// 댓글 삭제
 function* deleteComment(action) {
   try {
     const result = yield call(deleteCommentAPI, action.data);
