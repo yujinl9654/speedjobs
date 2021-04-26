@@ -57,6 +57,7 @@ public class UserService {
 			.orElseThrow(() -> new NotExistException("이미 처리된 요청이거나 시간초과되었습니다."));
 		redisUtil.delete(key);
 		UserDto userDto = request.getUserDto(passwordEncoder);
+		userDto.setNickname(request.getName());
 		if (userDto.getRole() == Role.ROLE_MEMBER) {
 			userDto.setNickname(request.getName());
 			Member member = new Member(userDto);

@@ -10,6 +10,9 @@ import {
   COMMENT_GET_FAIL,
   COMMENT_GET_REQUEST,
   COMMENT_GET_SUCCESS,
+  COMMENT_MODIFY_FAIL,
+  COMMENT_MODIFY_REQUEST,
+  COMMENT_MODIFY_SUCCESS,
 } from '../reducers/comment';
 
 // 댓글 추가
@@ -55,7 +58,7 @@ function* getComment(action) {
 }
 
 function getCommentAPI(data) {
-  return axios.get(`/post/${data}/paging?size=1&page=99&sort=id,DESC`);
+  return axios.get(`/post/${data}/paging?size=99&page=0&sort=id,DESC`);
 }
 
 // 댓글 삭제
@@ -79,6 +82,31 @@ function deleteCommentAPI(data) {
   return axios.delete(`/post/${postId}/${commentId}`);
 }
 
+function* modifyComment(action) {
+  try {
+    console.log('action=', action.data);
+    const result = yield call(modifyCommentAPI, action.data);
+    yield put({
+      type: COMMENT_MODIFY_SUCCESS,
+      data: result,
+    });
+  } catch (error) {
+    yield put({
+      type: COMMENT_MODIFY_FAIL,
+      data: '에러' ?? error.response.data,
+    });
+  }
+}
+
+function modifyCommentAPI(data) {
+  const { post, comment } = data;
+  return axios.put(`/post/${post}/${comment}`, { content: data.diff });
+}
+
+function* watchCommentModify() {
+  yield takeLatest(COMMENT_MODIFY_REQUEST, modifyComment);
+}
+
 function* watchCommentDelete() {
   yield takeLatest(COMMENT_DELETE_REQUEST, deleteComment);
 }
@@ -96,5 +124,6 @@ export default function* commentSaga() {
     fork(watchCommentAdd),
     fork(watchCommentGet),
     fork(watchCommentDelete),
+    fork(watchCommentModify),
   ]);
 }
