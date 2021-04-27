@@ -17,7 +17,7 @@ values  (1, '2021-02-06 17:23:02', null, '010-1342-3433', 'member@member.com', '
 (13, '2021-01-26 17:24:16', '2021-02-22 17:25:01', '010-3333-8888', 'member13@member.com', '김승현', '복불러', '$2a$10$Fl3r4xqxC51vSgTbO30r8OWtuAaT7slbPeQfwBI/0TqtGu6KMRYoq', null, 'ROLE_MEMBER'),
 (14, '2021-01-29 17:24:22', null, '010-8695-9484', 'member14@member.com', '한보라', '지배자', '$2a$10$Fl3r4xqxC51vSgTbO30r8OWtuAaT7slbPeQfwBI/0TqtGu6KMRYoq', null, 'ROLE_MEMBER'),
 (15, '2021-02-06 17:24:28', null, '010-3422-0393', 'member15@member.com', '김영현', '월급루팡', '$2a$10$Fl3r4xqxC51vSgTbO30r8OWtuAaT7slbPeQfwBI/0TqtGu6KMRYoq', null, 'ROLE_MEMBER'),
-(16, '2021-04-02 17:46:39', null, '010-5378-5628', 'company@company.com', '(주)잡식', '(주)잡식', '$2a$10$Fl3r4xqxC51vSgTbO30r8OWtuAaT7slbPeQfwBI/0TqtGu6KMRYoq', 'https://speedjobs.s3.ap-northeast-2.amazonaws.com/origin/8edbe2f6-9148-47fb-8549-efe1a6841d30.png', 'ROLE_COMPANY'),
+(16, '2021-04-02 17:46:39', null, '010-5378-5628', 'company16@company.com', '(주)잡식', '(주)잡식', '$2a$10$Fl3r4xqxC51vSgTbO30r8OWtuAaT7slbPeQfwBI/0TqtGu6KMRYoq', 'https://speedjobs.s3.ap-northeast-2.amazonaws.com/origin/8edbe2f6-9148-47fb-8549-efe1a6841d30.png', 'ROLE_COMPANY'),
 (17, '2021-04-06 17:46:46', null, '010-2816-4677', 'company17@company.com', '네이버', '네이버', '$2a$10$Fl3r4xqxC51vSgTbO30r8OWtuAaT7slbPeQfwBI/0TqtGu6KMRYoq', null, 'ROLE_COMPANY'),
 (18, '2021-03-24 17:46:49', null, '010-4462-1155', 'company18@company.com', '카카오', '카카오', '$2a$10$Fl3r4xqxC51vSgTbO30r8OWtuAaT7slbPeQfwBI/0TqtGu6KMRYoq', null, 'ROLE_COMPANY'),
 (19, '2021-02-22 17:46:53', null, '010-9758-2918', 'company19@company.com', '라인', '라인', '$2a$10$Fl3r4xqxC51vSgTbO30r8OWtuAaT7slbPeQfwBI/0TqtGu6KMRYoq', null, 'ROLE_COMPANY'),
@@ -172,14 +172,6 @@ values  (1, '2020-01-03 11:13:00', '2020-01-20 11:15:00', '안녕하세요.
 -- insert into posts (created_date, modified_date, comment_count, like_count, content, title, user_id, view_count) values ('2020-01-03 11:13:00', '2020-01-20 11:15:00', 0, 0, '클로저(closure)는 내부함수가 외부함수의 맥락(context)에 접근할 수 있는 것을 가르킨다. 클로저는 자바스크립트를 이용한 고난이도의 테크닉을 구사하는데 필수적인 개념으로 활용된다.\n 클로저란 내부함수가 외부함수의 지역변수에 접근 할 수 있고, 외부함수는 외부함수의 지역변수를 사용하는 내부함수가 소멸될 때까지 소멸되지 않는 특성을 의미한다.\n 자신의 생성된 시점의 환경을 기억하는 함수\n 렉시컬 스코프 : 함수가 중첩될 때 parser가 변수의 이름을 해석하는 방법\n Hooks도 클로져 함수이다!!!!\n 왜 클로져를 사용할까?\n Closure는 어떤 데이터(어휘적 환경)와 그 데이터를 조작하는 함수를 연결하는 데 있어서 유용하다. (객체지향 프로그래밍의 정보 은닉과 모듈화 같은 이점을 얻을 수 있다.)\n Tip!(Closure도 남발하면 안좋을 수 있다.)\n 클로져를 사용하면 가비지 컬렉션 대상이 되어야 할 객체가 메모리 상에 남아 있게 되므로, 클로져를 남발하면 메모리를 과다로 잡아 먹을 수 있기 때문이다.','[Closure] 클로져란 무엇인가?', 20, 70);
 -- insert into posts (created_date, modified_date, comment_count, like_count, content, title, user_id, view_count) values ('2020-01-03 11:13:00', '2020-01-20 11:15:00', 0, 0, '현재 톰캣으로 90 포트로 돌고 있는 서비스가 있는데요~ 이번에 ssl로 변경 하게 되었습니다.\n 그래서 server.xml의 <Connector port> 부분에서  redirectPort="443" 으로 해줬는데요. 기준의 윈도우 방화벽 인바운드가 90 포트로 되어있는데 이거에 443포트를 추가 해줘야 하는건가요?\n 아니면 인바운드에  90 포트는 지우고 443 포트만 추가 해줘야 하는건가요?','초보개발자 ssl 질문이 있습니다.', 13, 3);
 -- insert into posts (created_date, modified_date, comment_count, like_count, content, title, user_id, view_count) values ('2020-01-03 11:13:00', '2020-01-20 11:15:00', 0, 0, '자바 정규식에 대해 알고싶어요.', '자바 정규식', 14, 3);
-
--- -- POST_TAGS
-
-insert into post_tags (post_tag_id, created_date, modified_date, post_id, tag_id)
-values  (2, '2021-04-22 11:13:00', '2021-04-22 11:13:00', 1, 1),
-(3, '2021-04-22 11:13:00', '2021-04-22 11:13:00', 1, 2),
-(4, '2021-04-22 11:13:00', '2021-04-22 11:13:00', 2, 5),
-(5, '2021-04-22 11:13:00', '2021-04-22 11:13:00', 2, 8);
 
 -- -- COMMENT
 INSERT INTO comments (comment_id, created_date, modified_date, content, post_id, user_id) VALUES (1, '2020-04-22 15:01:40', '2020-04-22 15:01:40', '언어랑 DB랑은 연동여부는 관련 없습니다. (아주 없는건 아니지만요...)
