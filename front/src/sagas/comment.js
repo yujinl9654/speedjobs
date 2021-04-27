@@ -33,7 +33,7 @@ function* addComment(action) {
 
 function addCommentAPI(data) {
   const res = axios
-    .post(`/post/${data.id}`, {
+    .post(`/post/${data.id}/comment`, {
       content: data.content,
     })
     .then((response) => response)
@@ -58,7 +58,7 @@ function* getComment(action) {
 }
 
 function getCommentAPI(data) {
-  return axios.get(`/post/${data}/paging?size=99&page=0&sort=id,DESC`);
+  return axios.get(`/post/${data}/comments`);
 }
 
 // 댓글 삭제
@@ -79,7 +79,7 @@ function* deleteComment(action) {
 
 function deleteCommentAPI(data) {
   const { commentId, postId } = data;
-  return axios.delete(`/post/${postId}/${commentId}`);
+  return axios.delete(`/post/${postId}/comment/${commentId}`);
 }
 
 function* modifyComment(action) {
@@ -100,7 +100,7 @@ function* modifyComment(action) {
 
 function modifyCommentAPI(data) {
   const { post, comment } = data;
-  return axios.put(`/post/${post}/${comment}`, { content: data.diff });
+  return axios.put(`/post/${post}/comment/${comment}`, { content: data.diff });
 }
 
 function* watchCommentModify() {
