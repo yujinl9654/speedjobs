@@ -45,14 +45,27 @@ public class CommentService {
 	public void deleteComment(User user, Long commentId) {
 		Comment comment = findOne(commentId);
 		validateUser(comment, user);
+		comment.getPost().decreaseCommentCount();
 		commentRepository.delete(comment);
 	}
 
-	public Page<CommentResponse> findByPage(Long postId, Pageable pageable) {
+	public Page<CommentResponse> findByPage(Long postId, User user, Pageable pageable) {
 		List<Comment> comments = findPost(postId).getComments();
 		return new PageImpl<>(comments.stream()
-			.map(CommentResponse::of)
+			.map(comment -> CommentResponse.of(comment, user))
 			.collect(Collectors.toList()), pageable, comments.size());
+	}
+
+	@Transactional
+    public void saveCommentFavorite(Long commentId, User user) {
+		Comment comment = findOne(commentId);
+		comment.addFavorite(user);
+    }
+
+	@Transactional
+	public void deleteCommentFavorite(Long commentId, User user) {
+		Comment comment = findOne(commentId);
+		comment.removeFavorite(user);
 	}
 
 	private Post findPost(Long postId) {
@@ -71,17 +84,4 @@ public class CommentService {
 		}
 	}
 
-//	@Transactional
-//	public void like(Long commentId) {
-//		Comment comment = commentRepository.findById(commentId)
-//			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
-//		comment.increaseLikeCount();
-//	}
-//
-//	@Transactional
-//	public void hate(Long commentId) {
-//		Comment comment = commentRepository.findById(commentId)
-//			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
-//		comment.decreaseLikeCount();
-//	}
 }
