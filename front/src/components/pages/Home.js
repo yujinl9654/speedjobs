@@ -1,37 +1,32 @@
-import React, { useState } from 'react';
-import TitleCards from './home/TitleCards';
+import React from 'react';
 import AnnounceCard from './home/AnnounceCard';
 import Banner from '../components/banner/Banner';
 
 export default function Home() {
-  const [info] = useState([
-    { title: '네이버 경력직 모집중', date: '2021-04-01 ~ 2021-04-30' },
-    {
-      title: '카카오 경력직 상시모집중',
-      date: '2021-04-01 ~ 2021-04-30',
-    },
-    { title: '라인 신입공채 모집중', date: '2021-04-01 ~ 2021-04-30' },
-    {
-      title: '쿠팡 신입, 경력직 모집중',
-      date: '2021-04-01 ~ 2021-04-30',
-    },
-  ]);
-  const [newest] = useState([
-    { title: '안녕하세요.', date: '2021-05-01' },
-    { title: '반갑습니다.', date: '2021-04-30' },
-    { title: '여기 어떤가요ㅋㅋ', date: '2021-04-29' },
-    { title: '취업문의', date: '2021-04-28' },
-    { title: '별다줄', date: '2021-04-27' },
-    { title: '메인화면 카드를 꾸며주세요.', date: '2021-04-27' },
-  ]);
   return (
     <>
       <Banner />
       <div className="container">
         {/* 타이틀*/}
-        <div className="row">
-          <TitleCards title="공고일정" list={info} />
-          <TitleCards title="최신글목록" list={newest} />
+        <div
+          // className="row"
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            margin: '60px 0',
+            fontWeight: 'lighter',
+          }}
+        >
+          개발자 정보공유와 채용을 동시에
+          <br />
+          <b>
+            <i style={{ fontSize: '30px' }}>
+              커리어 성장과 행복을 위한 여정, SPEEDJOBS
+            </i>
+          </b>
+          <br />
+          개발자를 위한 다양한 필터 옵션으로 나를 위한 포지션을 찾아보세요.{' '}
+          <br />
         </div>
         {/* 공고*/}
         <AnnounceCard />
