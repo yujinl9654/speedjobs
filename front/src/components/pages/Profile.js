@@ -43,13 +43,13 @@ export default function Profile() {
               style={{ paddingRight: '0' }}
             >
               {role === 'ROLE_MEMBER' ? (
-                <Link to="/profile/modify">
+                <Link to={'/profile/modify'}>
                   <StyledButton style={{ marginRight: '0' }} wide>
                     개인정보 수정
                   </StyledButton>
                 </Link>
               ) : (
-                <Link to="/profile/modify2">
+                <Link to={'/profile/modify2'}>
                   <StyledButton style={{ marginRight: '0' }} wide>
                     기업정보 수정
                   </StyledButton>
@@ -71,9 +71,9 @@ export default function Profile() {
 
             <ProfileDiv className={'col-12 col-lg-10'}>
               {role === 'ROLE_MEMBER' ? (
-                <ProfileDetails />
+                <ProfileDetails /> // 개인회원 정보
               ) : (
-                <ProfileDetails2 />
+                <ProfileDetails2 /> // 기업회원 정보
               )}
             </ProfileDiv>
           </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   ProfileDiv,
@@ -8,41 +8,34 @@ import {
   StyledLeftLayout,
 } from '../components/Styled';
 import SideMenu from '../components/SideMenu';
-import {
-  PROFILE_DELETE_REQUEST,
-  PROFILE_GET_REQUEST,
-} from '../../reducers/profile';
+import { PROFILE_DELETE_REQUEST } from '../../reducers/profile';
+import { LOG_OUT_REQUEST } from '../../reducers/user';
 
 export default function Profile() {
   const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const [role, setRole] = useState('');
   const profile = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({ password: '' });
 
-  useEffect(() => {
-    if (user.me === null) return;
-    dispatch({
-      type: PROFILE_GET_REQUEST,
-      data: user.me,
-    });
-    setRole(user.me.role);
-  }, [user.me, dispatch]);
+  const onChangeHandler = useCallback((e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }, []);
 
-  useEffect(() => {
-    if (profile.profileDeleteDone) {
-      window.location.replace('/');
-    }
-  }, [profile]);
-
-  const deleteHandler = useCallback(
+  const onDeleteHandler = useCallback(
     (e) => {
       e.preventDefault();
       dispatch({
         type: PROFILE_DELETE_REQUEST,
+        data: form,
+        me: user.me,
+      });
+      dispatch({
+        type: LOG_OUT_REQUEST,
         data: user.me,
       });
+      console.log(profile);
     },
-    [dispatch, user.me]
+    [dispatch, user.me, profile, form]
   );
 
   return (
@@ -67,8 +60,6 @@ export default function Profile() {
               <SideMenu />
             </StyledLeftLayout>
 
-            {console.log('잉????: ', role)}
-
             <ProfileDiv className={'col-12 col-lg-10'}>
               <div
                 style={{
@@ -79,11 +70,23 @@ export default function Profile() {
               >
                 <h2>경고: 정말로 탈퇴 하시겠습니까?</h2>
                 <p>회원탈퇴 버튼을 클릭하면 모든 정보가 지워집니다.</p>
+
+                <div>
+                  <input
+                    type="password"
+                    onChange={(e) => onChangeHandler(e)}
+                    name={'password'}
+                    placeholder="비밀번호 확인"
+                  />
+                </div>
+
                 <StyledButton
                   red
                   style={{ marginRight: '0' }}
                   wide
-                  onClick={(e) => deleteHandler(e)}
+                  onClick={(e) => {
+                    onDeleteHandler(e);
+                  }}
                 >
                   회원탈퇴
                 </StyledButton>
