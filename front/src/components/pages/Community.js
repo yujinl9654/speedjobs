@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router';
 import Banner from '../components/banner/Banner';
-import { TagBody } from '../components/Styled';
+import { Order, SearchBox, TagBody } from '../components/Styled';
 import Post from '../components/Post';
 import { POST_LIST_DONE, POST_LIST_REQUEST } from '../../reducers/post';
 import TagSelector from '../components/tag/TagSelector';
@@ -129,9 +129,14 @@ export default function Community(props) {
               className={'row justify-content-between'}
               style={{ padding: '10px', paddingTop: '0' }}
             >
+              <div>
+              <Order />
               <TagSelector tagList={taglist} setTagList={setTaglist}>
                 필터
               </TagSelector>
+              </div>
+              <div>
+              <SearchBox />
               {user.me !== null ? (
                 <TagBody
                   style={{ marginTop: '0', border: '1px solid #f5df4d' }}
@@ -144,6 +149,7 @@ export default function Community(props) {
               ) : (
                 ''
               )}
+              </div>
             </div>
           </div>
           <div className={'text-left'}>
