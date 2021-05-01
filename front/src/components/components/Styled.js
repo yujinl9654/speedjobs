@@ -851,8 +851,8 @@ export const SearchBox = () => {
       <Category onClick={() => setShow(true)}>{dropTop[0].name}</Category>
       <input
         type="text"
+        maxLength="10"
         style={{
-          height: '28px',
           width: '120px',
           outline: 'none',
           border: 'none',
@@ -869,7 +869,10 @@ export const SearchBox = () => {
 
 const CategoryDrop = styled.div`
   width: 85px;
-  text-align: left;
+  text-align: center;
+  vertical-align: baseline;
+  position: relative;
+  z-index: 2;
   padding: 10px;
   margin-top: 10px;
   border-radius: 5px;
@@ -878,10 +881,9 @@ const CategoryDrop = styled.div`
 `;
 
 const Category = styled.div`
+  width: 72px;
+  text-align: center;
   display: inline-block;
-  vertical-align: middle;
-  margin-left: 8px;
-  margin-right: 3px;
   border-radius: 5px;
 `;
 
@@ -933,7 +935,10 @@ const OrderList = styled.div`
   cursor: pointer;
   border: #d3d3d3 1px solid;
   color: black;
+  background-color: white;
   border-radius: 5px;
+  position: relative;
+  z-index: 2;
 
   &:hover {
     overflow: visible;

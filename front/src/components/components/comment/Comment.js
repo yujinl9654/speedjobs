@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import 'autoheight-textarea';
-import { ThumbUp } from '@styled-icons/material-rounded/ThumbUp';
+import { ThumbUp } from '@styled-icons/material-rounded';
+
 import { StyledButton } from '../Styled';
 import {
+  COMMENT_FAV_REQUEST,
   COMMENT_GET_REQUEST,
+  COMMENT_HATE_REQUEST,
   COMMENT_MODIFY_REQUEST,
 } from '../../../reducers/comment';
 
@@ -112,6 +115,12 @@ const ThumbUpSt = styled(ThumbUp)`
   margin-right: 8px;
   color: #aaaaaa;
 
+  ${(props) =>
+    props.fav &&
+    css`
+      color: #f2d411;
+    `}
+
   &:hover {
     color: #f2d411;
   }
@@ -134,10 +143,9 @@ export default function Comment({
   content,
   date,
   img,
+  favorite,
   onClick,
 }) {
-  const user = useSelector((state) => state.user);
-
   // 댓글 작성자 기본이미지 설정
   const [image, setImage] = useState(
     'http://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
@@ -149,25 +157,24 @@ export default function Comment({
   }, [img]);
 
   // 댓글 수정하기
+  const { user, comment } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const comment = useSelector((s) => s.comment);
   const [modify, setModify] = useState(true);
-  const [form, setForm] = useState({
+  const [modifyForm, setModifyForm] = useState({
     post: postId,
     comment: commentId,
     diff: content,
   });
   const onChangeHandler = (e) => {
-    setForm((p) => ({ ...p, diff: e.target.value }));
+    setModifyForm((p) => ({ ...p, diff: e.target.value }));
   };
   const modifyHandler = (e) => {
-    console.log('form= ', form);
     if (modify) {
       setModify(false);
     } else {
       dispatch({
         type: COMMENT_MODIFY_REQUEST,
-        data: form,
+        data: modifyForm,
       });
     }
   };
@@ -181,6 +188,35 @@ export default function Comment({
     }
   }, [comment.commentModifyDone, dispatch, postId]);
 
+  // 좋아요 싫어요
+  const favForm = { post: postId, comment: commentId };
+  const favoriteHandler = () => {
+    if (!favorite && user.me?.id !== authorId) {
+      dispatch({
+        type: COMMENT_FAV_REQUEST,
+        data: favForm,
+      });
+    } else if (favorite && user.me?.id !== authorId) {
+      dispatch({
+        type: COMMENT_HATE_REQUEST,
+        data: favForm,
+      });
+    }
+  };
+  useEffect(() => {
+    if (comment.commentFavDone) {
+      dispatch({
+        type: COMMENT_GET_REQUEST,
+        data: postId,
+      });
+    } else if (comment.commentHateDone) {
+      dispatch({
+        type: COMMENT_GET_REQUEST,
+        data: postId,
+      });
+    }
+  }, [comment.commentFavDone, comment.commentHateDone, dispatch, postId]);
+
   return (
     <ClearFix>
       <BlogCommentAvatar src={image} />
@@ -189,11 +225,17 @@ export default function Comment({
           <div>
             {date} <A1>{writer}</A1>
           </div>
-          <ThumbUpSt />
+          <div>
+            {user.me?.id !== authorId ? (
+              <ThumbUpSt fav={favorite} onClick={() => favoriteHandler()} />
+            ) : (
+              ''
+            )}
+          </div>
         </MetaP>
         <autoheight-textarea>
           <P1
-            value={form.diff}
+            value={modifyForm.diff}
             onChange={(e) => onChangeHandler(e)}
             readOnly={modify}
           />

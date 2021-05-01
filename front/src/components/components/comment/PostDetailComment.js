@@ -29,6 +29,7 @@ export default function PostDetailComment(props) {
       content={comment.content}
       date={`${comment.createdDate[0]}/${comment.createdDate[1]}/${comment.createdDate[2]}`}
       img={comment.picture}
+      favorite={comment.favorite}
       onClick={() => deleteHandler(comment.id, props.id)}
     />
   ));

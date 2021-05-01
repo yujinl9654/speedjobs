@@ -130,25 +130,29 @@ export default function Community(props) {
               style={{ padding: '10px', paddingTop: '0' }}
             >
               <div>
-              <Order />
-              <TagSelector tagList={taglist} setTagList={setTaglist}>
-                필터
-              </TagSelector>
+                <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
+                  <Order />
+                </div>
+                <div style={{ display: 'inline-block' }}>
+                  <TagSelector tagList={taglist} setTagList={setTaglist}>
+                    필터
+                  </TagSelector>
+                </div>
               </div>
               <div>
-              <SearchBox />
-              {user.me !== null ? (
-                <TagBody
-                  style={{ marginTop: '0', border: '1px solid #f5df4d' }}
-                  onClick={() => {
-                    history.push('./community/add');
-                  }}
-                >
-                  글쓰기
-                </TagBody>
-              ) : (
-                ''
-              )}
+                <SearchBox />
+                {user.me !== null ? (
+                  <TagBody
+                    style={{ marginTop: '0', border: '1px solid #f5df4d' }}
+                    onClick={() => {
+                      history.push('./community/add');
+                    }}
+                  >
+                    글쓰기
+                  </TagBody>
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </div>
