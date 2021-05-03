@@ -7,9 +7,15 @@ import {
   COMMENT_DELETE_FAIL,
   COMMENT_DELETE_REQUEST,
   COMMENT_DELETE_SUCCESS,
+  COMMENT_FAV_FAIL,
+  COMMENT_FAV_REQUEST,
+  COMMENT_FAV_SUCCESS,
   COMMENT_GET_FAIL,
   COMMENT_GET_REQUEST,
   COMMENT_GET_SUCCESS,
+  COMMENT_HATE_FAIL,
+  COMMENT_HATE_REQUEST,
+  COMMENT_HATE_SUCCESS,
   COMMENT_MODIFY_FAIL,
   COMMENT_MODIFY_REQUEST,
   COMMENT_MODIFY_SUCCESS,
@@ -80,13 +86,13 @@ function* deleteComment(action) {
 }
 
 function deleteCommentAPI(data) {
-  const { commentId, postId } = data;
-  return axios.delete(`/post/${postId}/comment/${commentId}`);
+  const { comment, post } = data;
+  return axios.delete(`/post/${post}/comment/${comment}`);
 }
 
+// 댓글 수정
 function* modifyComment(action) {
   try {
-    console.log('action=', action.data);
     const result = yield call(modifyCommentAPI, action.data);
     yield put({
       type: COMMENT_MODIFY_SUCCESS,
@@ -105,6 +111,47 @@ function modifyCommentAPI(data) {
   return axios.put(`/post/${post}/comment/${comment}`, { content: data.diff });
 }
 
+// 댓글 좋아요
+function* favComment(action) {
+  try {
+    const result = yield call(favCommentAPI, action.data);
+    console.log('result= ', result);
+    yield put({
+      type: COMMENT_FAV_SUCCESS,
+      data: result,
+    });
+  } catch (error) {
+    yield put({
+      type: COMMENT_FAV_FAIL,
+    });
+  }
+}
+
+function favCommentAPI(data) {
+  const { post, comment } = data;
+  return axios.post(`/post/${post}/comment/${comment}/favorite`);
+}
+
+// 댓글 좋아요 취소
+function* hateComment(action) {
+  try {
+    const result = yield call(hateCommentAPI, action.data);
+    yield put({
+      type: COMMENT_HATE_SUCCESS,
+      data: result,
+    });
+  } catch (error) {
+    yield put({
+      type: COMMENT_HATE_FAIL,
+    });
+  }
+}
+
+function hateCommentAPI(data) {
+  const { post, comment } = data;
+  return axios.delete(`/post/${post}/comment/${comment}/favorite`);
+}
+
 function* watchCommentModify() {
   yield takeLatest(COMMENT_MODIFY_REQUEST, modifyComment);
 }
@@ -121,11 +168,21 @@ function* watchCommentGet() {
   yield takeLatest(COMMENT_GET_REQUEST, getComment);
 }
 
+function* watchCommentFav() {
+  yield takeLatest(COMMENT_FAV_REQUEST, favComment);
+}
+
+function* watchCommentHate() {
+  yield takeLatest(COMMENT_HATE_REQUEST, hateComment);
+}
+
 export default function* commentSaga() {
   yield all([
     fork(watchCommentAdd),
     fork(watchCommentGet),
     fork(watchCommentDelete),
     fork(watchCommentModify),
+    fork(watchCommentFav),
+    fork(watchCommentHate),
   ]);
 }

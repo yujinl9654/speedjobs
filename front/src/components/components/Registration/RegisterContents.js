@@ -21,7 +21,7 @@ export default function RegisterContents(props) {
     registrationNumber: '',
     role: 'ROLE_GUEST',
   });
-
+  // 규정에 맞게 입력했는지 체크하는 state
   const [check, setCheck] = useState({
     email: 0,
     password: 0,
@@ -33,7 +33,7 @@ export default function RegisterContents(props) {
     homepage: 0,
     registrationNumber: 0,
   });
-
+  // 각 항목 입력값 체크 => registerCheck에서 정규식으로 체크 후 true = 1, flase = -1
   const companyChange = (e) => {
     if (e.target.name === 'checkPassword') {
       setCheck((prev) => ({
@@ -56,7 +56,7 @@ export default function RegisterContents(props) {
       }));
     }
   };
-
+  // 모두 옳게 작성했을 경우 회원가입 요청
   const submitHandler = (e) => {
     e.preventDefault();
     if (
@@ -75,7 +75,7 @@ export default function RegisterContents(props) {
       });
     }
   };
-
+  // 회원가입이 성공적으로 끝나면 되돌아가기
   useEffect(() => {
     if (user.signUpDone) {
       history.goBack();

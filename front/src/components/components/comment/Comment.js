@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import 'autoheight-textarea';
-import { ThumbUp } from '@styled-icons/material-rounded/ThumbUp';
+import { ThumbUp } from '@styled-icons/material-rounded';
+
 import { StyledButton } from '../Styled';
 import {
+  COMMENT_DELETE_REQUEST,
+  COMMENT_FAV_REQUEST,
   COMMENT_GET_REQUEST,
+  COMMENT_HATE_REQUEST,
   COMMENT_MODIFY_REQUEST,
 } from '../../../reducers/comment';
 
@@ -112,6 +116,12 @@ const ThumbUpSt = styled(ThumbUp)`
   margin-right: 8px;
   color: #aaaaaa;
 
+  ${(props) =>
+    props.fav &&
+    css`
+      color: #f2d411;
+    `}
+
   &:hover {
     color: #f2d411;
   }
@@ -134,10 +144,8 @@ export default function Comment({
   content,
   date,
   img,
-  onClick,
+  favorite,
 }) {
-  const user = useSelector((state) => state.user);
-
   // 댓글 작성자 기본이미지 설정
   const [image, setImage] = useState(
     'http://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'
@@ -149,37 +157,71 @@ export default function Comment({
   }, [img]);
 
   // 댓글 수정하기
+  const { user, comment } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const comment = useSelector((s) => s.comment);
-  const [modify, setModify] = useState(true);
-  const [form, setForm] = useState({
+  const [readOnly, setReadOnly] = useState(true);
+  const [modifyForm, setModifyForm] = useState({
     post: postId,
     comment: commentId,
     diff: content,
   });
   const onChangeHandler = (e) => {
-    setForm((p) => ({ ...p, diff: e.target.value }));
+    setModifyForm((p) => ({ ...p, diff: e.target.value }));
   };
-  const modifyHandler = (e) => {
-    console.log('form= ', form);
-    if (modify) {
-      setModify(false);
+  // readOnly가 true면 댓글수정화면이 아님 & false면 댓글수정상황 맞음
+  const modifyHandler = () => {
+    if (readOnly) {
+      setReadOnly(false);
     } else {
       dispatch({
         type: COMMENT_MODIFY_REQUEST,
-        data: form,
+        data: modifyForm,
       });
     }
   };
   useEffect(() => {
     if (comment.commentModifyDone) {
-      setModify(true);
+      setReadOnly(true);
       dispatch({
         type: COMMENT_GET_REQUEST,
         data: postId,
       });
     }
   }, [comment.commentModifyDone, dispatch, postId]);
+
+  // 댓글 삭제하기
+  const deleteHandler = () => {
+    const idData = { post: postId, comment: commentId };
+    dispatch({
+      type: COMMENT_DELETE_REQUEST,
+      data: idData,
+    });
+  };
+
+  // 좋아요 싫어요
+  const favForm = { post: postId, comment: commentId };
+  // 댓글작성자와 로그인회원이 다른 경우 && 좋아요 한 댓글이 아닌 경우 => 좋아요
+  const favoriteHandler = () => {
+    if (!favorite && user.me?.id !== authorId) {
+      dispatch({
+        type: COMMENT_FAV_REQUEST,
+        data: favForm,
+      });
+    } else if (favorite && user.me?.id !== authorId) {
+      dispatch({
+        type: COMMENT_HATE_REQUEST,
+        data: favForm,
+      });
+    }
+  };
+  useEffect(() => {
+    if (comment.commentFavDone || comment.commentHateDone) {
+      dispatch({
+        type: COMMENT_GET_REQUEST,
+        data: postId,
+      });
+    }
+  }, [comment.commentFavDone, comment.commentHateDone, dispatch, postId]);
 
   return (
     <ClearFix>
@@ -189,21 +231,27 @@ export default function Comment({
           <div>
             {date} <A1>{writer}</A1>
           </div>
-          <ThumbUpSt />
+          <div>
+            {user.me?.id !== authorId ? (
+              <ThumbUpSt fav={favorite} onClick={() => favoriteHandler()} />
+            ) : (
+              ''
+            )}
+          </div>
         </MetaP>
         <autoheight-textarea>
           <P1
-            value={form.diff}
+            value={modifyForm.diff}
             onChange={(e) => onChangeHandler(e)}
-            readOnly={modify}
+            readOnly={readOnly}
           />
         </autoheight-textarea>
         {user.me?.id === authorId ? (
           <Meta>
-            <StyledButton white onClick={(e) => modifyHandler(e)}>
+            <StyledButton white onClick={() => modifyHandler()}>
               수정
             </StyledButton>
-            <StyledButton white onClick={onClick}>
+            <StyledButton white onClick={() => deleteHandler()}>
               삭제
             </StyledButton>
           </Meta>
@@ -225,16 +273,20 @@ export function CommentsForm(props) {
     id: props.id,
     content: '',
   });
+
+  // 새 댓글 저장하기
   const commentHandler = () => {
     props.onclick(comForm);
     setResult('0/300');
     setComForm({ ...comForm, content: '' });
   };
 
+  // 작성한 댓글 글자수 계산
   const cal = () => {
     setResult(comForm.content.length.toString() + '/300');
   };
 
+  // 로그인한 회원정보에 이미지 있는 경우 이미지 저장
   useEffect(() => {
     if (user.me.picture !== null) {
       setImg(user.me.picture);

@@ -20,6 +20,16 @@ export const initialState = {
   commentModifyDone: false,
   commentModifyData: null,
   commentModifyError: null,
+
+  commentFavLoading: false,
+  commentFavDone: false,
+  commentFavData: null,
+  commentFavError: null,
+
+  commentHateLoading: false,
+  commentHateDone: false,
+  commentHateData: null,
+  commentHateError: null,
 };
 
 export const COMMENT_ADD_REQUEST = 'COMMENT_ADD_REQUEST';
@@ -39,6 +49,16 @@ export const COMMENT_DELETE_FAIL = 'COMMENT_DELETE_FAIL';
 export const COMMENT_MODIFY_REQUEST = 'COMMENT_MODIFY_REQUEST';
 export const COMMENT_MODIFY_SUCCESS = 'COMMENT_MODIFY_SUCCESS';
 export const COMMENT_MODIFY_FAIL = 'COMMENT_MODIFY_FAIL';
+
+export const COMMENT_FAV_REQUEST = 'COMMENT_FAV_REQUEST';
+export const COMMENT_FAV_SUCCESS = 'COMMENT_FAV_SUCCESS';
+export const COMMENT_FAV_FAIL = 'COMMENT_FAV_FAIL';
+export const COMMENT_FAV_DONE = 'COMMENT_FAV_DONE';
+
+export const COMMENT_HATE_REQUEST = 'COMMENT_HATE_REQUEST';
+export const COMMENT_HATE_SUCCESS = 'COMMENT_HATE_SUCCESS';
+export const COMMENT_HATE_FAIL = 'COMMENT_HATE_FAIL';
+export const COMMENT_HATE_DONE = 'COMMENT_HATE_DONE';
 
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
@@ -75,16 +95,6 @@ const reducer = (state = initialState, action) =>
         draft.commentGetLoading = false;
         draft.commentGetError = action.error;
         break;
-      case COMMENT_GET_DONE:
-        draft.commentAddDone = false;
-        draft.commentAddData = null;
-        draft.commentGetDone = false;
-        draft.commentGetData = null;
-        draft.commentDeleteDone = false;
-        draft.commentDeleteData = null;
-        draft.commentModifyDone = false;
-        draft.commentModifyData = null;
-        break;
 
       case COMMENT_DELETE_REQUEST:
         draft.commentDeleteLoading = true;
@@ -118,9 +128,59 @@ const reducer = (state = initialState, action) =>
         draft.commentModifyError = action.error;
         break;
 
+      case COMMENT_FAV_REQUEST:
+        draft.commentFavLoading = true;
+        draft.commentFavDone = false;
+        draft.commentFavData = null;
+        draft.commentFavError = null;
+        break;
+      case COMMENT_FAV_SUCCESS:
+        draft.commentFavLoading = false;
+        draft.commentFavDone = true;
+        draft.commentFavData = action.data;
+        break;
+      case COMMENT_FAV_FAIL:
+        draft.commentFavLoading = false;
+        draft.commentFavError = action.error;
+        break;
+
+      case COMMENT_HATE_REQUEST:
+        draft.commentHateLoading = true;
+        draft.commentHateDone = false;
+        draft.commentHateData = null;
+        draft.commentHateError = null;
+        break;
+      case COMMENT_HATE_SUCCESS:
+        draft.commentHateLoading = false;
+        draft.commentHateDone = true;
+        draft.commentHateData = action.data;
+        break;
+      case COMMENT_HATE_FAIL:
+        draft.commentHateLoading = false;
+        draft.commentHateError = action.error;
+        break;
+
+      case COMMENT_GET_DONE:
+        draft.commentAddDone = false;
+        draft.commentAddData = null;
+        draft.commentGetDone = false;
+        draft.commentGetData = null;
+        draft.commentDeleteDone = false;
+        draft.commentDeleteData = null;
+        draft.commentModifyDone = false;
+        draft.commentModifyData = null;
+        draft.commentFavDone = false;
+        draft.commentFavData = null;
+        draft.commentHateDone = false;
+        draft.commentHateData = null;
+        break;
+
       case COMMENT_ERROR_RESOLVED:
         draft.commentAddError = null;
         draft.commentGetError = null;
+        draft.commentDeleteError = null;
+        draft.commentModifyError = null;
+        draft.commentFavError = null;
         break;
       default:
         break;
