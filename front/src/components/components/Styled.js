@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Plus } from '@styled-icons/octicons';
@@ -789,3 +789,181 @@ export const SearchInput = ({ placeholder, onChange, value }) => {
     </>
   );
 };
+
+// 게시판 검색
+export const SearchBox = ({ value, onChange, onClick }) => {
+  // 드롭다운 선택
+  const initialList = [
+    { name: '제목', state: false },
+    { name: '내용', state: false },
+    { name: '제목+내용', state: false },
+    { name: '작성자', state: false },
+  ];
+  const [list, setList] = useState([...initialList]);
+  const [dropTop, setDropTop] = useState([{ name: '검색', state: true }]);
+  const [click, setClick] = useState(false);
+  useEffect(() => {
+    const tmp = list.filter((i) => i.state);
+    // console.log('useEffect= ', list);
+
+    if (tmp.length > 0 && click) {
+      setDropTop([...tmp]);
+      setClick(false);
+      setList([...initialList]);
+    }
+  }, [click, initialList]);
+
+  const DropList = list
+    .filter((i) => !i.state)
+    .map((i, index) => (
+      <span>
+        <div
+          key={index}
+          onClick={() => {
+            i.state = true;
+            setClick(true);
+            console.log('onClick= ', list);
+          }}
+        >
+          {i.name}
+        </div>
+      </span>
+    ));
+
+  // 드롭다운 보이기 / 숨기기
+  const [show, setShow] = useState(false);
+  const showRef = useRef();
+  const ClickHandler = (e) => {
+    if (showRef.current) {
+      if (show && !showRef.current.contains(e.target)) setShow(false);
+    }
+  };
+  useEffect(() => {
+    addEventListener('click', ClickHandler, true);
+    return () => {
+      removeEventListener('click', ClickHandler, true);
+    };
+  });
+  return (
+    <SearchOutline ref={showRef}>
+      <Category onClick={() => setShow(true)}>{dropTop[0].name}</Category>
+      <CategoryInput
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e)}
+        maxLength="8"
+      />
+      <Search style={{ verticalAlign: 'middle' }} onClick={() => onClick()} />
+      {show && <CategoryDrop>{DropList}</CategoryDrop>}
+    </SearchOutline>
+  );
+};
+
+const CategoryInput = styled.input`
+  width: 100px;
+  outline: none;
+  border: none;
+  @media (max-width: 768px) {
+    width: 55px;
+    height: 20px;
+  }
+`;
+const CategoryDrop = styled.div`
+  width: 85px;
+  text-align: center;
+  vertical-align: baseline;
+  position: relative;
+  z-index: 2;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  @media (max-width: 768px) {
+    font-size: 12px;
+    width: 66px;
+    padding: 5px;
+  }
+`;
+
+const Category = styled.div`
+  width: 72px;
+  text-align: center;
+  display: inline-block;
+  border-radius: 5px;
+  vertical-align: center;
+  @media (max-width: 768px) {
+    width: 55px;
+    font-size: 12px;
+  }
+`;
+
+const SearchOutline = styled.div`
+  color: #7c7c7c;
+  height: 38px;
+  padding-right: 8px;
+  margin-right: 5px;
+  display: inline-block;
+  border: 3px #7c7c7c solid;
+  border-radius: 5px;
+  vertical-align: top;
+  @media (max-width: 768px) {
+    font-size: 13px;
+    height: 28px;
+    width: 140px;
+  }
+`;
+
+// 게시물 조회순서
+export const Order = () => {
+  const items = [
+    { order: 1, name: '조회순' },
+    { order: 2, name: '추천순' },
+    { order: 3, name: '댓글순' },
+  ];
+  const itemList = items.map((i, index) => (
+    <Type key={index} order={i.order} onClick={() => onClickHandler()}>
+      {i.name}
+    </Type>
+  ));
+  const onClickHandler = () => {};
+
+  return <OrderList>{itemList}</OrderList>;
+};
+
+const OrderList = styled.div`
+  display: inline-block;
+  overflow: hidden;
+  flex-direction: row;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  vertical-align: top;
+  width: fit-content;
+  padding: 7px 13px 0;
+  height: 38px;
+  font-size: 15px;
+  user-select: none;
+  cursor: pointer;
+  border: #d3d3d3 1px solid;
+  color: black;
+  background-color: white;
+  border-radius: 5px;
+  position: relative;
+  z-index: 2;
+  @media (max-width: 768px) {
+    font-size: 13px;
+    height: 28px;
+    padding-top: 4px;
+  }
+
+  &:hover {
+    overflow: visible;
+    height: fit-content;
+  }
+`;
+
+const Type = styled.div`
+  border-bottom: #d3d3d3;
+  margin-bottom: 7px;
+`;

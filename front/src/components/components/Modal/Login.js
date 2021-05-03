@@ -67,7 +67,11 @@ const CanButton = styled.div`
 `;
 
 export default function Login(props) {
-  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [loginForm, setLoginForm] = useState({
+    email: '',
+    password: '',
+    provider: 'LOCAL',
+  });
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 

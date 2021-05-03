@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import Cards from '../../components/Cards';
 import {
@@ -7,6 +8,7 @@ import {
 } from '../../../reducers/recruit';
 
 export default function AnnounceCard() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const recruit = useSelector((s) => s.recruit);
 
@@ -15,7 +17,7 @@ export default function AnnounceCard() {
   useEffect(() => {
     dispatch({
       type: RECRUIT_LIST_REQUEST,
-      data: { size: 6, page: 0 },
+      data: { size: 9, page: 0 },
     });
   }, [dispatch]);
 
@@ -29,6 +31,7 @@ export default function AnnounceCard() {
             'http://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
         }
         return {
+          id: i.id,
           thumbnail: thumb,
           title: i.title,
           content: i.content,
@@ -43,7 +46,11 @@ export default function AnnounceCard() {
 
   const cards = list.map((c, index) => {
     return (
-      <div className="col-md-4 mb-2 col-sm-6" key={index}>
+      <div
+        className="col-md-4 mb-2 col-sm-6"
+        key={index}
+        onClick={() => history.push(`./recruit/detail/${c.id}`)}
+      >
         <Cards title={c.title} content={c.content} thumbnail={c.thumbnail} />
       </div>
     );
