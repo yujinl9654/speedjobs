@@ -8,8 +8,8 @@ export default function ResumeEducation() {
   const [items, setItems] = useState([{ id: 0 }]);
   const itemList = items.map((item, index) => (
     <div key={index} style={{ display: 'flex', flexFlow: 'wrap' }}>
-      <ResumeInputs name={'학교이름'} />
-      <ResumeInputs name={'전공'} />
+      <ResumeInputs itemName={'학교이름'} />
+      <ResumeInputs itemName={'전공'} />
       <DatePickRange
         start={'입학날짜'}
         end={'졸업날짜'}
@@ -18,6 +18,7 @@ export default function ResumeEducation() {
       />
     </div>
   ));
+
   return (
     <>
       <div style={{ marginBottom: '40px' }}>
@@ -26,11 +27,11 @@ export default function ResumeEducation() {
           최종 학력만 입력하세요 (편입한 경우 편입한 대학을 기입하세요)
         </Warning>
         <MyEducation>고등학교</MyEducation>
-        <div>{itemList}</div>
+        {itemList}
         <MyEducation>대학교</MyEducation>
-        <div>{itemList}</div>
+        {itemList}
         <MyEducation>대학원</MyEducation>
-        <div>{itemList}</div>
+        {itemList}
       </div>
     </>
   );
