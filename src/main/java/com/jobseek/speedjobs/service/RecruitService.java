@@ -1,6 +1,7 @@
 package com.jobseek.speedjobs.service;
 
 import static com.jobseek.speedjobs.domain.user.Role.ROLE_ADMIN;
+import static com.jobseek.speedjobs.domain.user.Role.ROLE_COMPANY;
 
 import com.jobseek.speedjobs.common.exception.NotFoundException;
 import com.jobseek.speedjobs.common.exception.UnAuthorizedException;
@@ -49,6 +50,7 @@ public class RecruitService {
 		List<Tag> tags = findTagsById(recruitRequest.getTagIds());
 		recruit.addTags(tags);
 		return recruitRepository.save(recruit).getId();
+		// DB가 뻗을시 에러 처리 + 트랜잭션 안에서 에러 처리
 	}
 
 	@Transactional
@@ -66,10 +68,11 @@ public class RecruitService {
 	@Transactional
 	public void delete(Long recruitId, User user) {
 		Recruit recruit = findOne(recruitId);
-		if (user.getRole() != ROLE_ADMIN && recruit.getCompany().getId() != user.getId()) {
-			throw new UnAuthorizedException("권한이 없습니다.");
+		if (user.isAdmin() || recruit.getCompany() == user) {
+			recruitRepository.delete(recruit);
+			return;
 		}
-		recruitRepository.delete(recruit);
+		throw new UnAuthorizedException("관리자 또는 본인만 삭제할 수 있습니다");
 	}
 
 	@Transactional

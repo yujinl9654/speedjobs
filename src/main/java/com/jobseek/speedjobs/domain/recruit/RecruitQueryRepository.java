@@ -30,7 +30,6 @@ public class RecruitQueryRepository {
 
 	public Page<Recruit> findAll(RecruitSearchCondition condition, Pageable pageable) {
 		List<OrderSpecifier> orders = getAllOrderSpecifiers(pageable, recruit);
-
 		JPAQuery<Recruit> query = queryFactory
 			.selectDistinct(recruit)
 			.from(recruit)

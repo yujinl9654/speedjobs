@@ -17,8 +17,8 @@ Content-Type: application/json
 
 {
   "email": "123@123.com",
-  "name": "승보쿠",
-  "password": "a12341234!",
+  "name": "테스트",
+  "password": "a1231234",
   "role": "ROLE_MEMBER"
 }
 
@@ -85,3 +85,22 @@ GET http://{{host}}/user/
 ### 개인정보 조회
 GET http://{{host}}/user/me
 Authorization: Bearer {{accessToken}}
+
+### 회원가입
+POST http://{{host}}/user/signup/member
+Content-Type: application/json
+
+{
+  "name": "개인회원",
+  "email": "woojin7124@naver.com",
+  "password": "test12341231!",
+  "role": "ROLE_MEMBER"
+}
+
+###
+POST http://{{host}}/user/check
+Content-Type: application/json
+
+{
+  "password": 1234
+}
