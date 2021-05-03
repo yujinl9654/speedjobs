@@ -25,11 +25,11 @@ public class RecruitRequest {
 	private String title;
 
 	@NotNull
-	@JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
+	@JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime openDate;
 
 	@Future
-	@JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Asia/Seoul")
+	@JsonFormat(pattern = "yyyy-MM-dd kk:mm:ss", timezone = "Asia/Seoul")
 	private LocalDateTime closeDate;
 
 	@NotNull
@@ -48,6 +48,7 @@ public class RecruitRequest {
 
 	private List<Long> tagIds;
 
+	// Request에서 toEntity 메서드를 이용해서 엔티티로 반환한다.
 	public Recruit toEntity(Company company) {
 		return Recruit.builder()
 			.company(company)
