@@ -37,6 +37,7 @@ export default function Community(props) {
     )
   );
 
+  // 게시물 목록 불러오기
   const loadMore = () => {
     console.log(page.current);
     dispatch({
@@ -50,6 +51,7 @@ export default function Community(props) {
   const rootRef = useRef();
   const { post, user } = useSelector((state) => state);
 
+  // 태그 정보 불러오기
   const [, setLoading] = useState(false);
   const [postList, setPostList] = useState([]);
   const [taglist, setTaglist] = useState([]);
@@ -94,6 +96,11 @@ export default function Community(props) {
       }
       dispatch({ type: POST_LIST_DONE });
     }
+    if (post.postListSearchBar) {
+      setLoading(false);
+      setPostList([...post.postList.content]);
+      dispatch({ type: POST_LIST_DONE });
+    }
   }, [post, setPostList, setLoading, page, dispatch]);
 
   const mapPost = postList.map((pl) => (
@@ -111,6 +118,28 @@ export default function Community(props) {
       key={pl.id}
     />
   ));
+
+  // 게시물 검색하기
+  const [form, setForm] = useState({
+    size: 10,
+    page: 0,
+    title: '',
+    searchBar: true,
+  });
+  const ChangeHandler = (e) => {
+    setForm({ ...form, title: e.target.value });
+  };
+  const SearchHandler = () => {
+    console.log('form=', form);
+    if (form.title === '') {
+      alert('검색어를 입력하세요.');
+    } else {
+      dispatch({
+        type: POST_LIST_REQUEST,
+        data: form,
+      });
+    }
+  };
 
   return (
     <>
@@ -140,7 +169,11 @@ export default function Community(props) {
                 </div>
               </div>
               <div>
-                <SearchBox />
+                <SearchBox
+                  value={form.title}
+                  onChange={ChangeHandler}
+                  onClick={SearchHandler}
+                />
                 {user.me !== null ? (
                   <TagBody
                     style={{ marginTop: '0', border: '1px solid #f5df4d' }}

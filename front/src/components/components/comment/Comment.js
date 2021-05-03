@@ -6,6 +6,7 @@ import { ThumbUp } from '@styled-icons/material-rounded';
 
 import { StyledButton } from '../Styled';
 import {
+  COMMENT_DELETE_REQUEST,
   COMMENT_FAV_REQUEST,
   COMMENT_GET_REQUEST,
   COMMENT_HATE_REQUEST,
@@ -144,7 +145,6 @@ export default function Comment({
   date,
   img,
   favorite,
-  onClick,
 }) {
   // 댓글 작성자 기본이미지 설정
   const [image, setImage] = useState(
@@ -159,7 +159,7 @@ export default function Comment({
   // 댓글 수정하기
   const { user, comment } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const [modify, setModify] = useState(true);
+  const [readOnly, setReadOnly] = useState(true);
   const [modifyForm, setModifyForm] = useState({
     post: postId,
     comment: commentId,
@@ -168,9 +168,10 @@ export default function Comment({
   const onChangeHandler = (e) => {
     setModifyForm((p) => ({ ...p, diff: e.target.value }));
   };
-  const modifyHandler = (e) => {
-    if (modify) {
-      setModify(false);
+  // readOnly가 true면 댓글수정화면이 아님 & false면 댓글수정상황 맞음
+  const modifyHandler = () => {
+    if (readOnly) {
+      setReadOnly(false);
     } else {
       dispatch({
         type: COMMENT_MODIFY_REQUEST,
@@ -180,7 +181,7 @@ export default function Comment({
   };
   useEffect(() => {
     if (comment.commentModifyDone) {
-      setModify(true);
+      setReadOnly(true);
       dispatch({
         type: COMMENT_GET_REQUEST,
         data: postId,
@@ -188,8 +189,18 @@ export default function Comment({
     }
   }, [comment.commentModifyDone, dispatch, postId]);
 
+  // 댓글 삭제하기
+  const deleteHandler = () => {
+    const idData = { post: postId, comment: commentId };
+    dispatch({
+      type: COMMENT_DELETE_REQUEST,
+      data: idData,
+    });
+  };
+
   // 좋아요 싫어요
   const favForm = { post: postId, comment: commentId };
+  // 댓글작성자와 로그인회원이 다른 경우 && 좋아요 한 댓글이 아닌 경우 => 좋아요
   const favoriteHandler = () => {
     if (!favorite && user.me?.id !== authorId) {
       dispatch({
@@ -204,12 +215,7 @@ export default function Comment({
     }
   };
   useEffect(() => {
-    if (comment.commentFavDone) {
-      dispatch({
-        type: COMMENT_GET_REQUEST,
-        data: postId,
-      });
-    } else if (comment.commentHateDone) {
+    if (comment.commentFavDone || comment.commentHateDone) {
       dispatch({
         type: COMMENT_GET_REQUEST,
         data: postId,
@@ -237,15 +243,15 @@ export default function Comment({
           <P1
             value={modifyForm.diff}
             onChange={(e) => onChangeHandler(e)}
-            readOnly={modify}
+            readOnly={readOnly}
           />
         </autoheight-textarea>
         {user.me?.id === authorId ? (
           <Meta>
-            <StyledButton white onClick={(e) => modifyHandler(e)}>
+            <StyledButton white onClick={() => modifyHandler()}>
               수정
             </StyledButton>
-            <StyledButton white onClick={onClick}>
+            <StyledButton white onClick={() => deleteHandler()}>
               삭제
             </StyledButton>
           </Meta>
@@ -267,16 +273,20 @@ export function CommentsForm(props) {
     id: props.id,
     content: '',
   });
+
+  // 새 댓글 저장하기
   const commentHandler = () => {
     props.onclick(comForm);
     setResult('0/300');
     setComForm({ ...comForm, content: '' });
   };
 
+  // 작성한 댓글 글자수 계산
   const cal = () => {
     setResult(comForm.content.length.toString() + '/300');
   };
 
+  // 로그인한 회원정보에 이미지 있는 경우 이미지 저장
   useEffect(() => {
     if (user.me.picture !== null) {
       setImg(user.me.picture);

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Comment, { CommentsForm } from './Comment';
 import {
   COMMENT_ADD_REQUEST,
-  COMMENT_DELETE_REQUEST,
   COMMENT_GET_DONE,
   COMMENT_GET_REQUEST,
 } from '../../../reducers/comment';
@@ -30,7 +29,6 @@ export default function PostDetailComment(props) {
       date={`${comment.createdDate[0]}/${comment.createdDate[1]}/${comment.createdDate[2]}`}
       img={comment.picture}
       favorite={comment.favorite}
-      onClick={() => deleteHandler(comment.id, props.id)}
     />
   ));
 
@@ -38,22 +36,17 @@ export default function PostDetailComment(props) {
   const { comment, post, user } = useSelector((state) => state);
   const dispatch = useDispatch();
   const addComment = (newCom) => {
-    dispatch({
-      type: COMMENT_ADD_REQUEST,
-      data: newCom,
-    });
+    if (newCom.content === '') {
+      alert('댓글 내용을 입력해주세요.');
+    } else {
+      dispatch({
+        type: COMMENT_ADD_REQUEST,
+        data: newCom,
+      });
+    }
   };
 
-  // 댓글 삭제하기
-  const deleteHandler = (c, p) => {
-    const idData = { commentId: c, postId: p };
-    dispatch({
-      type: COMMENT_DELETE_REQUEST,
-      data: idData,
-    });
-  };
-
-  // 댓글 정보 불러오기
+  // 게시글 정보 불러오기 후에 댓글 정보 불러오기
   useEffect(() => {
     if (post.postGetDone) {
       dispatch({
@@ -63,6 +56,7 @@ export default function PostDetailComment(props) {
     }
   }, [dispatch, props.id, post.postGetDone]);
 
+  // 불러온 댓글 정보 화면에 표현하기
   useEffect(() => {
     if (comment.commentGetDone) {
       const getArr = comment.commentGetData.content;

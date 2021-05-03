@@ -59,6 +59,7 @@ export default function SignUp(props) {
     name: '',
     role: 'ROLE_MEMBER',
   });
+  // 규정에 맞게 입력했는지 체크하는 state
   const [check, setCheck] = useState({
     email: 0,
     password: 0,
@@ -66,6 +67,7 @@ export default function SignUp(props) {
     confirmBoolean: 0,
     name: 0,
   });
+  // 모두 옳게 작성했을 경우 회원가입 요청
   const submitHandle = useCallback(
     (e) => {
       e.preventDefault();
@@ -89,6 +91,7 @@ export default function SignUp(props) {
     },
     [check, dispatch, form, props]
   );
+  // 각 항목마다 입력값 체크 => signUpCheck에서 정규식으로 체크 후 true = 1, false = -1
   const handleChange = useCallback(
     (e) => {
       if (e.target.name !== 'REPEAT PASSWORD') {

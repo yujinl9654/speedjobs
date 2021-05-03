@@ -791,7 +791,7 @@ export const SearchInput = ({ placeholder, onChange, value }) => {
 };
 
 // 게시판 검색
-export const SearchBox = () => {
+export const SearchBox = ({ value, onChange, onClick }) => {
   // 드롭다운 선택
   const initialList = [
     { name: '제목', state: false },
@@ -804,14 +804,14 @@ export const SearchBox = () => {
   const [click, setClick] = useState(false);
   useEffect(() => {
     const tmp = list.filter((i) => i.state);
-    console.log('useEffect= ', list);
+    // console.log('useEffect= ', list);
 
     if (tmp.length > 0 && click) {
       setDropTop([...tmp]);
       setClick(false);
       setList([...initialList]);
     }
-  }, [click, initialList, list]);
+  }, [click, initialList]);
 
   const DropList = list
     .filter((i) => !i.state)
@@ -844,29 +844,30 @@ export const SearchBox = () => {
       removeEventListener('click', ClickHandler, true);
     };
   });
-  useEffect(() => {}, []);
-
   return (
     <SearchOutline ref={showRef}>
       <Category onClick={() => setShow(true)}>{dropTop[0].name}</Category>
-      <input
+      <CategoryInput
         type="text"
-        maxLength="10"
-        style={{
-          width: '120px',
-          outline: 'none',
-          border: 'none',
-        }}
+        value={value}
+        onChange={(e) => onChange(e)}
+        maxLength="8"
       />
-      <Search
-        style={{ verticalAlign: 'middle' }}
-        onClick={() => console.log('DropTop= ', dropTop)}
-      />
+      <Search style={{ verticalAlign: 'middle' }} onClick={() => onClick()} />
       {show && <CategoryDrop>{DropList}</CategoryDrop>}
     </SearchOutline>
   );
 };
 
+const CategoryInput = styled.input`
+  width: 100px;
+  outline: none;
+  border: none;
+  @media (max-width: 768px) {
+    width: 55px;
+    height: 20px;
+  }
+`;
 const CategoryDrop = styled.div`
   width: 85px;
   text-align: center;
@@ -878,6 +879,11 @@ const CategoryDrop = styled.div`
   border-radius: 5px;
   background-color: white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  @media (max-width: 768px) {
+    font-size: 12px;
+    width: 66px;
+    padding: 5px;
+  }
 `;
 
 const Category = styled.div`
@@ -885,6 +891,11 @@ const Category = styled.div`
   text-align: center;
   display: inline-block;
   border-radius: 5px;
+  vertical-align: center;
+  @media (max-width: 768px) {
+    width: 55px;
+    font-size: 12px;
+  }
 `;
 
 const SearchOutline = styled.div`
@@ -899,6 +910,7 @@ const SearchOutline = styled.div`
   @media (max-width: 768px) {
     font-size: 13px;
     height: 28px;
+    width: 140px;
   }
 `;
 
@@ -939,6 +951,11 @@ const OrderList = styled.div`
   border-radius: 5px;
   position: relative;
   z-index: 2;
+  @media (max-width: 768px) {
+    font-size: 13px;
+    height: 28px;
+    padding-top: 4px;
+  }
 
   &:hover {
     overflow: visible;

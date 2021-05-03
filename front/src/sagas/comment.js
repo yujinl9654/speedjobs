@@ -86,8 +86,8 @@ function* deleteComment(action) {
 }
 
 function deleteCommentAPI(data) {
-  const { commentId, postId } = data;
-  return axios.delete(`/post/${postId}/comment/${commentId}`);
+  const { comment, post } = data;
+  return axios.delete(`/post/${post}/comment/${comment}`);
 }
 
 // 댓글 수정
