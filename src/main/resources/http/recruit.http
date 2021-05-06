@@ -84,7 +84,18 @@ Authorization: Bearer {{accessToken}}
 GET http://{{host}}/recruit/favorites?page=0&size=2&sort=id,DESC
 Authorization: Bearer {{accessToken}}
 
+### 멤버 로그인
+POST http://{{host}}/auth/login
+Content-Type: application/json
 
+{
+  "email": "{{member_email}}",
+  "password": "{{password}}"
+}
+
+> {% client.global.set("accessToken", response.body.accessToken); %}
+
+###
 
 #GET http://{{host}}/recruit
 #GET http://{{host}}/recruit?page=0&size=3&sort=id,DESC
