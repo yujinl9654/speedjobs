@@ -18,6 +18,7 @@ export default function PostList({
   done,
   type,
   list,
+  option,
 }) {
   const dispatch = useDispatch();
   const page = useRef(0);
@@ -46,6 +47,7 @@ export default function PostList({
         size: 10,
         page: page.current,
         type,
+        ...option,
       },
     });
   };
@@ -102,7 +104,11 @@ export default function PostList({
       title={pl.title}
       writer={pl.author}
       viewCount={pl.viewCount}
-      date={`${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`}
+      date={
+        pl.createdDate
+          ? `${pl.createdDate[0]}/${pl.createdDate[1]}/${pl.createdDate[2]}`
+          : ''
+      }
       fav={pl.favorite}
       key={pl.id}
     />

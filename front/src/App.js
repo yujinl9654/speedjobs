@@ -30,6 +30,9 @@ import IndividualModify from './components/pages/profile/IndividualModify';
 import CorporateModify from './components/pages/profile/CorporateModify';
 import { TAG_GET_REQUEST } from './reducers/tag';
 import PostModify from './components/pages/PostModify';
+import SubmitList from './components/pages/SubmitList';
+import MyRecruitments from './components/pages/MyRecruitments';
+import MyPosts from './components/pages/MyPosts';
 
 const Container = styled.div`
   padding-bottom: 40px;
@@ -105,6 +108,7 @@ function App() {
         <Header />
         <Container>
           <Route exact path={'/community'} component={Community} />
+          <Route exact path={'/community/myList'} component={MyPosts} />
           <Route exact path={'/'} component={Home} />
           <Route exact path={'/recruit'} component={Recruitment} />
           <Route path={'/recruit/detail/:id'} component={RecruitmentDetail} />
@@ -123,12 +127,18 @@ function App() {
           />
           <Route exact path={'/resume'} component={Resume} />
           <Route exact path={'/resume/list'} component={ResumeList} />
+          <Route exact path={'/resume/submit'} component={SubmitList} />
           <Route exact path={'/likelist/community'} component={CommuLike} />
           <Route exact path={'/likelist/recruit'} component={RecruitLike} />
           <Route exact path={'/registration'} component={MemberRegistration} />
           <Route exact path={'/community/add'} component={PostAdd} />
           <Route exact path={'/community/modify/:id'} component={PostModify} />
           <Route exact path={'/recruitment/add'} component={RecruitAdd} />
+          <Route
+            exact
+            path={'/recruitment/myList'}
+            component={MyRecruitments}
+          />
           <Route exact path={'/admin/login'} component={Login} />
           <Route exact path={'/admin/home'} component={AdminHome} />
         </Container>

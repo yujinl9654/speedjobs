@@ -49,7 +49,6 @@ const PostComment = styled.div`
   border-radius: 4px;
   text-align: left;
   overflow-wrap: normal;
-
   @media (max-width: 992px) {
     margin-left: 5px;
     padding: 5px 10px;
@@ -168,7 +167,7 @@ export default function Comment({
   const onChangeHandler = (e) => {
     setModifyForm((p) => ({ ...p, diff: e.target.value }));
   };
-  // readOnly가 true면 댓글수정화면이 아님 & false면 댓글수정상황 맞음
+  // readOnly가 true면 댓글수정화면이 아님(일반댓글화면) & false면 댓글수정화면 맞음
   const modifyHandler = () => {
     if (readOnly) {
       setReadOnly(false);
@@ -186,8 +185,13 @@ export default function Comment({
         type: COMMENT_GET_REQUEST,
         data: postId,
       });
+    } else if (comment.commentFavDone || comment.commentHateDone) {
+      dispatch({
+        type: COMMENT_GET_REQUEST,
+        data: postId,
+      });
     }
-  }, [comment.commentModifyDone, dispatch, postId]);
+  }, [comment, dispatch, postId]);
 
   // 댓글 삭제하기
   const deleteHandler = () => {
@@ -214,14 +218,6 @@ export default function Comment({
       });
     }
   };
-  useEffect(() => {
-    if (comment.commentFavDone || comment.commentHateDone) {
-      dispatch({
-        type: COMMENT_GET_REQUEST,
-        data: postId,
-      });
-    }
-  }, [comment.commentFavDone, comment.commentHateDone, dispatch, postId]);
 
   return (
     <ClearFix>
@@ -313,16 +309,28 @@ export function CommentsForm(props) {
             value={comForm.content}
           ></CmtInput>
         </autoheight-textarea>
-        <Meta>
-          <TextLength value={result} readOnly />
-          <StyledButton
-            onClick={() => {
-              commentHandler();
-            }}
-          >
-            등록
-          </StyledButton>
-        </Meta>
+        <MetaP
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            margin: '0',
+            padding: '0',
+          }}
+        >
+          <MetaP>
+            <A1>{user.me.nickname}</A1>
+          </MetaP>
+          <Meta>
+            <TextLength value={result} readOnly />
+            <StyledButton
+              onClick={() => {
+                commentHandler();
+              }}
+            >
+              등록
+            </StyledButton>
+          </Meta>
+        </MetaP>
       </PostComment>
     </CommentForm>
   );

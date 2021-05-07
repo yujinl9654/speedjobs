@@ -743,41 +743,40 @@ export const SearchInput = ({ placeholder, onChange, value }) => {
 };
 
 // 게시판 검색
-export const SearchBox = ({ value, onChange, onClick }) => {
+export const SearchBox = ({ onInput, onClick, setForm }) => {
   // 드롭다운 선택
-  const initialList = useMemo(
-    () => [
-      { name: '제목', state: false },
-      { name: '내용', state: false },
-      { name: '제목+내용', state: false },
-      { name: '작성자', state: false },
-    ],
-    []
-  );
+  const initialList = useMemo(()=>[
+    { name: '제    목', state: false, target: 'title' },
+    { name: '내    용', state: false, target: 'content' },
+    { name: '제목+내용', state: false, target: '' },
+    { name: '작 성 자', state: false, target: 'author' },
+  ],[]);
   const [list, setList] = useState([...initialList]);
-  const [dropTop, setDropTop] = useState([{ name: '검색', state: true }]);
-  const [click, setClick] = useState(false);
+  const [dropTop, setDropTop] = useState([
+    { name: '제    목', state: true, target: 'title' },
+  ]);
   useEffect(() => {
     const tmp = list.filter((i) => i.state);
-    // console.log('useEffect= ', list);
-
-    if (tmp.length > 0 && click) {
+    // state가 true인 항목이 1개보다 많을 경우
+    if (tmp.length > 0) {
       setDropTop([...tmp]);
-      setClick(false);
       setList([...initialList]);
     }
-  }, [click, initialList, list]);
+  }, [initialList, list]);
 
   const DropList = list
     .filter((i) => !i.state)
     .map((i, index) => (
-      <span>
+      <span key={index}>
         <div
-          key={index}
           onClick={() => {
             i.state = true;
-            setClick(true);
-            console.log('onClick= ', list);
+            setForm((p) => ({
+              size: p.size,
+              page: p.page,
+              searchBar: p.searchBar,
+              [i.target]: keyword,
+            }));
           }}
         >
           {i.name}
@@ -787,6 +786,7 @@ export const SearchBox = ({ value, onChange, onClick }) => {
 
   // 드롭다운 보이기 / 숨기기
   const [show, setShow] = useState(false);
+  const [keyword, setKeyword] = useState('');
   const showRef = useRef();
   const ClickHandler = (e) => {
     if (showRef.current) {
@@ -804,11 +804,17 @@ export const SearchBox = ({ value, onChange, onClick }) => {
       <Category onClick={() => setShow(true)}>{dropTop[0].name}</Category>
       <CategoryInput
         type="text"
-        value={value}
-        onChange={(e) => onChange(e)}
+        value={keyword}
+        onChange={(e) => {
+          setKeyword(e.target.value);
+          onInput(e, dropTop[0]);
+        }}
         maxLength="8"
       />
-      <Search style={{ verticalAlign: 'middle' }} onClick={() => onClick()} />
+      <Search
+        style={{ verticalAlign: 'middle', cursor: 'pointer' }}
+        onClick={() => onClick()}
+      />
       {show && <CategoryDrop>{DropList}</CategoryDrop>}
     </SearchOutline>
   );
@@ -842,14 +848,17 @@ const CategoryDrop = styled.div`
 `;
 
 const Category = styled.div`
-  width: 72px;
-  text-align: center;
+  width: 75px;
+  cursor: pointer;
+  padding-left: 10px;
+  text-align: left;
   display: inline-block;
   border-radius: 5px;
   vertical-align: center;
   @media (max-width: 768px) {
     width: 55px;
     font-size: 12px;
+    padding-left: 0;
   }
 `;
 
@@ -870,18 +879,28 @@ const SearchOutline = styled.div`
 `;
 
 // 게시물 조회순서
-export const Order = () => {
-  const items = [
-    { order: 1, name: '조회순' },
-    { order: 2, name: '추천순' },
-    { order: 3, name: '댓글순' },
-  ];
+export const Order = ({ inOrder }) => {
+  const [items, setItems] = useState([
+    { name: '조회순', sort: 'viewCount' },
+    { name: '추천순', sort: 'favoriteCount' },
+    { name: '댓글순', sort: 'commentCount' },
+  ]);
   const itemList = items.map((i, index) => (
-    <Type key={index} order={i.order} onClick={() => onClickHandler()}>
+    <Type
+      key={index}
+      onClick={() => {
+        inOrder(i.sort);
+        setItems((p) => {
+          const temp = items[0];
+          p[0] = i;
+          p[index] = temp;
+          return p;
+        });
+      }}
+    >
       {i.name}
     </Type>
   ));
-  const onClickHandler = () => {};
 
   return <OrderList>{itemList}</OrderList>;
 };

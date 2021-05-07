@@ -64,10 +64,14 @@ export default function PostDetailComment(props) {
       dispatch({
         type: COMMENT_GET_DONE,
       });
-    } else if (
-      comment.commentAddData !== null ||
-      comment.commentDeleteData !== null
-    ) {
+    } else if (comment.commentAddData !== null) {
+      alert('댓글이 등록되었습니다.');
+      dispatch({
+        type: COMMENT_GET_REQUEST,
+        data: props.id,
+      });
+    } else if (comment.commentDeleteData !== null) {
+      alert('댓글이 삭제되었습니다.');
       dispatch({
         type: COMMENT_GET_REQUEST,
         data: props.id,
@@ -78,12 +82,12 @@ export default function PostDetailComment(props) {
   return (
     <>
       <BlogComment>
+        <CommentList>{mapComment}</CommentList>
         {user.me !== null ? (
           <CommentsForm id={props.id} onclick={addComment} />
         ) : (
           ''
         )}
-        <CommentList>{mapComment}</CommentList>
       </BlogComment>
     </>
   );
