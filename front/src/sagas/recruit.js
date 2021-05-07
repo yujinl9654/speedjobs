@@ -14,13 +14,16 @@ import {
 
 async function getRecruitListApi(action) {
   // eslint-disable-next-line
-  const { size, page, searchBar, ...search } = action.data;
+  let { size, page, searchBar, order, ...search } = action.data;
+  if (order === undefined) {
+    order = 'id';
+  }
   const searchText =
     (await Object.entries(search)
       .map((e) => `${e[0]}=${e[1]}`)
       .join('&')) + (Object.entries(search).length !== 0 ? '&' : '');
   return axios.get(
-    `/recruit?${searchText}size=${size}&page=${page}&sort=id,DESC`
+    `/recruit?${searchText}size=${size}&page=${page}&sort=${order},DESC`
   );
 }
 
