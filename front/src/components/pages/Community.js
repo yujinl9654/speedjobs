@@ -123,22 +123,32 @@ export default function Community(props) {
   const [form, setForm] = useState({
     size: 10,
     page: 0,
-    title: '',
     searchBar: true,
   });
-  const ChangeHandler = (e) => {
-    setForm({ ...form, title: e.target.value });
+  const OrderHandler = (sort) => {
+    setForm({ ...form, order: sort });
   };
-  const SearchHandler = () => {
-    console.log('form=', form);
-    if (form.title === '') {
-      alert('검색어를 입력하세요.');
-    } else {
+  useEffect(() => {
+    if (form.order !== undefined) {
       dispatch({
         type: POST_LIST_REQUEST,
         data: form,
       });
     }
+  }, [dispatch, form]);
+  const InputHandler = (e, i) => {
+    setForm((p) => ({
+      size: p.size,
+      page: p.page,
+      searchBar: p.searchBar,
+      [i.target]: e.target.value,
+    }));
+  };
+  const SearchHandler = () => {
+    dispatch({
+      type: POST_LIST_REQUEST,
+      data: form,
+    });
   };
 
   return (
@@ -160,7 +170,7 @@ export default function Community(props) {
             >
               <div>
                 <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
-                  <Order />
+                  <Order inOrder={OrderHandler} setForm={setForm} form={form} />
                 </div>
                 <div style={{ display: 'inline-block' }}>
                   <TagSelector tagList={taglist} setTagList={setTaglist}>
@@ -170,9 +180,9 @@ export default function Community(props) {
               </div>
               <div>
                 <SearchBox
-                  value={form.title}
-                  onChange={ChangeHandler}
+                  onInput={InputHandler}
                   onClick={SearchHandler}
+                  setForm={setForm}
                 />
                 {user.me !== null ? (
                   <TagBody

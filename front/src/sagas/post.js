@@ -21,12 +21,17 @@ import {
 
 async function getPostListApi(action) {
   // eslint-disable-next-line
-  const { size, page, searchBar, ...search } = action.data;
+  let { size, page, searchBar, order, ...search } = action.data;
+  if (order === undefined) {
+    order = 'id';
+  }
   const searchText =
     (await Object.entries(search)
       .map((e) => `${e[0]}=${e[1]}`)
       .join('&')) + (Object.entries(search).length !== 0 ? '&' : '');
-  return axios.get(`/post?${searchText}size=${size}&page=${page}&sort=id,DESC`);
+  return axios.get(
+    `/post?${searchText}size=${size}&page=${page}&sort=${order},DESC`
+  );
 }
 
 function* getPostList(action) {

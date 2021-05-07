@@ -92,19 +92,13 @@ export default function IndividualModify() {
 
   const onChangeDate = useCallback(
     (e) => {
-      console.log('=== e ===', e);
       const event = { target: { name: 'birth', value: e } };
-      console.log('=== event ===', event);
-      console.log('=== event.target ===', event.target);
-      console.log('=== event.target.name ===', event.target.name);
-      console.log('=== event.target.value ===', event.target.value);
       if (event.target.name === 'birth') {
         setForm((prev) => ({
           ...prev,
           [event.target.name]: moment(event.target.value).format('YYYY-MM-DD'),
         }));
       }
-      console.log('=== form ===', form);
     },
     [form]
   );

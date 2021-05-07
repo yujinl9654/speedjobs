@@ -44,14 +44,12 @@ export default function IndividualDetails() {
   }, [user.me, dispatch]);
 
   useEffect(() => {
-    console.log('=== profile.profileGetData ===', profile.profileGetData);
     if (profile.profileGetData) {
       const profileTemp = { ...profile.profileGetData };
       if (profile.profileGetData.picture === null) {
         profileTemp.picture =
           'http://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
       }
-      console.log('=== profileTemp ===', profileTemp);
       setItem({ ...profileTemp });
     }
   }, [profile.profileGetData]);
