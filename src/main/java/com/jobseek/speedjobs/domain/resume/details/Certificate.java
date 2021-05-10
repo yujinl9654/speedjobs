@@ -8,8 +8,8 @@ import lombok.ToString;
 
 @Embeddable
 @Getter
-@ToString
 @Setter
+@ToString
 public class Certificate {
 
 	private String certName;
