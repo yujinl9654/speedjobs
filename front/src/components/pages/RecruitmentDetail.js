@@ -13,6 +13,12 @@ import {
   UN_LIKE_REQUEST,
 } from '../../reducers/like';
 import KakaoMap from '../data/KakaoMap';
+import {
+  RESUME_APPLY_DONE,
+  RESUME_APPLY_REQUEST,
+  RESUME_LIST_DONE,
+  RESUME_LIST_REQUEST,
+} from '../../reducers/resume';
 
 const Chatting = styled.div`
   width: 100%;
@@ -22,13 +28,44 @@ const Chatting = styled.div`
   }
 `;
 
+const Choice = styled.div`
+  border-radius: 5px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 80px;
+  background-color: white;
+  width: 35%;
+  height: inherit;
+  z-index: 20;
+  padding: 18px 25px;
+  text-align: left;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+const ResumeInfo = styled.div`
+  font-size: 12px;
+  font-weight: lighter;
+  color: #747474;
+`;
+const Resume = styled.div`
+  //padding: 5px;
+  margin-bottom: 5px;
+  &:hover {
+    background-color: #eee;
+  }
+`;
+
 export default function RecruitmentDetail(props) {
+  const { id } = useParams();
   const [pop, setPop] = useState('none');
   const [content, setContent] = useState({});
   const [isFav, setIsFav] = useState(false);
-  const { id } = useParams();
+  const [choice, setChoice] = useState(false);
+  const [resumeList, setResumeList] = useState([]);
+  const [apply, setApply] = useState({ recruitId: id, resumeId: '' });
   const dispatch = useDispatch();
-  const recruit = useSelector((state) => state.recruit);
+  const { recruit, resume } = useSelector((state) => state);
   const [refresh, ,] = useCookies(['REFRESH_TOKEN']);
   const { user, like } = useSelector((state) => state);
   const ButtonEvent = () => {
@@ -97,6 +134,39 @@ export default function RecruitmentDetail(props) {
     [id, dispatch]
   );
 
+  // 이력서 지원하기
+  const submitHandler = () => {
+    if (choice) {
+      dispatch({
+        type: RESUME_APPLY_REQUEST,
+        data: apply,
+      });
+    }
+  };
+  useEffect(() => {
+    if (resume.resumeListDone) {
+      setResumeList([...resume.resumeList.content]);
+      dispatch({
+        type: RESUME_LIST_DONE,
+      });
+    } else if (resume.resumeApplyDone) {
+      setChoice(false);
+      alert('지원이 완료되었습니다.');
+      dispatch({
+        type: RESUME_APPLY_DONE,
+      });
+    }
+  }, [dispatch, resume.resumeApplyDone, resume.resumeListDone]);
+  const resumeArr = resumeList.map((item) => (
+    <Resume onClick={() => setApply((p) => ({ ...p, resumeId: item.id }))}>
+      <div>{item.title}</div>
+      <ResumeInfo>
+        <div>{item.name}</div>
+        <div>{item.contact}</div>
+      </ResumeInfo>
+    </Resume>
+  ));
+
   return (
     <>
       <div
@@ -108,8 +178,32 @@ export default function RecruitmentDetail(props) {
       >
         {/* 제목 지원 찜하기 */}
         <StyledHeaderDiv title={content.title ?? '.....'}>
+          {choice && (
+            <Choice>
+              <div>이력서 선택</div>
+              <div style={{ marginTop: '10px' }}>{resumeArr}</div>
+              <div style={{ textAlign: 'right' }}>
+                <StyledButton onClick={() => submitHandler()}>
+                  이력서 지원
+                </StyledButton>
+                <StyledButton grey onClick={() => setChoice(false)}>
+                  취소
+                </StyledButton>
+              </div>
+            </Choice>
+          )}
           <div style={{ flex: '0 0' }}>
-            <StyledButton wide>지원하기</StyledButton>
+            <StyledButton
+              wide
+              onClick={() => {
+                setChoice(true);
+                dispatch({
+                  type: RESUME_LIST_REQUEST,
+                });
+              }}
+            >
+              지원하기
+            </StyledButton>
           </div>
           <div style={{ flex: '0 0' }}>
             <StyledButton
