@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import {
   ProfileDiv,
@@ -7,6 +8,10 @@ import {
 } from '../components/Styled';
 import SideMenu from '../components/SideMenu';
 import SubmitItem from '../components/SubmitItem';
+import {
+  RECRUIT_LIST_DONE,
+  RECRUIT_LIST_REQUEST,
+} from '../../reducers/recruit';
 
 const ApplicationInfo = styled.div`
   border: 1px #eee solid;
@@ -36,56 +41,43 @@ const ListSetting = styled.div`
 `;
 
 export default function SubmitList() {
-  const [arr] = useState([
-    {
-      author: '김건목',
-      position: 'frontend 웹개발자',
-      skill: [{ name: 'javascript' }, { name: 'vue.js' }],
-      date: '2021-05-01',
-    },
-    {
-      author: '박지훈',
-      position: 'frontend 웹개발자',
-      skill: [{ name: 'react.js' }],
-      date: '2021-05-02',
-    },
-    {
-      author: '한보라',
-      position: 'backend 서버개발자',
-      skill: [{ name: 'java' }],
-      date: '2021-05-01',
-    },
-    {
-      author: '최예린',
-      position: 'fullstack 개발자',
-      skill: [{ name: 'python' }, { name: 'java' }],
-      date: '2021-05-03',
-    },
-    {
-      author: '이중복',
-      position: 'frontend 웹개발자',
-      skill: [{ name: 'javascript' }],
-      date: '2021-05-05',
-    },
-  ]);
-  const mapArr = arr.map((i) => (
+  const dispatch = useDispatch();
+  const { user, recruit } = useSelector((state) => state);
+  const [recruitCount, setRecruitCount] = useState('');
+  const [arr, setArr] = useState([]);
+
+  // 기업이 작성한 공고목록 불러오기
+  useEffect(() => {
+    dispatch({
+      type: RECRUIT_LIST_REQUEST,
+      data: { size: 99, page: 0, companyName: user.me?.nickname },
+    });
+  }, [dispatch, user.me?.nickname]);
+  useEffect(() => {
+    if (recruit.recruitList) {
+      const tmp = recruit.recruitList.content.length;
+      setRecruitCount(tmp);
+      setArr(recruit.recruitList.content);
+      dispatch({
+        type: RECRUIT_LIST_DONE,
+      });
+    }
+  }, [dispatch, recruit.recruitList]);
+
+  const mapArr = arr.map((i, index) => (
     <SubmitItem
-      author={i.author}
-      date={i.date}
+      key={index}
+      id={i.id}
+      title={i.title}
+      date={i.openDate}
+      tags={i.tags}
       position={i.position}
-      skill={i.skill}
     />
   ));
 
   return (
     <div className="container text-left">
-      <StyledHeaderDiv padding title={'지원이력서 목록'}>
-        {/* <div style={{ flex: '0 0' }}>*/}
-        {/*  <Link to="/resume">*/}
-        {/*    <StyledButton wide>???</StyledButton>*/}
-        {/*  </Link>*/}
-        {/* </div>*/}
-      </StyledHeaderDiv>
+      <StyledHeaderDiv padding title={'지원이력서 목록'} />
       <div className="container" style={{ marginTop: '70px' }}>
         <div className="row justify-content-center">
           <StyledLeftLayout borderNone className={'col-12 col-lg-2 text-left'}>
@@ -96,7 +88,7 @@ export default function SubmitList() {
             <ListSetting>
               <ApplicationInfo>
                 <span>
-                  <CountNumber>5</CountNumber>
+                  <CountNumber>{recruitCount}</CountNumber>
                   <span>채용중 공고</span>
                 </span>
                 <span>
@@ -104,7 +96,7 @@ export default function SubmitList() {
                   <span>지원자</span>
                 </span>
                 <span>
-                  <CountNumber>10</CountNumber>
+                  <CountNumber>{recruitCount}</CountNumber>
                   <span>전체 공고</span>
                 </span>
               </ApplicationInfo>
