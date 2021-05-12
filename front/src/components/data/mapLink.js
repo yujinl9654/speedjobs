@@ -15,7 +15,7 @@ const DropLinks = [
   { title: 'Membership', to: '/registration' },
   { title: 'Profile 개발용', to: '/profile' },
 ];
-//  아이디
+//  아이디_MEMBER
 const DropLinksUser = [
   { title: 'user', to: '/' },
   { title: '개인정보', to: '/profile' },
@@ -34,11 +34,37 @@ const DropLinksUser = [
     },
   },
 ];
+//  아이디_COMPANY
+const DropLinksCompany = [
+  { title: 'user', to: '/' },
+  { title: '개인정보', to: '/profile' },
+  { title: '이력서', to: '/resume/submit' },
+  { title: '게시글', to: '/community/myList' },
+  { title: '채용공고', to: '/recruitment/myList' },
+  {
+    title: '로그아웃',
+    to: '/',
+    onClick: (e, dispatch) => {
+      e.preventDefault();
+      dispatch({
+        type: LOG_OUT_REQUEST,
+      });
+    },
+  },
+];
 
 //   모바일페이지 아래 부분 링크
-export const mappedLinkUser = (change, isLogin, toggle, dispatch) => {
-  const Drop = isLogin ? DropLinksUser : DropLinks;
-  const headLink = Drop.map((link) => ({
+export const mappedLinkUser = (change, role, isLogin, toggle, dispatch) => {
+  const Drop = () => {
+    if (isLogin) {
+      if (role === 'ROLE_MEMBER') return DropLinksUser;
+      else return DropLinksCompany;
+    } else {
+      return DropLinks;
+    }
+  };
+  // isLogin? DropLinksUser: DropLinks;
+  const headLink = Drop().map((link) => ({
     ...change.find((c) => c.title === link.title),
     ...link,
   }));
@@ -92,9 +118,17 @@ export const MapMenu = ({ change }) => {
   return <>{mappedMenu(change)}</>;
 };
 
-export const mappedDrop = (change, isLogin, toggle, dispatch) => {
-  const Drop = isLogin ? DropLinksUser : DropLinks;
-  const mapDropLink = Drop.map((link) => ({
+export const mappedDrop = (role, change, isLogin, toggle, dispatch) => {
+  const Drop = () => {
+    if (isLogin) {
+      if (role === 'ROLE_MEMBER') return DropLinksUser;
+      else return DropLinksCompany;
+    } else {
+      return DropLinks;
+    }
+  };
+  // isLogin ? DropLinksUser : DropLinks;
+  const mapDropLink = Drop().map((link) => ({
     ...change.find((c) => c.title === link.title),
     ...link,
   }));
@@ -119,10 +153,10 @@ export default function MapLink() {
   return <>{mappedLink()}</>;
 }
 
-export function MapDrop({ change, toggle, isLogin, dispatch }) {
-  return <>{mappedDrop(change, isLogin, toggle, dispatch)}</>;
+export function MapDrop({ role, change, toggle, isLogin, dispatch }) {
+  return <>{mappedDrop(role, change, isLogin, toggle, dispatch)}</>;
 }
 
-export function MapLinkUser({ change, toggle, isLogin, dispatch }) {
-  return <>{mappedLinkUser(change, isLogin, toggle, dispatch)}</>;
+export function MapLinkUser({ change, toggle, role, isLogin, dispatch }) {
+  return <>{mappedLinkUser(change, role, isLogin, toggle, dispatch)}</>;
 }

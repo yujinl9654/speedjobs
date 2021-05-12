@@ -67,6 +67,7 @@ export const Background = styled.div`
 export default function NavDrop(props) {
   const [toggle, setToggle] = useState('none');
   const [isLogin, setIsLogin] = useState(false);
+  const [role, setRole] = useState('');
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const DropRef = useRef();
@@ -91,6 +92,7 @@ export default function NavDrop(props) {
   useEffect(() => {
     if ((user.meDone || user.logInWelcomed) && !user.logOutDone) {
       setIsLogin((prev) => true);
+      setRole(user.me.role);
       setMapPropsLogin((prev) => {
         prev[0].name = user.me.nickname;
         return prev;
@@ -140,6 +142,7 @@ export default function NavDrop(props) {
             change={isLogin ? mapPropsLogin : mapProps}
             toggle={() => toggleHandler()}
             isLogin={isLogin}
+            role={role}
           ></MapDrop>
         </DropUl>
       </NavDropContent>

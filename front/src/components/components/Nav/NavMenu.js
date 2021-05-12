@@ -79,6 +79,7 @@ export default function NavMenu(props) {
   const dispatch = useDispatch();
   const MenuRef = useRef();
   const [isLogin, setIsLogin] = useState(false);
+  const [role, setRole] = useState('');
   const toggleHandler = () => {
     setToggle((p) => !p);
   };
@@ -132,6 +133,7 @@ export default function NavMenu(props) {
   useEffect(() => {
     if ((user.meDone || user.logInWelcomed) && !user.logOutDone) {
       setIsLogin((prev) => true);
+      setRole(user.me.role);
       setMapPropsUserLogin((prev) => {
         prev[0].name = user.me.nickname;
         return prev;
@@ -164,6 +166,7 @@ export default function NavMenu(props) {
             <MapLinkUser
               change={isLogin ? mapPropsUserLogin : mapPropsUser}
               toggle={() => toggleHandler()}
+              role={role}
               isLogin={isLogin}
               dispatch={dispatch}
             ></MapLinkUser>

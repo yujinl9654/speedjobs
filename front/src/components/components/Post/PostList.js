@@ -103,6 +103,8 @@ export default function PostList({
       tags={[...(pl.tags.SKILL ?? []), ...(pl.tags.POSITION ?? [])]}
       title={pl.title}
       writer={pl.author}
+      favoriteCount={pl.favoriteCount}
+      commentCount={pl.commentCount}
       viewCount={pl.viewCount}
       date={
         pl.createdDate
