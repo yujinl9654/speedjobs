@@ -29,7 +29,7 @@ export default function MyRecruitments() {
             </StyledLeftLayout>
             <ProfileDiv
               className={'col-12 col-lg-10'}
-              style={{ paddingLeft: '30px' }}
+              style={{ paddingLeft: '40px' }}
             >
               {/* <Tags tagList={taglist} selected={setTaglist}>*/}
               {/*  직무*/}

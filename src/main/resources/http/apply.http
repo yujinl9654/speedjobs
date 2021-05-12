@@ -21,7 +21,7 @@ Content-Type: application/json
 > {% client.global.set("accessToken", response.body.accessToken); %}
 
 ### 공고 지원
-POST http://{{host}}/recruit/3/resume/3
+POST http://{{host}}/recruit/2/resume/3
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

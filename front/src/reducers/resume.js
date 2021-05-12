@@ -25,6 +25,11 @@ export const initialState = {
   resumeModifyDone: false,
   resumeModifyError: null,
   resumeModify: null,
+
+  resumeApplyLoading: false,
+  resumeApplyDone: false,
+  resumeApplyError: null,
+  resumeApply: null,
 };
 
 export const RESUME_GET_REQUEST = 'RESUME_GET_REQUEST';
@@ -51,6 +56,11 @@ export const RESUME_MODIFY_REQUEST = 'RESUME_MODIFY_REQUEST';
 export const RESUME_MODIFY_SUCCESS = 'RESUME_MODIFY_SUCCESS';
 export const RESUME_MODIFY_FAIL = 'RESUME_MODIFY_FAIL';
 export const RESUME_MODIFY_DONE = 'RESUME_MODIFY_DONE';
+
+export const RESUME_APPLY_REQUEST = 'RESUME_APPLY_REQUEST';
+export const RESUME_APPLY_SUCCESS = 'RESUME_APPLY_SUCCESS';
+export const RESUME_APPLY_FAIL = 'RESUME_APPLY_FAIL';
+export const RESUME_APPLY_DONE = 'RESUME_APPLY_DONE';
 
 const reducer = (state = initialState, action) =>
   produce(state, (draft) => {
@@ -163,6 +173,28 @@ const reducer = (state = initialState, action) =>
         draft.resumeModify = null;
         draft.resumeModifyError = null;
         break;
+
+      // =========APPLY=========
+      case RESUME_APPLY_REQUEST:
+        draft.resumeApplyLoading = true;
+        draft.resumeApplyDone = false;
+        draft.resumeApplyError = null;
+        draft.resumeApply = null;
+        break;
+      case RESUME_APPLY_SUCCESS:
+        draft.resumeApplyLoading = false;
+        draft.resumeApplyDone = true;
+        draft.resumeApply = action.data;
+        break;
+      case RESUME_APPLY_FAIL:
+        draft.resumeApplyLoading = false;
+        draft.resumeAddError = action.error;
+        break;
+      case RESUME_APPLY_DONE:
+        draft.resumeApplyDone = false;
+        draft.resumeApply = null;
+        break;
+
       default:
         break;
     }
