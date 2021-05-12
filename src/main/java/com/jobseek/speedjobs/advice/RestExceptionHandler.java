@@ -4,7 +4,7 @@ import com.jobseek.speedjobs.advice.dto.ErrorResponse;
 import com.jobseek.speedjobs.common.exception.DuplicatedException;
 import com.jobseek.speedjobs.common.exception.ForbiddenException;
 import com.jobseek.speedjobs.common.exception.NotFoundException;
-import com.jobseek.speedjobs.common.exception.UnAuthorizedException;
+import com.jobseek.speedjobs.common.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +41,8 @@ public class RestExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 
-	@ExceptionHandler(UnAuthorizedException.class)
-	public ResponseEntity<ErrorResponse> UnAuthorizedException(UnAuthorizedException e) {
+	@ExceptionHandler(UnauthorizedException.class)
+	public ResponseEntity<ErrorResponse> UnauthorizedException(UnauthorizedException e) {
 		ErrorResponse response = new ErrorResponse(e.getMessage());
 		log.error("UnauthorizedException - {}", e.getMessage());
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);

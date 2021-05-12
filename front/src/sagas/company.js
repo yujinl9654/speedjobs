@@ -39,7 +39,6 @@ function* getCompanyInfo(action) {
 
 // 공고에 지원된 이력서 조회
 function getApplyListAPI(data) {
-  console.log('data= ', data);
   const res = axios
     .get(`/apply/company/${data}`)
     .then((response) => response)
@@ -52,7 +51,6 @@ function getApplyListAPI(data) {
 function* getApplyList(action) {
   try {
     const result = yield call(getApplyListAPI, action.data);
-    console.log('result= ', result.data);
     yield put({
       type: APPLY_LIST_SUCCESS,
       data: result.data,

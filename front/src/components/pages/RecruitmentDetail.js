@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import styled, { css } from 'styled-components';
 import { useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
@@ -51,6 +51,11 @@ const ResumeInfo = styled.div`
 const Resume = styled.div`
   //padding: 5px;
   margin-bottom: 5px;
+  ${(props) =>
+    props.id === props.apply &&
+    css`
+      background-color: #eee;
+    `}
   &:hover {
     background-color: #eee;
   }
@@ -158,7 +163,11 @@ export default function RecruitmentDetail(props) {
     }
   }, [dispatch, resume.resumeApplyDone, resume.resumeListDone]);
   const resumeArr = resumeList.map((item) => (
-    <Resume onClick={() => setApply((p) => ({ ...p, resumeId: item.id }))}>
+    <Resume
+      id={item.id}
+      apply={apply.resumeId}
+      onClick={() => setApply((p) => ({ ...p, resumeId: item.id }))}
+    >
       <div>{item.title}</div>
       <ResumeInfo>
         <div>{item.name}</div>
@@ -166,6 +175,20 @@ export default function RecruitmentDetail(props) {
       </ResumeInfo>
     </Resume>
   ));
+  const showRef = useRef();
+  const ClickHandler = (e) => {
+    if (showRef.current) {
+      if (choice && !showRef.current.contains(e.target)) {
+        setChoice(false);
+      }
+    }
+  };
+  useEffect(() => {
+    addEventListener('click', ClickHandler, true);
+    return () => {
+      removeEventListener('click', ClickHandler, true);
+    };
+  });
 
   return (
     <>
@@ -179,12 +202,12 @@ export default function RecruitmentDetail(props) {
         {/* 제목 지원 찜하기 */}
         <StyledHeaderDiv title={content.title ?? '.....'}>
           {choice && (
-            <Choice>
+            <Choice ref={showRef}>
               <div>이력서 선택</div>
               <div style={{ marginTop: '10px' }}>{resumeArr}</div>
               <div style={{ textAlign: 'right' }}>
                 <StyledButton onClick={() => submitHandler()}>
-                  이력서 지원
+                  지원하기
                 </StyledButton>
                 <StyledButton grey onClick={() => setChoice(false)}>
                   취소

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import styled, { css } from 'styled-components';
 import { Blank } from '../pages/Community';
 import { TagBody } from './Styled';
@@ -47,6 +48,7 @@ const SubmitDate = styled.div`
 export default function SubmitItem({ id, title, date, position, tags }) {
   const { company } = useSelector((state) => state);
   const dispatch = useDispatch();
+  const history = useHistory();
   const [arr, setArr] = useState([]);
   const [show, setShow] = useState(false);
 
@@ -70,8 +72,9 @@ export default function SubmitItem({ id, title, date, position, tags }) {
     }
   }, [company.applyListDone, company.applyListId, dispatch, id]);
 
-  const resumeArr = arr.map((resume) => (
+  const resumeArr = arr.map((resume, index) => (
     <div
+      key={index}
       className={'container-fluid text-left'}
       style={{
         position: 'relative',
@@ -79,7 +82,12 @@ export default function SubmitItem({ id, title, date, position, tags }) {
         width: '95%',
       }}
     >
-      <h6 style={{ margin: '0' }}>{resume.title}</h6>
+      <h6
+        style={{ margin: '0' }}
+        // onClick={() => history.push(`../resume/detail/${resume.resumeId}`)}
+      >
+        {resume.title}
+      </h6>
       <Applicant sm>{resume.email}</Applicant>
       <SubmitDate sm>{resume.name}</SubmitDate>
     </div>
