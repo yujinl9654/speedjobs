@@ -89,8 +89,9 @@ export default function ResumeCareer({ form, setForm }) {
   const onChangeInDate = useCallback(
     (date, index) => {
       setForm((p) => {
-        p.careers[p.careers.findIndex((x) => x.index === index)]['inDate'] =
-          date;
+        p.careers[p.careers.findIndex((x) => x.index === index)][
+          'inDate'
+        ] = date;
         return { ...p };
       });
     },
@@ -100,8 +101,9 @@ export default function ResumeCareer({ form, setForm }) {
   const onChangeOutDate = useCallback(
     (date, index) => {
       setForm((p) => {
-        p.careers[p.careers.findIndex((x) => x.index === index)]['outDate'] =
-          date;
+        p.careers[p.careers.findIndex((x) => x.index === index)][
+          'outDate'
+        ] = date;
         return { ...p };
       });
     },

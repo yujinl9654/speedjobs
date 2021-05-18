@@ -5,15 +5,28 @@ export const initialState = {
   recruitGetDone: false,
   recruitGetError: null,
   recruit: null,
+
   recruitListLoading: false,
   recruitListDone: false,
   recruitListError: null,
   recruitList: null,
   recruitListSearchBar: false,
+
   recruitAddLoading: false,
   recruitAddDone: false,
   recruitAddError: null,
   recruitAdd: null,
+
+  recruitModifyLoading: false,
+  recruitModifyDone: false,
+  recruitModifyError: null,
+  recruitModify: null,
+
+  recruitDeleteLoading: false,
+  recruitDeleteDone: false,
+  recruitDeleteError: null,
+  recruitDelete: null,
+
   getChatLoading: false,
   getChatDone: false,
   getChatFail: false,
@@ -36,6 +49,16 @@ export const RECRUIT_ADD_REQUEST = 'RECRUIT_ADD_REQUEST';
 export const RECRUIT_ADD_SUCCESS = 'RECRUIT_ADD_SUCCESS';
 export const RECRUIT_ADD_FAIL = 'RECRUIT_ADD_FAIL';
 export const RECRUIT_ADD_DONE = 'RECRUIT_ADD_DONE';
+
+export const RECRUIT_MODIFY_REQUEST = 'RECRUIT_MODIFY_REQUEST';
+export const RECRUIT_MODIFY_SUCCESS = 'RECRUIT_MODIFY_SUCCESS';
+export const RECRUIT_MODIFY_FAIL = 'RECRUIT_MODIFY_FAIL';
+export const RECRUIT_MODIFY_DONE = 'RECRUIT_MODIFY_DONE';
+
+export const RECRUIT_DELETE_REQUEST = 'RECRUIT_DELETE_REQUEST';
+export const RECRUIT_DELETE_SUCCESS = 'RECRUIT_DELETE_SUCCESS';
+export const RECRUIT_DELETE_FAIL = 'RECRUIT_DELETE_FAIL';
+export const RECRUIT_DELETE_DONE = 'RECRUIT_DELETE_DONE';
 
 export const GET_CHAT_REQUEST = 'GET_CHAT_REQUEST';
 export const GET_CHAT_SUCCESS = 'GET_CHAT_SUCCESS';
@@ -64,6 +87,7 @@ const reducer = (state = initialState, action) =>
         draft.recruitGetDone = false;
         draft.recruitGetError = null;
         break;
+
       case RECRUIT_LIST_REQUEST:
         draft.recruitListLoading = true;
         draft.recruitListError = null;
@@ -87,6 +111,7 @@ const reducer = (state = initialState, action) =>
         draft.recruitList = null;
         draft.recruitListSearchBar = false;
         break;
+
       case RECRUIT_ADD_REQUEST:
         draft.recruitAddLoading = true;
         draft.recruitAdd = null;
@@ -108,6 +133,49 @@ const reducer = (state = initialState, action) =>
         draft.recruitAddError = null;
         draft.recruitAddDone = false;
         break;
+
+      case RECRUIT_MODIFY_REQUEST:
+        draft.recruitModifyLoading = true;
+        draft.recruitModifyDone = false;
+        draft.recruitModifyError = null;
+        draft.recruitModify = null;
+        break;
+      case RECRUIT_MODIFY_SUCCESS:
+        draft.recruitModifyLoading = false;
+        draft.recruitModifyDone = true;
+        draft.recruitModify = action.data;
+        break;
+      case RECRUIT_MODIFY_FAIL:
+        draft.recruitModifyLoading = false;
+        draft.recruitModifyError = action.error;
+        break;
+      case RECRUIT_MODIFY_DONE:
+        draft.recruitModifyDone = false;
+        draft.recruitModify = null;
+        draft.recruitModifyError = null;
+        break;
+
+      case RECRUIT_DELETE_REQUEST:
+        draft.recruitDeleteLoading = true;
+        draft.recruitDeleteDone = false;
+        draft.recruitDelete = null;
+        draft.recruitDeleteError = null;
+        break;
+      case RECRUIT_DELETE_SUCCESS:
+        draft.recruitDeleteLoading = false;
+        draft.recruitDeleteDone = true;
+        draft.recruitDelete = action.data;
+        break;
+      case RECRUIT_DELETE_FAIL:
+        draft.recruitDeleteLoading = false;
+        draft.recruitDeleteError = action.error;
+        break;
+      case RECRUIT_DELETE_DONE:
+        draft.recruitDeleteDone = false;
+        draft.recruitDelete = null;
+        draft.recruitDeleteError = null;
+        break;
+
       case GET_CHAT_REQUEST:
         draft.getChatLoading = true;
         break;

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,22 +8,18 @@ import {
   StyledButton,
   StyledHeaderDiv,
 } from '../components/Styled';
-import { RECRUIT_ADD_DONE, RECRUIT_ADD_REQUEST } from '../../reducers/recruit';
+import {
+  RECRUIT_GET_DONE,
+  RECRUIT_GET_REQUEST,
+  RECRUIT_MODIFY_DONE,
+  RECRUIT_MODIFY_REQUEST,
+} from '../../reducers/recruit';
 import RecruitAddContents from '../components/RecruitAdd/RecruitAddContents';
 
-export default function RecruitAdd() {
-  const [form, setForm] = useState({
-    title: '',
-    position: 'TEMPORARY',
-    thumbnail: '',
-    experience: '',
-    content: '',
-    openDate: '',
-    closeDate: '',
-    status: 'PROCESS',
-    tagIds: [],
-  });
-  const recruit = useSelector((state) => state.recruit);
+export default function RecruitModify() {
+  const { id } = useParams();
+  const [form, setForm] = useState();
+  const { recruit } = useSelector((state) => state);
   const [totalTag, setTotalTag] = useState([]);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -48,29 +44,42 @@ export default function RecruitAdd() {
       e.preventDefault();
       console.log(form);
       if (form.title === '' || form.content === '') {
-        if (form.title === '') {
-          alert('제목을 입력하세요');
-        } else if (form.content === '') {
-          alert('내용을 입력하세요');
-        }
+        if (form.title === '') alert('제목을 입력하세요.');
+        else if (form.content === '') alert('내용을 입력하세요.');
       } else {
-        dispatch({ type: RECRUIT_ADD_REQUEST, data: form });
+        // dispatch({ type: RECRUIT_MODIFY_REQUEST, data: form });
       }
     },
     [form, dispatch]
   );
 
+  // 화면 렌더링 후 원래 공고글 정보 불러오기
   useEffect(() => {
-    if (recruit.recruitAddDone) {
+    dispatch({
+      type: RECRUIT_GET_REQUEST,
+      data: id,
+    });
+  }, []);
+  useEffect(() => {
+    if (recruit.recruitGetDone) {
+      setForm((p) => ({ ...p, ...recruit.recruit }));
       dispatch({
-        type: RECRUIT_ADD_DONE,
+        type: RECRUIT_GET_DONE,
+      });
+    }
+  }, [recruit.recruitGetDone, recruit.recruit, dispatch]);
+
+  useEffect(() => {
+    if (recruit.recruitModifyDone) {
+      dispatch({
+        type: RECRUIT_MODIFY_DONE,
       });
       history.goBack();
     }
   }, [recruit, history, dispatch]);
 
   useEffect(() => {
-    setForm((p) => ({ ...p, tagIds: totalTag }));
+    setForm((p) => ({ ...p, tags: totalTag }));
   }, [totalTag]);
 
   return (
@@ -89,6 +98,7 @@ export default function RecruitAdd() {
               onChange={(e) => onChangHandler(e)}
               name={'title'}
               placeholder={'제목을 입력해주세요'}
+              value={form?.title}
             />
           </HeaderTitle>
           <div style={{ flex: '0 0' }}>
@@ -97,7 +107,7 @@ export default function RecruitAdd() {
               style={{ letterSpacing: '10px', paddingLeft: '20px' }}
               onClick={(e) => onSubmitHandler(e)}
             >
-              등록
+              수정
             </StyledButton>
           </div>
         </StyledHeaderDiv>

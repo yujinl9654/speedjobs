@@ -185,13 +185,23 @@ export default function Comment({
         type: COMMENT_GET_REQUEST,
         data: postId,
       });
-    } else if (comment.commentFavDone || comment.commentHateDone) {
+    } else if (
+      (comment.commentFavDone || comment.commentHateDone) &&
+      !comment.commentGetLoading
+    ) {
       dispatch({
         type: COMMENT_GET_REQUEST,
         data: postId,
       });
     }
-  }, [comment, dispatch, postId]);
+  }, [
+    comment.commentModifyDone,
+    comment.commentFavDone,
+    comment.commentHateDone,
+    comment.commentGetLoading,
+    dispatch,
+    postId,
+  ]);
 
   // 댓글 삭제하기
   const deleteHandler = () => {

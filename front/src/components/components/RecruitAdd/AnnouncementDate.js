@@ -12,7 +12,7 @@ const RecruitDatePicker = styled(DatePicker)`
   display: inline-block;
 `;
 
-export default function AnnouncementDate({ onChange }) {
+export default function AnnouncementDate({ onChange, form }) {
   const [startDate, setStartDate] = useState('');
   const [finishDate, setFinishDate] = useState('');
   const StartDateHandler = useCallback(

@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { StyledButton, StyledHeaderDiv } from '../components/Styled';
 import ChatIcon from '../components/Chatting/ChatIcon';
 import ChatBox from '../components/Chatting/ChatBox';
-import { RECRUIT_GET_REQUEST } from '../../reducers/recruit';
+import {
+  RECRUIT_DELETE_DONE,
+  RECRUIT_DELETE_REQUEST,
+  RECRUIT_GET_REQUEST,
+} from '../../reducers/recruit';
 import {
   ADD_LIKE_DONE,
   ADD_LIKE_REQUEST,
@@ -63,8 +67,11 @@ const Resume = styled.div`
 
 export default function RecruitmentDetail(props) {
   const { id } = useParams();
+  const history = useHistory();
   const [pop, setPop] = useState('none');
   const [content, setContent] = useState({});
+  const [tags, setTags] = useState([]);
+  const [experience, setExperience] = useState('');
   const [isFav, setIsFav] = useState(false);
   const [choice, setChoice] = useState(false);
   const [resumeList, setResumeList] = useState([]);
@@ -91,9 +98,16 @@ export default function RecruitmentDetail(props) {
   useEffect(() => {
     if (recruit.recruitGetDone) {
       setContent(recruit.recruit);
+      setTags(recruit.recruit.tags.POSITION);
       setIsFav(recruit.recruit.favorite);
     }
   }, [recruit.recruitGetDone, recruit.recruit]);
+  useEffect(() => {
+    if (content.experience === 0) setExperience('신입');
+    else if (content.experience < 0) setExperience('경력 무관');
+    else setExperience(content.experience + '년 이상');
+  }, [content.experience]);
+
   useEffect(() => {
     if (pop === 'none') {
       document.body.style.overflow = 'unset';
@@ -138,6 +152,22 @@ export default function RecruitmentDetail(props) {
     },
     [id, dispatch]
   );
+
+  // 이력서 삭제하기
+  const deleteHandler = () => {
+    dispatch({
+      type: RECRUIT_DELETE_REQUEST,
+      data: id,
+    });
+  };
+  useEffect(() => {
+    if (recruit.recruitDeleteDone) {
+      dispatch({
+        type: RECRUIT_DELETE_DONE,
+      });
+      history.goBack();
+    }
+  }, [recruit.recruitDeleteDone, dispatch, history]);
 
   // 이력서 지원하기
   const submitHandler = () => {
@@ -255,12 +285,18 @@ export default function RecruitmentDetail(props) {
               }}
             >
               <p>요약</p>
-              <p>직무 : 백엔드 프론트엔드</p>
-              <p>고용형태 : 정규직</p>
-              <p>경력 : 경력무관</p>
+              <p>직무 : {tags.map((i) => i.name).join(', ')}</p>
+              <p>
+                고용형태 :{' '}
+                {content.position === 'PERMANENT' ? '정규직' : '계약직'}
+              </p>
+              <p>경력 : {experience}</p>
               <p>회사규모 : {content.scale}명</p>
-              <p>주요서비스 : 앱개발</p>
-              <p>채용기간 : 상시채용</p>
+              <p>주요서비스 : {content.description}</p>
+              <p>
+                채용기간 : {content.openDate?.join('-')} ~{' '}
+                {content.closeDate?.join('-')}
+              </p>
             </div>
             {/* 업무소개*/}
             <div
@@ -282,12 +318,29 @@ export default function RecruitmentDetail(props) {
               <ChatIcon onclick={ButtonEvent} />
             </Chatting>
             <KakaoMap></KakaoMap>
+
+            {user.me?.nickname === content.companyName && (
+              <div style={{ textAlign: 'right' }}>
+                <StyledButton
+                  white
+                  onClick={() => history.push(`/recruitment/modify/${id}`)}
+                >
+                  수정
+                </StyledButton>
+                <StyledButton white onClick={() => deleteHandler()}>
+                  삭제
+                </StyledButton>
+              </div>
+            )}
+            {user.me?.role === 'ROLE_ADMIN' && (
+              <div style={{ textAlign: 'right' }}>
+                <StyledButton white onClick={() => deleteHandler()}>
+                  삭제
+                </StyledButton>
+              </div>
+            )}
           </div>
         </div>
-        {/* <StyledButton hcenter wide>*/}
-        {/*  지원*/}
-        {/* </StyledButton>*/}
-        {/* 본문end*/}
       </div>
     </>
   );

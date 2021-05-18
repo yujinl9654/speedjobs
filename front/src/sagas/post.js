@@ -29,6 +29,7 @@ async function getPostListApi(action) {
     (await Object.entries(search)
       .map((e) => `${e[0]}=${e[1]}`)
       .join('&')) + (Object.entries(search).length !== 0 ? '&' : '');
+  console.log('searchText= ', searchText);
   return axios.get(
     `/post?${searchText}size=${size}&page=${page}&sort=${order},DESC`
   );

@@ -83,7 +83,6 @@ export default function PostModify() {
       dispatch({
         type: POST_MODIFY_DONE,
       });
-      // history.push(`./community/post/${id}`);
       history.goBack();
     }
   }, [post, history, dispatch]);
