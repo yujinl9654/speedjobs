@@ -112,9 +112,6 @@ export default function PostDetail(props) {
         type: POST_DELETE_DONE,
       });
       history.goBack();
-      // dispatch({
-      //   type: POST_LIST_REQUEST,
-      // });
     }
   }, [dispatch, history, post.postDeleteDone]);
 
@@ -216,6 +213,13 @@ export default function PostDetail(props) {
               >
                 수정
               </StyledButton>
+              <StyledButton white onClick={() => DeleteHandler()}>
+                삭제
+              </StyledButton>
+            </div>
+          )}
+          {user.me.role === 'ROLE_ADMIN' && (
+            <div style={{ textAlign: 'right' }}>
               <StyledButton white onClick={() => DeleteHandler()}>
                 삭제
               </StyledButton>

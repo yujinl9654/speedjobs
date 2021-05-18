@@ -120,7 +120,7 @@ export default function Login(props) {
         <Forget>Forgot password?</Forget>
         <br />
         <div>
-          <input type="checkbox" style={{ marginTop: '20px' }} /> Remember me
+          {/* <input type="checkbox" style={{ marginTop: '20px' }} /> Remember me*/}
           <div className="buttons">
             <Button type="submit" name="LOG IN" />
           </div>

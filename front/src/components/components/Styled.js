@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Plus } from '@styled-icons/octicons';
@@ -746,18 +746,15 @@ export const SearchInput = ({ placeholder, onChange, value }) => {
 };
 
 // 게시판 검색
-export const SearchBox = ({ onInput, onClick, setForm }) => {
+export const SearchBox = ({
+  initial,
+  onKeyPress,
+  onInput,
+  onClick,
+  setForm,
+}) => {
   // 드롭다운 선택
-  const initialList = useMemo(
-    () => [
-      { name: '제    목', state: false, target: 'title' },
-      { name: '내    용', state: false, target: 'content' },
-      { name: '제목+내용', state: false, target: '' },
-      { name: '작 성 자', state: false, target: 'author' },
-    ],
-    []
-  );
-  const [list, setList] = useState([...initialList]);
+  const [list, setList] = useState([...initial]);
   const [dropTop, setDropTop] = useState([
     { name: '제    목', state: true, target: 'title' },
   ]);
@@ -766,29 +763,26 @@ export const SearchBox = ({ onInput, onClick, setForm }) => {
     // state가 true인 항목이 1개보다 많을 경우
     if (tmp.length > 0) {
       setDropTop([...tmp]);
-      setList([...initialList]);
+      setList([...initial]);
     }
-  }, [initialList, list]);
+  }, [initial, list, dropTop]);
 
-  const DropList = list
-    .filter((i) => !i.state)
-    .map((i, index) => (
-      <span key={index}>
-        <div
-          onClick={() => {
-            i.state = true;
-            setForm((p) => ({
-              size: p.size,
-              page: p.page,
-              searchBar: p.searchBar,
-              [i.target]: keyword,
-            }));
-          }}
-        >
-          {i.name}
-        </div>
-      </span>
-    ));
+  const DropList = list.map((i, index) => (
+    <span key={index}>
+      <div
+        onClick={() => {
+          i.state = true;
+          setForm((p) => ({
+            size: p.size,
+            page: p.page,
+            [i.target]: keyword,
+          }));
+        }}
+      >
+        {i.name}
+      </div>
+    </span>
+  ));
 
   // 드롭다운 보이기 / 숨기기
   const [show, setShow] = useState(false);
@@ -807,6 +801,7 @@ export const SearchBox = ({ onInput, onClick, setForm }) => {
       removeEventListener('click', ClickHandler, true);
     };
   });
+
   return (
     <SearchOutline ref={showRef}>
       <Category onClick={() => setShow(true)}>{dropTop[0].name}</Category>
@@ -817,6 +812,7 @@ export const SearchBox = ({ onInput, onClick, setForm }) => {
           setKeyword(e.target.value);
           onInput(e, dropTop[0]);
         }}
+        onKeyPress={(e) => onKeyPress(e)}
         maxLength="8"
       />
       <Search
@@ -894,12 +890,8 @@ const SearchOutline = styled.div`
 `;
 
 // 게시물 조회순서
-export const Order = ({ inOrder }) => {
-  const [items, setItems] = useState([
-    { name: '조회순', sort: 'viewCount' },
-    { name: '추천순', sort: 'favoriteCount' },
-    { name: '댓글순', sort: 'commentCount' },
-  ]);
+export const Order = ({ inOrder, orderItem }) => {
+  const [items, setItems] = useState([...orderItem]);
   const itemList = items.map((i, index) => (
     <Type
       key={index}
