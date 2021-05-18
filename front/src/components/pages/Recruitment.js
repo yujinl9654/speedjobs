@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useCookies } from 'react-cookie';
 import Banner from '../components/banner/Banner';
-import { TagBody } from '../components/Styled';
+import { Order, SearchBox, TagBody } from '../components/Styled';
 import {
   RECRUIT_LIST_DONE,
   RECRUIT_LIST_REQUEST,
@@ -14,6 +14,20 @@ import TagSelector from '../components/tag/TagSelector';
 import TagShower from '../components/tag/TagShower';
 
 export default function Recruitment() {
+  const [form, setForm] = useState({
+    size: 10,
+    page: 0,
+  });
+  const recruitOrder = [
+    { name: '조회순', sort: 'viewCount' },
+    { name: '추천순', sort: 'favoriteCount' },
+  ];
+  const initialList = [
+    { name: '제 목', state: false, target: 'title' },
+    { name: '내 용', state: false, target: 'content' },
+    { name: '제목+내용', state: false, target: '' },
+    { name: '작성자', state: false, target: 'companyName' },
+  ];
   const history = useHistory();
   const dispatch = useDispatch();
   const page = useRef(0);
@@ -43,12 +57,13 @@ export default function Recruitment() {
         page: page.current,
       },
     });
+    paging.current = true;
   };
 
   const rootRef = useRef();
   const { user, recruit } = useSelector((state) => state);
   const me = useState({ ...user.me });
-
+  const paging = useRef(false);
   const [, setLoading] = useState(false);
   const [recruitList, setRecruitList] = useState([]);
   const [taglist, setTaglist] = useState([]);
@@ -84,7 +99,9 @@ export default function Recruitment() {
     }
     if (recruit.recruitListDone) {
       setLoading((prev) => false);
-      setRecruitList((prev) => [...prev, ...recruit.recruitList.content]);
+      if (paging.current)
+        setRecruitList((prev) => [...prev, ...recruit.recruitList.content]);
+      else setRecruitList([...recruit.recruitList.content]);
       if (recruit.recruitList.last) {
         isLast.current = true;
       } else {
@@ -93,6 +110,21 @@ export default function Recruitment() {
       dispatch({ type: RECRUIT_LIST_DONE });
     }
   }, [recruit, setRecruitList, setLoading, page, dispatch]);
+
+  useEffect(() => {
+    setForm((p) => {
+      const ids = taglist
+        .filter((t) => t.selected)
+        .map((t) => t.id)
+        .join(',');
+      if (ids === '') {
+        const { tagIds, ...res } = p;
+        return { ...res };
+      } else {
+        return { ...p, tagIds: ids };
+      }
+    });
+  }, [taglist, dispatch]);
 
   const mapRecruit = recruitList.map((pl) => (
     <Post
@@ -109,12 +141,42 @@ export default function Recruitment() {
     />
   ));
 
+  // 게시물 검색하기
+  const OrderHandler = (sort) => {
+    setForm({ ...form, order: sort });
+  };
+  useEffect(() => {
+    if (form?.order !== undefined) {
+      dispatch({
+        type: RECRUIT_LIST_REQUEST,
+        data: form,
+      });
+    }
+    paging.current = false;
+  }, [dispatch, form]);
+  const InputHandler = (e, i) => {
+    setForm((p) => ({
+      size: p.size,
+      page: p.page,
+      [i.target]: e.target.value,
+    }));
+  };
+  const SearchHandler = () => {
+    dispatch({
+      type: RECRUIT_LIST_REQUEST,
+      data: form,
+    });
+    paging.current = false;
+  };
+  const EnterHandler = (e) => {
+    if (e.key === 'Enter') SearchHandler();
+  };
+
   return (
     <>
       <Banner />
       <div className="container">
         <div className={'row justify-content-center'}>
-          {' '}
           <div ref={rootRef} className={'container'}>
             <div
               className={'text-right'}
@@ -130,25 +192,43 @@ export default function Recruitment() {
                   paddingTop: '0',
                 }}
               >
-                <TagSelector tagList={taglist} setTagList={setTaglist}>
-                  필터
-                </TagSelector>
-                {me[0].role === 'ROLE_COMPANY' ? (
-                  <TagBody
-                    style={{ marginTop: '0', border: '1px solid #f5df4d' }}
-                    onClick={() => {
-                      history.push('./recruitment/add');
-                      dispatch({
-                        type: COMPANY_GET_REQUEST,
-                        data: user.me,
-                      });
-                    }}
+                <div>
+                  <div
+                    style={{ display: 'inline-block', verticalAlign: 'top' }}
                   >
-                    글쓰기
-                  </TagBody>
-                ) : (
-                  ''
-                )}
+                    <Order inOrder={OrderHandler} orderItem={recruitOrder} />
+                  </div>
+                  <div style={{ display: 'inline-block' }}>
+                    <TagSelector tagList={taglist} setTagList={setTaglist}>
+                      필터
+                    </TagSelector>
+                  </div>
+                </div>
+                <div>
+                  <SearchBox
+                    onInput={InputHandler}
+                    onClick={SearchHandler}
+                    onKeyPress={EnterHandler}
+                    setForm={setForm}
+                    initial={initialList}
+                  />
+                  {me[0].role === 'ROLE_COMPANY' ? (
+                    <TagBody
+                      style={{ marginTop: '0', border: '1px solid #f5df4d' }}
+                      onClick={() => {
+                        history.push('./recruitment/add');
+                        dispatch({
+                          type: COMPANY_GET_REQUEST,
+                          data: user.me,
+                        });
+                      }}
+                    >
+                      글쓰기
+                    </TagBody>
+                  ) : (
+                    ''
+                  )}
+                </div>
               </div>
             </div>
             <div className={'text-left'}>

@@ -65,12 +65,18 @@ export default function SubmitItem({ id, title, date, position, tags }) {
   };
   useEffect(() => {
     if (company.applyListDone && company.applyListId === id) {
-      setArr(company.applyListData.content);
+      setArr(company.applyListData?.content);
       dispatch({
         type: APPLY_LIST_DONE,
       });
     }
-  }, [company.applyListDone, company.applyListId, dispatch, id]);
+  }, [
+    company.applyListData.content,
+    company.applyListDone,
+    company.applyListId,
+    dispatch,
+    id,
+  ]);
 
   const resumeArr = arr.map((resume, index) => (
     <div
@@ -84,7 +90,7 @@ export default function SubmitItem({ id, title, date, position, tags }) {
     >
       <h6
         style={{ margin: '0' }}
-        // onClick={() => history.push(`../resume/detail/${resume.resumeId}`)}
+        onClick={() => history.push(`../resume/resume/${resume.resumeId}`)}
       >
         {resume.title}
       </h6>

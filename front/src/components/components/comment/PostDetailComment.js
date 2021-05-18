@@ -77,7 +77,13 @@ export default function PostDetailComment(props) {
         data: props.id,
       });
     }
-  }, [comment, dispatch, props.id]);
+  }, [
+    comment.commentGetDone,
+    comment.commentAddData,
+    comment.commentDeleteData,
+    dispatch,
+    props.id,
+  ]);
 
   return (
     <>

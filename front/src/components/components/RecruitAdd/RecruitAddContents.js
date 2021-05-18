@@ -14,31 +14,29 @@ const AnnounceHeader = styled.div`
   letter-spacing: 1px;
   margin: 0 0 10px;
 `;
-export default function RecruitAddContents({ onChange, setTags }) {
+export default function RecruitAddContents({ onChange, setTags, form }) {
   const [author, setAuthor] = useState('');
   const user = useSelector((state) => state.user);
   useEffect(() => {
     if (user.me !== null) {
-      setAuthor(user.me.name);
+      setAuthor(user.me.nickname);
     }
   }, [user.me]);
   return (
     <>
       {/* 작성자 */}
       <PostWriterDate>{author} 2020-01-01</PostWriterDate>
-
       {/* 회사 요약정보 */}
       <AnnounceHeader>회사요약정보</AnnounceHeader>
       <CompanySummaryInfo />
       {/* 공고 날짜 */}
       <AnnounceHeader>공고기간</AnnounceHeader>
-      <AnnouncementDate onChange={onChange} />
+      <AnnouncementDate onChange={onChange} form={form} />
       {/* 공고정보 */}
       <AnnounceHeader>공고정보</AnnounceHeader>
-      <AnnounceHeader>위치</AnnounceHeader>
+      <AnnouncementInfo setTags={setTags} onChange={onChange} form={form} />
+      <AnnounceHeader style={{ marginTop: '30px' }}>위치</AnnounceHeader>
       <AnnounceLocation></AnnounceLocation>
-      <AnnounceHeader>정보</AnnounceHeader>
-      <AnnouncementInfo setTags={setTags} onChange={onChange} />
     </>
   );
 }

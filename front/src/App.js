@@ -34,6 +34,7 @@ import ResumeDetails from './components/pages/ResumeDetails';
 import SubmitList from './components/pages/SubmitList';
 import MyRecruitments from './components/pages/MyRecruitments';
 import MyPosts from './components/pages/MyPosts';
+import RecruitModify from './components/pages/RecruitModify';
 
 const Container = styled.div`
   padding-bottom: 40px;
@@ -139,6 +140,11 @@ function App() {
           <Route exact path={'/community/add'} component={PostAdd} />
           <Route exact path={'/community/modify/:id'} component={PostModify} />
           <Route exact path={'/recruitment/add'} component={RecruitAdd} />
+          <Route
+            exact
+            path={'/recruitment/modify/:id'}
+            component={RecruitModify}
+          />
           <Route
             exact
             path={'/recruitment/myList'}

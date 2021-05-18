@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Tags from '../Tags';
 
-export default function AnnouncementInfo({ onChange, setTags }) {
+export default function AnnouncementInfo({ onChange, setTags, form }) {
   const [tags] = useState([
     { name: '신입', id: 0, selected: false },
     { name: '경력 1년이상', id: 1, selected: false },
@@ -18,18 +18,20 @@ export default function AnnouncementInfo({ onChange, setTags }) {
   const [taglist, setTaglist] = useState([]);
   const tagss = useSelector((state) => state.tag);
   useEffect(() => {
-    if (tagss.tagGetData) {
+    if (tagss.tagGetData && form !== undefined) {
       const temp = Array.from(tagss.tagGetData.tags.POSITION);
+      const tempFromRecruit = [...(form.tags?.POSITION ?? []).map((t) => t.id)];
       const tt = temp.map((t) => {
+        if (tempFromRecruit.indexOf(t.id) >= 0) return { ...t, selected: true };
         return { ...t, selected: false };
       });
-      setTaglist((p) => [...p, ...tt]);
+      setTaglist([...tt]);
     }
-  }, [tagss.tagGetData]);
+  }, [tagss.tagGetData, form]);
 
-  useEffect(() => {
-    setTags([...taglist.filter((t) => t.selected).map((t) => t.id)]);
-  }, [taglist, setTags]);
+  // useEffect(() => {
+  //   setTags([...taglist.filter((t) => t.selected).map((t) => t.id)]);
+  // }, [taglist]);
 
   const [src, setSrc] = useState([]);
   const dropHandler = (e) => {
@@ -75,6 +77,7 @@ export default function AnnouncementInfo({ onChange, setTags }) {
             padding: '5px 10px',
             marginBottom: '10px',
           }}
+          value={form?.content}
           onChange={(e) => onChange(e)}
         />
 

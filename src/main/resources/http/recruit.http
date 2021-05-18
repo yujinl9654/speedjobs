@@ -16,6 +16,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
+  "description": "안녕하세요.",
   "title": "제목입니당",
   "openDate": "2020-01-02 00:00:00",
   "closeDate": "2021-12-15 00:00:00",

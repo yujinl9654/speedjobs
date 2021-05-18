@@ -17,6 +17,21 @@ export const Blank = styled.div`
 `;
 
 export default function Community(props) {
+  const [form, setForm] = useState({
+    size: 10,
+    page: 0,
+  });
+  const postOrder = [
+    { name: '조회순', sort: 'viewCount' },
+    { name: '추천순', sort: 'favoriteCount' },
+    { name: '댓글순', sort: 'commentCount' },
+  ];
+  const initialList = [
+    { name: '제 목', state: false, target: 'title' },
+    { name: '내 용', state: false, target: 'content' },
+    { name: '제목+내용', state: false, target: '' },
+    { name: '작성자', state: false, target: 'author' },
+  ];
   const history = useHistory();
   const dispatch = useDispatch();
   const page = useRef(0);
@@ -68,10 +83,7 @@ export default function Community(props) {
       setTaglist((p) => [...p, ...tt]);
     }
   }, [tagss.tagGetData]);
-  const [form, setForm] = useState({
-    size: 10,
-    page: 0,
-  });
+
   useEffect(() => {
     const currentObserver = observe.current;
     const divElm = targetRef.current;
@@ -103,11 +115,6 @@ export default function Community(props) {
       }
       dispatch({ type: POST_LIST_DONE });
     }
-    // if (post.postListSearchBar) {
-    //   setLoading(false);
-    //   setPostList([...post.postList.content]);
-    //   dispatch({ type: POST_LIST_DONE });
-    // }
   }, [post, setPostList, setLoading, page, dispatch]);
 
   useEffect(() => {
@@ -124,15 +131,6 @@ export default function Community(props) {
       }
     });
   }, [taglist, dispatch]);
-
-  useEffect(() => {
-    console.log('form');
-    dispatch({
-      type: POST_LIST_REQUEST,
-      data: form,
-    });
-    paging.current = false;
-  }, [form, dispatch]);
 
   const mapPost = postList.map((pl) => (
     <Post
@@ -151,7 +149,6 @@ export default function Community(props) {
   ));
 
   // 게시물 검색하기
-
   const OrderHandler = (sort) => {
     setForm({ ...form, order: sort });
   };
@@ -162,6 +159,7 @@ export default function Community(props) {
         data: form,
       });
     }
+    paging.current = false;
   }, [dispatch, form]);
   const InputHandler = (e, i) => {
     setForm((p) => ({
@@ -176,6 +174,9 @@ export default function Community(props) {
       data: form,
     });
     paging.current = false;
+  };
+  const EnterHandler = (e) => {
+    if (e.key === 'Enter') SearchHandler();
   };
 
   return (
@@ -197,7 +198,7 @@ export default function Community(props) {
             >
               <div>
                 <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
-                  <Order inOrder={OrderHandler} setForm={setForm} form={form} />
+                  <Order inOrder={OrderHandler} orderItem={postOrder} />
                 </div>
                 <div style={{ display: 'inline-block' }}>
                   <TagSelector tagList={taglist} setTagList={setTaglist}>
@@ -209,7 +210,9 @@ export default function Community(props) {
                 <SearchBox
                   onInput={InputHandler}
                   onClick={SearchHandler}
+                  onKeyPress={EnterHandler}
                   setForm={setForm}
+                  initial={initialList}
                 />
                 {user.me !== null ? (
                   <TagBody
