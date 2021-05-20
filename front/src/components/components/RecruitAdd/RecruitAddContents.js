@@ -14,7 +14,12 @@ const AnnounceHeader = styled.div`
   letter-spacing: 1px;
   margin: 0 0 10px;
 `;
-export default function RecruitAddContents({ onChange, setTags, form }) {
+export default function RecruitAddContents({
+  onChange,
+  setTags,
+  form,
+  setForm,
+}) {
   const [author, setAuthor] = useState('');
   const user = useSelector((state) => state.user);
   useEffect(() => {
@@ -29,14 +34,19 @@ export default function RecruitAddContents({ onChange, setTags, form }) {
       {/* 회사 요약정보 */}
       <AnnounceHeader>회사요약정보</AnnounceHeader>
       <CompanySummaryInfo />
+      {/* <AnnounceHeader>회사 위치</AnnounceHeader>*/}
+      {/* <AnnounceLocation />*/}
       {/* 공고 날짜 */}
       <AnnounceHeader>공고기간</AnnounceHeader>
       <AnnouncementDate onChange={onChange} form={form} />
       {/* 공고정보 */}
       <AnnounceHeader>공고정보</AnnounceHeader>
-      <AnnouncementInfo setTags={setTags} onChange={onChange} form={form} />
-      <AnnounceHeader style={{ marginTop: '30px' }}>위치</AnnounceHeader>
-      <AnnounceLocation></AnnounceLocation>
+      <AnnouncementInfo
+        setTags={setTags}
+        onChange={onChange}
+        form={form}
+        setForm={setForm}
+      />
     </>
   );
 }

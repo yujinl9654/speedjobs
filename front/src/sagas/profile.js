@@ -35,36 +35,24 @@ function* getProfile(action) {
   }
 }
 
-function updateProfileApi(data, data2, me) {
-  console.log('me?', me);
-  console.log('data2', data2.role);
-  if (data2.role === 'ROLE_COMPANY') {
-    const res = axios
-      .patch(`/user/company/${me}`, data)
-      .then((response) => {
-        return response;
-      })
-      .catch((err) => new Error(err));
-    return res;
+function updateProfileApi(action) {
+  const { data, me } = action;
+  const userId = me.id;
+  const role = me.role;
+  if (role === 'ROLE_MEMBER') {
+    return axios.patch(`/user/member/${userId}`, data).catch((err) => {
+      throw err;
+    });
   } else {
-    const res = axios
-      .patch(`/user/member/${me}`, data)
-      .then((response) => {
-        return response;
-      })
-      .catch((error) => new Error(error));
-    return res;
+    return axios.patch(`/user/company/${userId}`, data).catch((err) => {
+      throw err;
+    });
   }
 }
 
 function* updateProfile(action) {
   try {
-    const result = yield call(
-      updateProfileApi,
-      action.data,
-      action.data2,
-      action.me
-    );
+    const result = yield call(updateProfileApi, action);
     yield put({
       type: PROFILE_UPDATE_SUCCESS,
       data: result.data,

@@ -14,48 +14,42 @@ import RecruitAddContents from '../components/RecruitAdd/RecruitAddContents';
 export default function RecruitAdd() {
   const [form, setForm] = useState({
     title: '',
-    position: 'TEMPORARY',
+    position: 'PERMANENT',
     thumbnail: '',
-    experience: '',
+    experience: -1,
     content: '',
     openDate: '',
     closeDate: '',
-    status: 'PROCESS',
     tagIds: [],
   });
   const recruit = useSelector((state) => state.recruit);
   const [totalTag, setTotalTag] = useState([]);
   const dispatch = useDispatch();
   const history = useHistory();
-  const onChangHandler = useCallback(
-    (e) => {
-      console.log(e.target.name);
-      if (e.target.name.endsWith('Date')) {
-        console.log('hi');
-        setForm((prev) => ({
-          ...prev,
-          [e.target.name]: moment(e.target.value).format('YYYY-MM-DD 00:00:00'),
-        }));
-      } else {
-        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-      }
-      console.log(form);
-    },
-    [form]
-  );
+  const onChangHandler = useCallback((e) => {
+    if (e.target.name.endsWith('Date')) {
+      console.log('hi');
+      setForm((prev) => ({
+        ...prev,
+        [e.target.name]: moment(e.target.value).format('YYYY-MM-DD 00:00:00'),
+      }));
+    } else {
+      setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    }
+  }, []);
   const onSubmitHandler = useCallback(
     (e) => {
       e.preventDefault();
       console.log(form);
-      if (form.title === '' || form.content === '') {
-        if (form.title === '') {
-          alert('제목을 입력하세요');
-        } else if (form.content === '') {
-          alert('내용을 입력하세요');
-        }
-      } else {
-        dispatch({ type: RECRUIT_ADD_REQUEST, data: form });
-      }
+      // if (form.title === '' || form.content === '') {
+      //   if (form.title === '') {
+      //     alert('제목을 입력하세요');
+      //   } else if (form.content === '') {
+      //     alert('내용을 입력하세요');
+      //   }
+      // } else {
+      //   dispatch({ type: RECRUIT_ADD_REQUEST, data: form });
+      // }
     },
     [form, dispatch]
   );
@@ -107,6 +101,7 @@ export default function RecruitAdd() {
             setTags={setTotalTag}
             onChange={onChangHandler}
             form={form}
+            setForm={setForm}
           />
         </div>
       </form>

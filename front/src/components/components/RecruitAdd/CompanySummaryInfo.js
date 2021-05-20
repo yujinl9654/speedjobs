@@ -14,11 +14,13 @@ export default function CompanySummaryInfo() {
   const [info, setInfo] = useState({});
   // 기업회원 정보조회
   useEffect(() => {
-    dispatch({
-      type: COMPANY_GET_REQUEST,
-      data: { id: user.me.id },
-    });
-  }, [dispatch, user.me?.id]);
+    if (user.me !== null) {
+      dispatch({
+        type: COMPANY_GET_REQUEST,
+        data: { id: user.me.id },
+      });
+    }
+  }, [dispatch, user.me]);
   useEffect(() => {
     if (company.companyGetDone) {
       setInfo(company.companyGetData);
@@ -32,8 +34,9 @@ export default function CompanySummaryInfo() {
           marginBottom: '30px',
         }}
       >
-        <Info>회사이름 : {info.companyName}</Info>
-        <Info>회사규모 : {info.scale}명</Info>
+        <Info>회사 이름 : {info.companyName}</Info>
+        <Info>회사 규모 : {info.scale}명</Info>
+        <Info>회사 위치 : {info.address}</Info>
         <Info>연락처 : {info.contact}</Info>
         <textarea
           placeholder="회사정보 수정은 마이페이지에서 가능합니다."
@@ -46,6 +49,7 @@ export default function CompanySummaryInfo() {
             padding: '5px 10px',
             marginTop: '20px',
             outline: 'none',
+            color: '#a1a1a1',
           }}
           value={info.description}
           readOnly

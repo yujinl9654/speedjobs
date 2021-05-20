@@ -1,38 +1,73 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Tags from '../Tags';
+import { Order } from '../Styled';
+import TagSelector from '../tag/TagSelector';
+import TagShower from '../tag/TagShower';
 
-export default function AnnouncementInfo({ onChange, setTags, form }) {
-  const [tags] = useState([
-    { name: '신입', id: 0, selected: false },
-    { name: '경력 1년이상', id: 1, selected: false },
-    { name: '경력 2년이상', id: 3, selected: false },
-    { name: '경력 5년이상', id: 4, selected: false },
-    { name: '경력 10년이상', id: 5, selected: false },
-  ]);
-  const [tags2] = useState([
-    { name: '정규직', id: 0, selected: false },
-    { name: '인턴', id: 1, selected: false },
-  ]);
+export default function AnnouncementInfo({ onChange, setTags, form, setForm }) {
+  // experience 태그
+  const experienceTags = [
+    { name: '경력무관', sort: -1 },
+    { name: '신입', sort: 0 },
+    { name: '경력 1년 이상', sort: 1 },
+    { name: '경력 2년 이상', sort: 2 },
+    { name: '경력 3년 이상', sort: 3 },
+    { name: '경력 4년 이상', sort: 4 },
+    { name: '경력 5년 이상', sort: 5 },
+    { name: '경력 6년 이상', sort: 6 },
+    { name: '경력 7년 이상', sort: 7 },
+    { name: '경력 8년 이상', sort: 8 },
+    { name: '경력 9년 이상', sort: 9 },
+    { name: '경력 10년 이상', sort: 10 },
+  ];
+  const experienceHandler = (sort) => {
+    setForm((p) => ({ ...p, experience: sort }));
+  };
 
+  // position 태그
+  const positionTags = [
+    { name: '정규직', sort: 'PERMANENT' },
+    { name: '계약직', sort: 'TEMPORARY' },
+  ];
+  const positionHandler = (sort) => {
+    setForm((p) => ({ ...p, position: sort }));
+  };
+
+  // 직무 태그
+  const [click, setClick] = useState(false);
   const [taglist, setTaglist] = useState([]);
   const tagss = useSelector((state) => state.tag);
   useEffect(() => {
-    if (tagss.tagGetData && form !== undefined) {
+    if (tagss.tagGetData) {
       const temp = Array.from(tagss.tagGetData.tags.POSITION);
       const tempFromRecruit = [...(form.tags?.POSITION ?? []).map((t) => t.id)];
       const tt = temp.map((t) => {
         if (tempFromRecruit.indexOf(t.id) >= 0) return { ...t, selected: true };
         return { ...t, selected: false };
       });
-      setTaglist([...tt]);
+      setTaglist((p) => [...p, ...tt]);
     }
-  }, [tagss.tagGetData, form]);
+  }, [tagss.tagGetData, form.tags?.POSITION]);
+  useEffect(() => {
+    if (click) {
+      setForm((p) => {
+        const ids = taglist
+          .filter((t) => t.selected)
+          .map((t) => t.id)
+          .join(',');
+        if (ids === '') {
+          // eslint-disable-next-line
+          const { tagIds, ...res } = p;
+          return { ...res };
+        } else {
+          return { ...p, tagIds: ids };
+        }
+      });
+      setClick(!click);
+    }
+  }, [taglist, setForm, click]);
 
-  // useEffect(() => {
-  //   setTags([...taglist.filter((t) => t.selected).map((t) => t.id)]);
-  // }, [taglist]);
-
+  // thumbnail 입력
   const [src, setSrc] = useState([]);
   const dropHandler = (e) => {
     e.preventDefault();
@@ -59,12 +94,22 @@ export default function AnnouncementInfo({ onChange, setTags, form }) {
   return (
     <>
       <div>
-        <Tags tagList={tags}>경력요구사항</Tags>
-        <Tags tagList={tags2}>고용형태</Tags>
-        <Tags tagList={taglist} selected={setTaglist}>
-          직무추가
-        </Tags>
-
+        <div style={{ position: 'relative' }}>
+          <Order orderItem={experienceTags} inOrder={experienceHandler} />
+          <Order orderItem={positionTags} inOrder={positionHandler} />
+          <div
+            style={{ display: 'inline-block' }}
+            onClick={() => setClick(true)}
+          >
+            <TagSelector tagList={taglist} setTagList={setTaglist}>
+              직무추가
+            </TagSelector>
+          </div>
+        </div>
+        <div className={'text-left'}>
+          <TagShower tagList={taglist} setTagList={setTaglist} />
+        </div>
+        <div style={{ height: '30px' }}></div>
         <textarea
           placeholder="공고 정보를 입력해주세요."
           name="content"

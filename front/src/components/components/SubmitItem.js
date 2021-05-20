@@ -71,7 +71,7 @@ export default function SubmitItem({ id, title, date, position, tags }) {
       });
     }
   }, [
-    company.applyListData.content,
+    company.applyListData?.content,
     company.applyListDone,
     company.applyListId,
     dispatch,
