@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, Content, SubHeader } from './adminStyled';
+import { Content, Header, SubHeader } from './adminStyled';
 
 export default function Report(props) {
   return (

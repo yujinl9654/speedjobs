@@ -6,11 +6,6 @@ import static com.jobseek.speedjobs.domain.user.Role.ROLE_COMPANY;
 import static com.jobseek.speedjobs.domain.user.Role.ROLE_GUEST;
 import static com.jobseek.speedjobs.domain.user.Role.ROLE_MEMBER;
 
-import com.jobseek.speedjobs.domain.member.Member;
-import com.jobseek.speedjobs.dto.user.member.MemberUpdateRequest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 public class UserTest {
 
 	public static final String MEMBER_EMAIL = "woojin7124@naver.com";

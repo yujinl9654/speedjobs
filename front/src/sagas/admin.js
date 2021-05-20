@@ -1,4 +1,4 @@
-import { all, takeLatest, put } from 'redux-saga/effects';
+import { all, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 import {
   COMPANY_ALLOW_FAIL,

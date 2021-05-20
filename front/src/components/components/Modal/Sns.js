@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Kakaotalk } from '@styled-icons/simple-icons/Kakaotalk';
 import { Naver } from '@styled-icons/simple-icons/Naver';
-import { Google, Github } from 'react-bootstrap-icons';
+import { Github, Google } from 'react-bootstrap-icons';
 import address from '../../../auth/address';
 
 const MySns = styled.div`

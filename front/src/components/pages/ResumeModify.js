@@ -2,7 +2,7 @@ import { useCookies } from 'react-cookie';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 } from 'uuid';
-import { useParams, useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 import {
   PostTitleInput,

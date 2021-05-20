@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProfileInputs from './ProfileInputs';
 import { InputText, MyImage, ProfileImg, TextArea } from '../Styled';
 import { PROFILE_GET_REQUEST } from '../../../reducers/profile';

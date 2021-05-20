@@ -1,4 +1,4 @@
-import { all, fork, takeLatest, put } from 'redux-saga/effects';
+import { all, fork, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 import {
   ADD_LIKE_FAIL,
