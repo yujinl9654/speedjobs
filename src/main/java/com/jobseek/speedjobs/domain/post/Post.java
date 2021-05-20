@@ -8,7 +8,6 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.jobseek.speedjobs.common.exception.DuplicatedException;
-import com.jobseek.speedjobs.common.exception.ForbiddenException;
 import com.jobseek.speedjobs.common.exception.NotFoundException;
 import com.jobseek.speedjobs.domain.BaseTimeEntity;
 import com.jobseek.speedjobs.domain.tag.Tag;

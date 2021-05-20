@@ -12,10 +12,8 @@ import com.jobseek.speedjobs.domain.user.exception.WrongPasswordException;
 import com.jobseek.speedjobs.dto.auth.TokenRequest;
 import com.jobseek.speedjobs.dto.auth.TokenResponse;
 import com.jobseek.speedjobs.dto.user.UserTokenDto;
-import com.jobseek.speedjobs.utils.CookieUtil;
 import com.jobseek.speedjobs.utils.JwtUtil;
 import com.jobseek.speedjobs.utils.RedisUtil;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +30,6 @@ public class AuthService {
 	private final MemberRepository memberRepository;
 	private final JwtUtil jwtUtil;
 	private final RedisUtil redisUtil;
-	private final CookieUtil cookieUtil;
 	private final PasswordEncoder passwordEncoder;
 
 	public TokenResponse login(TokenRequest tokenRequest, HttpServletResponse response) {
@@ -58,15 +55,6 @@ public class AuthService {
 
 		redisUtil.set(refreshToken, user.getId().toString(), jwtUtil.getRefreshValidity());
 
-		Cookie accessCookie = cookieUtil.createCookie(jwtUtil.ACCESS_TOKEN, accessToken,
-			jwtUtil.accessValidity.intValue() / 1000);
-
-		Cookie refreshCookie = cookieUtil.createCookie(jwtUtil.REFRESH_TOKEN, refreshToken,
-			jwtUtil.refreshValidity.intValue() / 1000);
-
-		response.addCookie(accessCookie);
-		response.addCookie(refreshCookie);
-
 		return TokenResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
 	}
 
@@ -87,12 +75,6 @@ public class AuthService {
 
 		UserTokenDto userTokenDto = jwtUtil.getUserTokenDto(refreshToken);
 		String accessToken = jwtUtil.createAccessToken(userTokenDto);
-
-		Cookie accessCookie = cookieUtil
-			.createCookie(jwtUtil.ACCESS_TOKEN, accessToken,
-				jwtUtil.accessValidity.intValue() / 1000);
-
-		response.addCookie(accessCookie);
 
 		return TokenResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
 	}

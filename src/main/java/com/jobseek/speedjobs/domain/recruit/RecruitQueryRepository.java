@@ -1,7 +1,6 @@
 package com.jobseek.speedjobs.domain.recruit;
 
 import static com.jobseek.speedjobs.domain.company.QCompany.company;
-import static com.jobseek.speedjobs.domain.post.QPost.post;
 import static com.jobseek.speedjobs.domain.recruit.QRecruit.recruit;
 import static com.jobseek.speedjobs.domain.tag.QTag.tag;
 import static com.jobseek.speedjobs.utils.QueryDslUtil.getAllOrderSpecifiers;

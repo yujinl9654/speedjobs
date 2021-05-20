@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useChain, useSpring, animated } from 'react-spring';
+import { animated, useChain, useSpring } from 'react-spring';
 import { NavMenuContent } from '../Nav/NavMenu';
 
 export default function NavAnimation({ children, toggle }) {

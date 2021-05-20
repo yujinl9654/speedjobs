@@ -1,11 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import {
   HeaderTitle,
   PostTextArea,
   PostTitleInput,
-  // PostWriterDate,
   StyledButton,
   StyledHeaderDiv,
 } from '../components/Styled';
