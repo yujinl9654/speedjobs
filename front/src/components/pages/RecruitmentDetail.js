@@ -256,19 +256,21 @@ export default function RecruitmentDetail(props) {
               </div>
             </Choice>
           )}
-          <div style={{ flex: '0 0' }}>
-            <StyledButton
-              wide
-              onClick={() => {
-                setChoice(true);
-                dispatch({
-                  type: RESUME_LIST_REQUEST,
-                });
-              }}
-            >
-              지원하기
-            </StyledButton>
-          </div>
+          {user.me?.role !== 'ROLE_COMPANY' && (
+            <div style={{ flex: '0 0' }}>
+              <StyledButton
+                wide
+                onClick={() => {
+                  setChoice(true);
+                  dispatch({
+                    type: RESUME_LIST_REQUEST,
+                  });
+                }}
+              >
+                지원하기
+              </StyledButton>
+            </div>
+          )}
           <div style={{ flex: '0 0' }}>
             <StyledButton
               white={!isFav}

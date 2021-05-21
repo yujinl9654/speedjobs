@@ -931,7 +931,7 @@ const OrderList = styled.div`
   background-color: white;
   border-radius: 5px;
   position: relative;
-  z-index: 2;
+  //z-index: 2;
   @media (max-width: 768px) {
     font-size: 13px;
     height: 28px;
@@ -939,6 +939,7 @@ const OrderList = styled.div`
   }
 
   &:hover {
+    z-index: 2;
     overflow: visible;
     height: fit-content;
   }

@@ -14,35 +14,29 @@ import RecruitAddContents from '../components/RecruitAdd/RecruitAddContents';
 export default function RecruitAdd() {
   const [form, setForm] = useState({
     title: '',
-    position: 'TEMPORARY',
+    position: 'PERMANENT',
     thumbnail: '',
-    experience: '',
+    experience: -1,
     content: '',
     openDate: '',
     closeDate: '',
-    status: 'PROCESS',
     tagIds: [],
+    status: 'PROCESS',
   });
   const recruit = useSelector((state) => state.recruit);
-  const [totalTag, setTotalTag] = useState([]);
   const dispatch = useDispatch();
   const history = useHistory();
-  const onChangHandler = useCallback(
-    (e) => {
-      console.log(e.target.name);
-      if (e.target.name.endsWith('Date')) {
-        console.log('hi');
-        setForm((prev) => ({
-          ...prev,
-          [e.target.name]: moment(e.target.value).format('YYYY-MM-DD 00:00:00'),
-        }));
-      } else {
-        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-      }
-      console.log(form);
-    },
-    [form]
-  );
+  const onChangHandler = useCallback((e) => {
+    if (e.target.name.endsWith('Date')) {
+      console.log('hi');
+      setForm((prev) => ({
+        ...prev,
+        [e.target.name]: moment(e.target.value).format('YYYY-MM-DD 00:00:00'),
+      }));
+    } else {
+      setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    }
+  }, []);
   const onSubmitHandler = useCallback(
     (e) => {
       e.preventDefault();
@@ -68,10 +62,6 @@ export default function RecruitAdd() {
       history.goBack();
     }
   }, [recruit, history, dispatch]);
-
-  useEffect(() => {
-    setForm((p) => ({ ...p, tagIds: totalTag }));
-  }, [totalTag]);
 
   return (
     <div
@@ -104,9 +94,9 @@ export default function RecruitAdd() {
 
         <div className={'container'}>
           <RecruitAddContents
-            setTags={setTotalTag}
             onChange={onChangHandler}
             form={form}
+            setForm={setForm}
           />
         </div>
       </form>

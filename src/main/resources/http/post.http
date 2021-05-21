@@ -109,3 +109,8 @@ Authorization: Bearer {{accessToken}}
 DELETE http://{{host}}/post/1/comment/2/favorite
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
+
+### etc. get Tag test
+GET http://{{host}}/tag
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
