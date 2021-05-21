@@ -27,7 +27,7 @@ export default function Recruitment() {
     { name: '내 용', state: false, target: 'content' },
     { name: '연 봉', state: false, target: 'avgSalary' },
     { name: '작성자', state: false, target: 'companyName' },
-    { name: '채용상태', state: false, target: 'state' },
+    // { name: '채용상태', state: false, target: 'state' },
   ];
   const history = useHistory();
   const dispatch = useDispatch();
@@ -95,7 +95,7 @@ export default function Recruitment() {
         currentObserver.unobserve(divElm);
       }
     };
-  }, [user.me, refresh, observe.current]);
+  }, [user.me, refresh]);
 
   useEffect(() => {
     if (recruit.recruitListLoading) {
@@ -189,7 +189,7 @@ export default function Recruitment() {
       data: { ...form, page: form.page + 1 },
     });
     paging.current = true;
-  }, [paging.current, dispatch, form]);
+  }, [dispatch, form]);
   return (
     <>
       <Banner />

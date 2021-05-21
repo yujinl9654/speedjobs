@@ -3,7 +3,9 @@ import KakaoMap from '../../data/KakaoMap';
 import DaumAddress from '../../data/DaumAddress';
 
 export default function AnnounceLocation(props) {
+  // 도로명주소
   const [addr, setAddr] = useState('');
+  //위도, 경도
   const [location, setLocation] = useState([]);
 
   return (

@@ -21,9 +21,9 @@ export default function RecruitAdd() {
     openDate: '',
     closeDate: '',
     tagIds: [],
+    status: 'PROCESS',
   });
   const recruit = useSelector((state) => state.recruit);
-  const [totalTag, setTotalTag] = useState([]);
   const dispatch = useDispatch();
   const history = useHistory();
   const onChangHandler = useCallback((e) => {
@@ -41,15 +41,15 @@ export default function RecruitAdd() {
     (e) => {
       e.preventDefault();
       console.log(form);
-      // if (form.title === '' || form.content === '') {
-      //   if (form.title === '') {
-      //     alert('제목을 입력하세요');
-      //   } else if (form.content === '') {
-      //     alert('내용을 입력하세요');
-      //   }
-      // } else {
-      //   dispatch({ type: RECRUIT_ADD_REQUEST, data: form });
-      // }
+      if (form.title === '' || form.content === '') {
+        if (form.title === '') {
+          alert('제목을 입력하세요');
+        } else if (form.content === '') {
+          alert('내용을 입력하세요');
+        }
+      } else {
+        dispatch({ type: RECRUIT_ADD_REQUEST, data: form });
+      }
     },
     [form, dispatch]
   );
@@ -62,10 +62,6 @@ export default function RecruitAdd() {
       history.goBack();
     }
   }, [recruit, history, dispatch]);
-
-  useEffect(() => {
-    setForm((p) => ({ ...p, tagIds: totalTag }));
-  }, [totalTag]);
 
   return (
     <div
@@ -98,7 +94,6 @@ export default function RecruitAdd() {
 
         <div className={'container'}>
           <RecruitAddContents
-            setTags={setTotalTag}
             onChange={onChangHandler}
             form={form}
             setForm={setForm}
