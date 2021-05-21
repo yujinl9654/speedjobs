@@ -10,6 +10,7 @@ const RecruitDatePicker = styled(DatePicker)`
   padding: 2px 0 2px 0;
   margin: 0 5px;
   display: inline-block;
+  z-index: 10;
 `;
 
 export default function AnnouncementDate({ onChange, form }) {

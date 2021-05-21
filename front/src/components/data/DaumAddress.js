@@ -9,7 +9,7 @@ export default function DaumAddress({ onChange }) {
     border: '1px solid #eee',
     position: 'fixed',
     top: '200px',
-    width: '78%',
+    width: '80%',
     zIndex: '5',
   };
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +24,6 @@ export default function DaumAddress({ onChange }) {
   };
 
   const handleComplete = (data) => {
-    console.log('data= ', data);
     const fullAddr = data.address;
     let extraAddr = '';
     if (isOpen) {
@@ -48,24 +47,9 @@ export default function DaumAddress({ onChange }) {
     if (detailAddress !== '') setFullAddress(address + ' ' + detailAddress);
   }, [address, detailAddress]);
   useEffect(() => {
-    console.log(fullAddress);
     onChange(fullAddress);
   }, [fullAddress, onChange]);
 
-  // const showRef = useRef();
-  // const ClickHandler = (e) => {
-  //   if (showRef.current) {
-  //     if (isOpen && !showRef.current.contains(e.target)) {
-  //       setIsOpen(false);
-  //     }
-  //   }
-  // };
-  // useEffect(() => {
-  //   addEventListener('click', ClickHandler, true);
-  //   return () => {
-  //     removeEventListener('click', ClickHandler, true);
-  //   };
-  // });
   return (
     <div>
       <div>
@@ -73,25 +57,21 @@ export default function DaumAddress({ onChange }) {
           type="text"
           name="postcode"
           placeholder="우편번호"
-          value={zipcode}
+          defaultValue={zipcode}
           style={{ width: '25%' }}
         />
-        <StyledButton mid onClick={() => onClickHandler()}>
+        <StyledButton mid grey onClick={() => onClickHandler()}>
           우편번호 찾기
         </StyledButton>
         {isOpen && (
-          <DaumPostcode
-            style={addressStyle}
-            onComplete={handleComplete}
-            // ref={showRef}
-          />
+          <DaumPostcode style={addressStyle} onComplete={handleComplete} />
         )}
       </div>
       <input
         type="text"
         name="roadAddress"
         placeholder="주소"
-        value={address}
+        defaultValue={address}
         style={{ width: '100%' }}
       />
       <div style={{ marginBottom: '10px' }}>
@@ -106,7 +86,7 @@ export default function DaumAddress({ onChange }) {
           type="text"
           name="extraAddress"
           placeholder="참고항목"
-          value={exAddress}
+          defaultValue={exAddress}
           style={{ width: '30%' }}
         />
       </div>
