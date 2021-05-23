@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -17,25 +18,82 @@ import ProfileImage from '../../components/Profile/ProfileImage';
 import ProfileInputs from '../../components/Profile/ProfileInputs';
 import ProfileTextarea from '../../components/Profile/ProfileTextarea';
 import { ME_REQUEST } from '../../../reducers/user';
+import AnnounceLocation from '../../components/RecruitAdd/AnnounceLocation';
 
-/**
- * 기업회원 수정 페이지
- * 1. dispatch => PROFILE_GET_REQUEST 액션 발생
- * 2. useState를 이용해서 각 항목의 이름을 선언하고 빈문자열로 초기화한다.
- * 3. 조회 페이지에 있었던 값들을 수정페이지에서도 볼 수 있도록 한다.
- * 4. setForm에 저장되어 있는 각 항목을 input 값에 뿌려준다.
- * 5. 데이터를 수정하게 되면 각 항목에 해당하는 e.target.name을 매칭하여 onChangeInput, onChangeDate 이벤트가 발생하도록한다.
- * 6. setForm을 이용해서 변경된 값들을 저장한다.
- * 7. 마지막으로 '변경 사항 저장' 버튼에 onClick 이벤트를 걸어주어 onSubmitHandler 이벤트가 발생하도록 한다.
- * 8. dispatch를 이용해서 PROFILE_UPDATE_REQUEST 리덕스 상태를 전송하고,
- * 9. Redux_Saga에 변경된 데이터 form, role을 확인하기위한 user.me, 사용자 고유 id를 확인하기 위한 user.me.id를 같이 보내준다.
- * 10. 리덕스가 PROFILE_UPDATE_SUCCESS를 보내주면 성공적으로 수정이 완료되었기 때문에 useHistory를 이용해서 조회 페이지로 가게 한다.
- */
+const DropDownContainer = styled('div')`
+  position: relative;
+  margin: 0 auto;
+`;
 
+const DropDownHeader = styled('div')`
+  width: 100%;
+  border-radius: 27px;
+  margin-bottom: 10px;
+  padding: 3px 20px 3px;
+  height: 35px;
+  font-weight: 500;
+  border: 1px solid silver;
+  cursor: pointer;
+`;
+
+const DropDownListContainer = styled('div')``;
+
+const DropDownList = styled('ul')`
+  width: 100%;
+  border-radius: 27px;
+  position: absolute;
+  padding-left: 20px;
+  background: #ffffff;
+  border: 2px solid #e5e5e5;
+  box-sizing: border-box;
+  font-weight: 500;
+  z-index: 1;
+  overflow-y: scroll;
+  height: 150px;
+
+  &:first-child {
+    padding-top: 0.8em;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const ListItem = styled('li')`
+  list-style: none;
+  margin-bottom: 0.8em;
+  cursor: pointer;
+
+  &:hover {
+    color: black;
+    font-weight: bold;
+  }
+`;
 export default function CorporateModify() {
+  const [options] = useState([
+    { id: 0, avgSalary: 3000, name: '3,000 이상' },
+    { id: 1, avgSalary: 3500, name: '3,500 이상' },
+    { id: 2, avgSalary: 4000, name: '4,000 이상' },
+    { id: 3, avgSalary: 4500, name: '4,500 이상' },
+    { id: 4, avgSalary: 5000, name: '5,000 이상' },
+    { id: 5, avgSalary: 5500, name: '5,500 이상' },
+    { id: 6, avgSalary: 6000, name: '6,000 이상' },
+    { id: 7, avgSalary: 6500, name: '6,500 이상' },
+    { id: 8, avgSalary: 7000, name: '7,000 이상' },
+    { id: 9, avgSalary: 7500, name: '7,500 이상' },
+    { id: 10, avgSalary: 8000, name: '8,000 이상' },
+  ]);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const toggling = () => setIsOpen(!isOpen);
+
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector((state) => state.user);
+
   const profile = useSelector((state) => state.profile);
   const [form, setForm] = useState({
     companyName: '',
@@ -48,13 +106,40 @@ export default function CorporateModify() {
     scale: '',
     homepage: '',
     address: '',
+    avgSalary: '',
+    latitude: '',
+    longitude: '',
   });
 
+  const onChangeInput = useCallback((e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }, []);
+
+  const onOptionClicked = (value, name) => () => {
+    setSelectedOption(name);
+    setForm((p) => ({ ...p, avgSalary: value }));
+    setIsOpen(false);
+  };
+
+  const onSubmitHandler = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (user.me.id === null) {
+        dispatch({ type: ME_REQUEST });
+      }
+      dispatch({
+        type: PROFILE_UPDATE_REQUEST,
+        data: form,
+        me: user.me,
+      });
+      history.push('/profile');
+    },
+    [dispatch, form, user.me, history]
+  );
+
   useEffect(() => {
-    if (user.me === null) {
-      return;
-    }
-    dispatch({ type: PROFILE_GET_REQUEST, data: user.me });
+    if (user.me === null) return;
+    dispatch({ type: PROFILE_GET_REQUEST, me: user.me });
   }, [user.me, dispatch]);
 
   useEffect(() => {
@@ -64,32 +149,9 @@ export default function CorporateModify() {
         profileTemp.picture =
           'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
       }
-      setForm({ ...profileTemp });
+      setForm((p) => ({ ...p, ...profileTemp }));
     }
   }, [profile.profileGetData]);
-
-  const onChangeInput = useCallback((e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }, []);
-
-  const onSubmitHandler = useCallback(
-    (e) => {
-      e.preventDefault();
-      if (user.me.id === null) {
-        return;
-      }
-      dispatch({
-        type: PROFILE_UPDATE_REQUEST,
-        data: form,
-        data2: user.me,
-        me: user.me.id,
-      });
-      // 회원정보 수정하고 조회 페이지로 넘어갈 때 새로고침해야 수정된 정보를 볼 수 있는 오류 해결
-      dispatch({ type: ME_REQUEST });
-      history.push('/profile');
-    },
-    [dispatch, form, user.me, history]
-  );
 
   return (
     <div className="container text-left">
@@ -169,7 +231,7 @@ export default function CorporateModify() {
               type="text"
               value={form.homepage || ''}
             />
-            {/* 사업 등록번호*/}
+            {/* 사업자 등록번호*/}
             <ProfileInputs name={'사업자 등록번호'} />
             <InputText
               onChange={(e) => onChangeInput(e)}
@@ -178,24 +240,40 @@ export default function CorporateModify() {
               value={form.registrationNumber || ''}
               disabled
             />
-            {/* 회사 규모*/}
-            <ProfileInputs name={'회사 규모'} />
+            {/* 주소*/}
+            <AnnounceLocation form={form} setForm={setForm} />
+            {/* 사원수*/}
+            <ProfileInputs name={'사원수'} />
             <InputText
               onChange={(e) => onChangeInput(e)}
               name={'scale'}
               type="text"
               value={form.scale || ''}
             />
-            {/* 회사 주소*/}
-            <ProfileInputs name={'회사 주소'} />
-            <InputText
-              onChange={(e) => onChangeInput(e)}
-              name={'address'}
-              type="text"
-              value={form.address || ''}
-            />
-            {/* 회사 소개*/}
-            <ProfileInputs name={'회사 소개'} />
+            {/* 평균 연봉*/}
+            <ProfileInputs name={'평균 연봉'} />
+            <DropDownContainer>
+              <DropDownHeader onClick={toggling}>
+                {selectedOption || '3,000 이상'}
+              </DropDownHeader>
+              {isOpen && (
+                <DropDownListContainer>
+                  <DropDownList>
+                    {options.map((option) => (
+                      <ListItem
+                        key={option.id}
+                        onClick={onOptionClicked(option.avgSalary, option.name)}
+                      >
+                        {option.name}
+                      </ListItem>
+                    ))}
+                  </DropDownList>
+                </DropDownListContainer>
+              )}
+            </DropDownContainer>
+
+            {/* 소개*/}
+            <ProfileInputs name={'소개'} />
             <ProfileTextarea
               onChange={(e) => onChangeInput(e)}
               name={'description'}
