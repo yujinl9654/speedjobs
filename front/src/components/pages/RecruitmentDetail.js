@@ -33,6 +33,12 @@ const Chatting = styled.div`
   }
 `;
 
+const MapWrapper = styled.div`
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
 const Choice = styled.div`
   border-radius: 5px;
   position: fixed;
@@ -67,6 +73,7 @@ const Resume = styled.div`
 `;
 
 export default function RecruitmentDetail(props) {
+  const media = matchMedia('screen and (max-width: 768px)');
   const { id } = useParams();
   const history = useHistory();
   const [pop, setPop] = useState('none');
@@ -256,8 +263,10 @@ export default function RecruitmentDetail(props) {
         }}
       >
         {/* 제목 지원 찜하기 */}
-        <StyledHeaderDiv title={`[${status}]` + content.title ?? '.....'}>
-          {/* 지원할 이력서목록 */}
+        <StyledHeaderDiv
+          mobile={media.matches}
+          title={`[${status}]` + content.title ?? '.....'}
+        >
           {choice && (
             <Choice ref={showRef}>
               <div>이력서 선택</div>
@@ -316,6 +325,8 @@ export default function RecruitmentDetail(props) {
               style={{
                 display: 'block',
                 borderBottom: '1px solid #eee',
+                fontWeight: 'lighter',
+                fontSize: '14px',
               }}
             >
               <p style={{ fontSize: '1.5em' }}>요약</p>
@@ -335,7 +346,12 @@ export default function RecruitmentDetail(props) {
             </div>
             {/* 업무소개*/}
             <div
-              style={{ whiteSpace: 'pre-line', padding: '14px' }}
+              style={{
+                whiteSpace: 'pre-line',
+                padding: '14px',
+                fontSize: '14px',
+                fontWeight: 'lighter',
+              }}
               className={'container'}
             >
               {content.content ?? '....'}
@@ -352,10 +368,13 @@ export default function RecruitmentDetail(props) {
               <ChatBox recruitId={id} pop={pop} button={ButtonEvent} />
               <ChatIcon onclick={ButtonEvent} />
             </Chatting>
-            <KakaoMap
+            <MapWrapper>
+              <KakaoMap
               address={content.address}
               location={setLocation}
             ></KakaoMap>
+            </MapWrapper>
+
 
             {user.me?.id === content.companyId && (
               <div style={{ textAlign: 'right' }}>
