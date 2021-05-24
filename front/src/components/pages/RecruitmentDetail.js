@@ -9,6 +9,7 @@ import ChatBox from '../components/Chatting/ChatBox';
 import {
   RECRUIT_DELETE_DONE,
   RECRUIT_DELETE_REQUEST,
+  RECRUIT_GET_DONE,
   RECRUIT_GET_REQUEST,
 } from '../../reducers/recruit';
 import {
@@ -71,15 +72,13 @@ export default function RecruitmentDetail(props) {
   const [pop, setPop] = useState('none');
   const [content, setContent] = useState({});
   const [tags, setTags] = useState([]);
-  const [experience, setExperience] = useState('');
   const [isFav, setIsFav] = useState(false);
   const [choice, setChoice] = useState(false);
   const [resumeList, setResumeList] = useState([]);
   const [apply, setApply] = useState({ recruitId: id, resumeId: '' });
   const dispatch = useDispatch();
-  const { recruit, resume } = useSelector((state) => state);
+  const { user, like, recruit, resume } = useSelector((state) => state);
   const [refresh, ,] = useCookies(['REFRESH_TOKEN']);
-  const { user, like } = useSelector((state) => state);
   const ButtonEvent = () => {
     if (pop === 'none') {
       setPop('inline-block');
@@ -100,13 +99,29 @@ export default function RecruitmentDetail(props) {
       setContent(recruit.recruit);
       setTags(recruit.recruit.tags.POSITION);
       setIsFav(recruit.recruit.favorite);
+      dispatch({
+        type: RECRUIT_GET_DONE,
+      });
     }
-  }, [recruit.recruitGetDone, recruit.recruit]);
+  }, [recruit.recruitGetDone, recruit.recruit, dispatch]);
+
+  //  for KakaoMap
+  const [, setLocation] = useState([]);
+
+  // 경력태그, 채용상태 태그 관리
+  const [experience, setExperience] = useState('');
   useEffect(() => {
     if (content.experience === 0) setExperience('신입');
     else if (content.experience < 0) setExperience('경력 무관');
     else setExperience(content.experience + '년 이상');
   }, [content.experience]);
+  const [status, setStatus] = useState('');
+  useEffect(() => {
+    if (content.status === 'REGULAR') setStatus('상시모집');
+    else if (content.status === 'PROCESS') setStatus('채용중');
+    else if (content.status === 'END') setStatus('채용마감');
+    else setStatus('채용전');
+  }, [content.status]);
 
   useEffect(() => {
     if (pop === 'none') {
@@ -241,7 +256,8 @@ export default function RecruitmentDetail(props) {
         }}
       >
         {/* 제목 지원 찜하기 */}
-        <StyledHeaderDiv title={content.title ?? '.....'}>
+        <StyledHeaderDiv title={`[${status}]` + content.title ?? '.....'}>
+          {/* 지원할 이력서목록 */}
           {choice && (
             <Choice ref={showRef}>
               <div>이력서 선택</div>
@@ -256,36 +272,38 @@ export default function RecruitmentDetail(props) {
               </div>
             </Choice>
           )}
-          {user.me?.role !== 'ROLE_COMPANY' && (
-            <div style={{ flex: '0 0' }}>
-              <StyledButton
-                wide
-                onClick={() => {
-                  setChoice(true);
-                  dispatch({
-                    type: RESUME_LIST_REQUEST,
-                  });
-                }}
-              >
-                지원하기
-              </StyledButton>
-            </div>
+          {user.me?.role === 'ROLE_MEMBER' && (
+            <>
+              <div style={{ flex: '0 0' }}>
+                <StyledButton
+                  wide
+                  onClick={() => {
+                    setChoice(true);
+                    dispatch({
+                      type: RESUME_LIST_REQUEST,
+                    });
+                  }}
+                >
+                  지원하기
+                </StyledButton>
+              </div>
+              <div style={{ flex: '0 0' }}>
+                <StyledButton
+                  white={!isFav}
+                  grey={isFav}
+                  onClick={(e) => {
+                    if (isFav) {
+                      unFavClick(e);
+                    } else {
+                      favClick(e);
+                    }
+                  }}
+                >
+                  찜하기
+                </StyledButton>
+              </div>
+            </>
           )}
-          <div style={{ flex: '0 0' }}>
-            <StyledButton
-              white={!isFav}
-              grey={isFav}
-              onClick={(e) => {
-                if (isFav) {
-                  unFavClick(e);
-                } else {
-                  favClick(e);
-                }
-              }}
-            >
-              찜하기
-            </StyledButton>
-          </div>
         </StyledHeaderDiv>
 
         {/* 제목 end*/}
@@ -300,17 +318,18 @@ export default function RecruitmentDetail(props) {
                 borderBottom: '1px solid #eee',
               }}
             >
-              <p>요약</p>
+              <p style={{ fontSize: '1.5em' }}>요약</p>
               <p>직무 : {tags.map((i) => i.name).join(', ')}</p>
               <p>
-                고용형태 :{' '}
+                고용 형태 :{' '}
                 {content.position === 'PERMANENT' ? '정규직' : '계약직'}
               </p>
               <p>경력 : {experience}</p>
-              <p>회사규모 : {content.scale}명</p>
-              <p>주요서비스 : {content.description}</p>
+              <p>평균 연봉 : {content.avgSalary}만 원</p>
+              <p>회사 규모 : {content.scale}명</p>
+              <p>주요 서비스 : {content.description}</p>
               <p>
-                채용기간 : {content.openDate?.join('-')} ~{' '}
+                채용 기간 : {content.openDate?.join('-')} ~{' '}
                 {content.closeDate?.join('-')}
               </p>
             </div>
@@ -333,9 +352,12 @@ export default function RecruitmentDetail(props) {
               <ChatBox recruitId={id} pop={pop} button={ButtonEvent} />
               <ChatIcon onclick={ButtonEvent} />
             </Chatting>
-            <KakaoMap></KakaoMap>
+            <KakaoMap
+              address={content.address}
+              location={setLocation}
+            ></KakaoMap>
 
-            {user.me?.nickname === content.companyName && (
+            {user.me?.id === content.companyId && (
               <div style={{ textAlign: 'right' }}>
                 <StyledButton
                   white
