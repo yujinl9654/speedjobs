@@ -281,38 +281,40 @@ export default function RecruitmentDetail(props) {
               </div>
             </Choice>
           )}
-          {user.me?.role === 'ROLE_MEMBER' && (
-            <>
-              <div style={{ flex: '0 0' }}>
-                <StyledButton
-                  wide
-                  onClick={() => {
-                    setChoice(true);
-                    dispatch({
-                      type: RESUME_LIST_REQUEST,
-                    });
-                  }}
-                >
-                  지원하기
-                </StyledButton>
-              </div>
-              <div style={{ flex: '0 0' }}>
-                <StyledButton
-                  white={!isFav}
-                  grey={isFav}
-                  onClick={(e) => {
-                    if (isFav) {
-                      unFavClick(e);
-                    } else {
-                      favClick(e);
-                    }
-                  }}
-                >
-                  찜하기
-                </StyledButton>
-              </div>
-            </>
-          )}
+          {user.me?.role === 'ROLE_MEMBER' &&
+            (content.status === 'PROCESS' || content.status === 'REGULAR') && (
+              <>
+                <div style={{ flex: '0 0' }}>
+                  <StyledButton
+                    wide
+                    onClick={() => {
+                      setChoice(true);
+                      dispatch({
+                        type: RESUME_LIST_REQUEST,
+                        data: { size: 99, page: 0 },
+                      });
+                    }}
+                  >
+                    지원하기
+                  </StyledButton>
+                </div>
+                <div style={{ flex: '0 0' }}>
+                  <StyledButton
+                    white={!isFav}
+                    grey={isFav}
+                    onClick={(e) => {
+                      if (isFav) {
+                        unFavClick(e);
+                      } else {
+                        favClick(e);
+                      }
+                    }}
+                  >
+                    찜하기
+                  </StyledButton>
+                </div>
+              </>
+            )}
         </StyledHeaderDiv>
 
         {/* 제목 end*/}
@@ -330,7 +332,7 @@ export default function RecruitmentDetail(props) {
               }}
             >
               <p style={{ fontSize: '1.5em' }}>요약</p>
-              <p>직무 : {tags.map((i) => i.name).join(', ')}</p>
+              <p>직무 : {tags !== {} && tags?.map((i) => i.name).join(', ')}</p>
               <p>
                 고용 형태 :{' '}
                 {content.position === 'PERMANENT' ? '정규직' : '계약직'}

@@ -1,6 +1,8 @@
 package com.jobseek.speedjobs.dto.apply;
 
+import com.jobseek.speedjobs.domain.member.Member;
 import com.jobseek.speedjobs.domain.resume.Apply;
+import com.jobseek.speedjobs.domain.resume.Resume;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,16 +21,21 @@ public class MemberResponse {
 	private String title;
 	private Long memberId;
 	private String email;
+	private String contact;
 	private String name;
 
 	public static MemberResponse of(Apply apply) {
+		Resume resume = apply.getResume();
+		Member member = resume.getMember();
+
 		return MemberResponse.builder()
 			.applyId(apply.getId())
-			.resumeId(apply.getResume().getId())
-			.title(apply.getResume().getTitle())
-			.memberId(apply.getMemberId())
-			.email(apply.getResume().getMember().getEmail())
-			.name(apply.getResume().getMember().getName())
+			.resumeId(resume.getId())
+			.title(resume.getTitle())
+			.memberId(member.getId())
+			.email(member.getEmail())
+			.contact(member.getContact())
+			.name(member.getName())
 			.build();
 	}
 }

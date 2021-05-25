@@ -12,7 +12,8 @@ import {
   RECRUIT_LIST_DONE,
   RECRUIT_LIST_REQUEST,
 } from '../../reducers/recruit';
-import { RESUME_LIST_REQUEST } from '../../reducers/resume';
+import { RESUME_LIST_DONE, RESUME_LIST_REQUEST } from '../../reducers/resume';
+import ResumeItem from '../components/ResumeItem';
 
 const ApplicationInfo = styled.div`
   border: 1px #eee solid;
@@ -43,50 +44,68 @@ const ListSetting = styled.div`
 
 export default function SubmitList() {
   const dispatch = useDispatch();
-  const { user, recruit } = useSelector((state) => state);
+  const { user, recruit, resume } = useSelector((state) => state);
   const [process, setProcess] = useState([]);
   const [all, setAll] = useState([]);
   const [arr, setArr] = useState([]);
+  const [resumes, setResumes] = useState([]);
 
-  // 오픈된 이력서목록 불러오기
-  const OpenHandler = () => {
-    dispatch({
-      type: RESUME_LIST_REQUEST,
-      data: { size: 99, page: 0 },
-    });
-  };
-
-  // 기업이 작성한 공고목록 불러오기
+  // 작성한 공고목록 & 오픈된 이력서목록 불러오기 요청
   useEffect(() => {
     dispatch({
       type: RECRUIT_LIST_REQUEST,
       data: { size: 99, page: 0, companyName: user.me?.nickname },
     });
+    dispatch({
+      type: RESUME_LIST_REQUEST,
+      data: { size: 99, page: 0, open: 'YES' },
+    });
   }, [dispatch, user.me?.nickname]);
+
+  // 기업이 작성한 공고목록 불러오기
   useEffect(() => {
     if (recruit.recruitList) {
       setAll(recruit.recruitList.content);
-      setArr(recruit.recruitList.content);
       const processTmp = recruit.recruitList.content.filter(
-        (i) => i.status !== 'END'
+        (i) => i.status === 'REGULAR' || i.status === 'PROCESS'
       );
       setProcess(processTmp);
       dispatch({
         type: RECRUIT_LIST_DONE,
       });
+
+      // 초기화면 목록
+      setArr(recruit.recruitList.content);
     }
   }, [dispatch, recruit.recruitList]);
 
-  const mapArr = arr.map((i, index) => (
-    <SubmitItem
-      key={index}
-      id={i.id}
-      title={i.title}
-      date={i.openDate}
-      tags={i.tags}
-      position={i.position}
-    />
-  ));
+  // 오픈된 이력서목록 불러오기
+  useEffect(() => {
+    if (resume.resumeList) {
+      setResumes(resume.resumeList.content);
+      dispatch({
+        type: RESUME_LIST_DONE,
+      });
+    }
+  }, [resume.resumeList, dispatch]);
+
+  const mapArr = arr.map((i, index) => {
+    if (i.open === undefined) {
+      return (
+        <SubmitItem
+          key={index}
+          id={i.id}
+          title={i.title}
+          date={i.openDate}
+          tags={i.tags}
+          status={i.status}
+          position={i.position}
+        />
+      );
+    } else {
+      return <ResumeItem resume={i} key={index} />;
+    }
+  });
 
   return (
     <div className="container text-left">
@@ -101,16 +120,31 @@ export default function SubmitList() {
             <ListSetting>
               <ApplicationInfo>
                 <span>
-                  <CountNumber>00</CountNumber>
-                  <span>오픈된 이력서</span>
+                  <CountNumber>{resumes.length}</CountNumber>
+                  <span
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setArr(resumes)}
+                  >
+                    오픈된 이력서
+                  </span>
                 </span>
                 <span>
                   <CountNumber>{process.length}</CountNumber>
-                  <span onClick={() => setArr(process)}>채용중 공고</span>
+                  <span
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setArr(process)}
+                  >
+                    채용중 공고
+                  </span>
                 </span>
                 <span>
                   <CountNumber>{all.length}</CountNumber>
-                  <span onClick={() => setArr(all)}>전체 공고</span>
+                  <span
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setArr(all)}
+                  >
+                    전체 공고
+                  </span>
                 </span>
               </ApplicationInfo>
               {mapArr}
