@@ -8,8 +8,6 @@ import {
   SearchBox,
   SearchBoxContainer,
   SearchBoxContainerM,
-  SearchBoxContainerR,
-  SearchBoxContainerRM,
   TagBody,
 } from '../components/Styled';
 import {

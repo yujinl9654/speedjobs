@@ -9,7 +9,6 @@ import SideMenu from '../components/SideMenu';
 import PostList from '../components/Post/PostList';
 import { GET_LIKE_DONE, GET_LIKE_REQUEST } from '../../reducers/like';
 import TagShower from '../components/tag/TagShower';
-import TagSelector from '../components/tag/TagSelector';
 
 export default function CommunityLike() {
   const targetRef = useRef();

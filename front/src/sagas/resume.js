@@ -22,11 +22,17 @@ import {
 } from '../reducers/resume';
 
 // ========== 이력서 목록 ==========
-function resumeListAPI(action) {
-  const { size, page } = action.data;
-  return axios.get(`/resume?size=${size}&page=${page}`).catch((error) => {
-    throw error;
-  });
+async function resumeListAPI(action) {
+  const { size, page, ...search } = action.data;
+  const searchText =
+    (await Object.entries(search)
+      .map((e) => `${e[0]}=${e[1]}`)
+      .join('&')) + (Object.entries(search).length !== 0 ? '&' : '');
+  return axios
+    .get(`/resume?${searchText}size=${size}&page=${page}`)
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function* resumeList(action) {
