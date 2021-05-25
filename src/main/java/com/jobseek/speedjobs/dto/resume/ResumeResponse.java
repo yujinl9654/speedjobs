@@ -27,6 +27,7 @@ public class ResumeResponse {
 	private String title;
 	private String name;
 	private String gender;
+	private String email;
 	private String contact;
 	private LocalDate birth;
 	private String address;
@@ -48,6 +49,7 @@ public class ResumeResponse {
 			.title(resume.getTitle())
 			.name(resume.getName())
 			.gender(resume.getGender())
+			.email(resume.getMember().getEmail())
 			.contact(resume.getContact())
 			.birth(resume.getBirth())
 			.address(resume.getAddress())

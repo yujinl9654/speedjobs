@@ -29,8 +29,8 @@ const Icon = styled.div`
 export default function ChatIcon(props) {
   return (
     <>
-      <Icon>
-        <ChatLeftDotsFill onClick={() => props.onclick()} />
+      <Icon onClick={() => props.onclick()}>
+        <ChatLeftDotsFill />
       </Icon>
     </>
   );
