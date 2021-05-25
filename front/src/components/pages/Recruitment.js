@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useCookies } from 'react-cookie';
+import styled from 'styled-components';
 import Banner from '../components/banner/Banner';
 import { Order, SearchBox, TagBody } from '../components/Styled';
 import {
@@ -12,6 +13,13 @@ import Post from '../components/Post';
 import { COMPANY_GET_REQUEST } from '../../reducers/company';
 import TagSelector from '../components/tag/TagSelector';
 import TagShower from '../components/tag/TagShower';
+
+const SearchBoundary = styled.div`
+  padding: 0 10px 10px;
+  @media (max-width: 992px) {
+    flex-direction: column-reverse;
+  }
+`;
 
 export default function Recruitment() {
   const [form, setForm] = useState({
@@ -101,7 +109,7 @@ export default function Recruitment() {
 
   const rootRef = useRef();
   const { user, recruit } = useSelector((state) => state);
-  const me = useState({ ...user.me });
+  // const me = useState({ ...user.me });
   const [, setLoading] = useState(false);
 
   const [recruitList, setRecruitList] = useState([]);
@@ -254,14 +262,8 @@ export default function Recruitment() {
                 height: '60px',
               }}
             >
-              <div
-                className={'row justify-content-between'}
-                style={{
-                  padding: '10px',
-                  paddingTop: '0',
-                }}
-              >
-                <div>
+              <SearchBoundary className={'row justify-content-between'}>
+                <div style={{ height: '38px' }}>
                   <div style={{ display: 'inline-block' }}>
                     <TagSelector tagList={taglist} setTagList={setTaglist}>
                       필터
@@ -304,9 +306,9 @@ export default function Recruitment() {
                     ''
                   )}
                 </div>
-              </div>
+              </SearchBoundary>
             </div>
-            <div className={'text-left'}>
+            <div className={'text-left'} style={{ paddingTop: '8px' }}>
               <TagShower tagList={taglist} setTagList={setTaglist}></TagShower>
             </div>
             <div style={{ height: '30px' }}></div>

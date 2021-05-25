@@ -82,7 +82,7 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
   // thumbnail 입력
   const [src, setSrc] = useState('');
   useEffect(() => {
-    if (form.thumbnail !== '' || form.thumbnail !== null) {
+    if (form.thumbnail !== null) {
       setSrc(form.thumbnail);
     }
   }, [form.thumbnail]);
@@ -211,7 +211,7 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
           ) : (
             <img
               src={src}
-              alt={'hello'}
+              alt={'저장된 사진이 없습니다.'}
               style={{ height: '50px', display: 'inline-block' }}
             />
           )}
