@@ -755,13 +755,7 @@ export const SearchInput = ({ placeholder, onChange, value }) => {
 };
 
 // 게시판 검색
-export const SearchBox = ({
-  initial,
-  onKeyPress,
-  onInput,
-  onClick,
-  setForm,
-}) => {
+export const SearchBox = ({ initial, onKeyPress, onInput, setForm }) => {
   // 드롭다운 선택
   const [list, setList] = useState([...initial]);
   const [dropTop, setDropTop] = useState([
@@ -887,7 +881,7 @@ const SearchOutline = styled.div`
   @media (max-width: 768px) {
     font-size: 13px;
     height: 24px;
-    width: 170px;
+    width: 165px;
     margin-right: 10px;
   }
 `;
@@ -939,7 +933,7 @@ const OrderList = styled.div`
     font-size: 11px;
     height: 24px;
     margin-top: 2px;
-    padding: 3px 13px 0px;
+    padding: 3px 7px 0px;
   }
 
   &:hover {

@@ -34,9 +34,9 @@ public class OAuth2AuthenticationSuccessHandler implements AuthenticationSuccess
 			.provider(provider)
 			.build();
 		TokenResponse tokenResponse = authService.login(tokenRequest);
-		String uri = UriComponentsBuilder.fromUriString(frontUrl)
+		String uri = UriComponentsBuilder.fromUriString(frontUrl + "/login")
 			.queryParam("token", tokenResponse.getRefreshToken())
-			.buildAndExpand("login")
+			.build()
 			.toUriString();
 		response.sendRedirect(uri);
 	}

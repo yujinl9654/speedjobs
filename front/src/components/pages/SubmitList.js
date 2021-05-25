@@ -12,6 +12,7 @@ import {
   RECRUIT_LIST_DONE,
   RECRUIT_LIST_REQUEST,
 } from '../../reducers/recruit';
+import { RESUME_LIST_REQUEST } from '../../reducers/resume';
 
 const ApplicationInfo = styled.div`
   border: 1px #eee solid;
@@ -22,7 +23,7 @@ const ApplicationInfo = styled.div`
   padding: 10px 50px;
   color: #707070;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   @media (max-width: 768px) {
     padding: 10px;
   }
@@ -43,8 +44,17 @@ const ListSetting = styled.div`
 export default function SubmitList() {
   const dispatch = useDispatch();
   const { user, recruit } = useSelector((state) => state);
-  const [recruitCount, setRecruitCount] = useState('');
+  const [process, setProcess] = useState([]);
+  const [all, setAll] = useState([]);
   const [arr, setArr] = useState([]);
+
+  // 오픈된 이력서목록 불러오기
+  const OpenHandler = () => {
+    dispatch({
+      type: RESUME_LIST_REQUEST,
+      data: { size: 99, page: 0 },
+    });
+  };
 
   // 기업이 작성한 공고목록 불러오기
   useEffect(() => {
@@ -55,9 +65,12 @@ export default function SubmitList() {
   }, [dispatch, user.me?.nickname]);
   useEffect(() => {
     if (recruit.recruitList) {
-      const tmp = recruit.recruitList.content.length;
-      setRecruitCount(tmp);
+      setAll(recruit.recruitList.content);
       setArr(recruit.recruitList.content);
+      const processTmp = recruit.recruitList.content.filter(
+        (i) => i.status !== 'END'
+      );
+      setProcess(processTmp);
       dispatch({
         type: RECRUIT_LIST_DONE,
       });
@@ -88,16 +101,16 @@ export default function SubmitList() {
             <ListSetting>
               <ApplicationInfo>
                 <span>
-                  <CountNumber>{recruitCount}</CountNumber>
-                  <span>채용중 공고</span>
+                  <CountNumber>00</CountNumber>
+                  <span>오픈된 이력서</span>
                 </span>
                 <span>
-                  <CountNumber>5</CountNumber>
-                  <span>지원자</span>
+                  <CountNumber>{process.length}</CountNumber>
+                  <span onClick={() => setArr(process)}>채용중 공고</span>
                 </span>
                 <span>
-                  <CountNumber>{recruitCount}</CountNumber>
-                  <span>전체 공고</span>
+                  <CountNumber>{all.length}</CountNumber>
+                  <span onClick={() => setArr(all)}>전체 공고</span>
                 </span>
               </ApplicationInfo>
               {mapArr}
