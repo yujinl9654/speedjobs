@@ -66,7 +66,6 @@ export default function RecruitModify() {
   const onModifyHandler = useCallback(
     (e) => {
       e.preventDefault();
-      console.log('before= ', form);
       if (form.title === '' || form.content === '') {
         if (form.title === '') {
           alert('제목을 입력하세요');
@@ -93,8 +92,8 @@ export default function RecruitModify() {
     if (modify) {
       dispatch({ type: RECRUIT_MODIFY_REQUEST, data: form, recruitId: id });
       setModify(false);
-      console.log('after= ', form);
     }
+    //  eslint-disable-next-line
   }, [modify]);
   useEffect(() => {
     if (recruit.recruitModifyDone) {
