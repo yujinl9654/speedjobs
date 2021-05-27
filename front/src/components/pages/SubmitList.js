@@ -23,16 +23,24 @@ const ApplicationInfo = styled.div`
   margin: 0 auto 10px;
   padding: 10px 50px;
   color: #707070;
-  display: flex;
-  justify-content: space-around;
   @media (max-width: 768px) {
     padding: 10px;
+  }
+`;
+
+const CountText = styled.span`
+  cursor: pointer;
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `;
 
 const CountNumber = styled.span`
   font-size: 25px;
   margin-right: 8px;
+  @media (max-width: 768px) {
+    font-size: 22px;
+  }
 `;
 
 const ListSetting = styled.div`
@@ -119,33 +127,30 @@ export default function SubmitList() {
           <ProfileDiv className={'col-12 col-lg-10 p-0'}>
             <ListSetting>
               <ApplicationInfo>
-                <span>
-                  <CountNumber>{resumes.length}</CountNumber>
-                  <span
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setArr(resumes)}
-                  >
-                    오픈된 이력서
+                <div
+                  style={{
+                    display: 'flex',
+                    verticalAlign: 'middle',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <span>
+                    <CountNumber>{resumes.length}</CountNumber>
+                    <CountText onClick={() => setArr(resumes)}>
+                      오픈된 이력서
+                    </CountText>
                   </span>
-                </span>
-                <span>
-                  <CountNumber>{process.length}</CountNumber>
-                  <span
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setArr(process)}
-                  >
-                    채용중 공고
+                  <span>
+                    <CountNumber>{process.length}</CountNumber>
+                    <CountText onClick={() => setArr(process)}>
+                      채용중 공고
+                    </CountText>
                   </span>
-                </span>
-                <span>
-                  <CountNumber>{all.length}</CountNumber>
-                  <span
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => setArr(all)}
-                  >
-                    전체 공고
+                  <span>
+                    <CountNumber>{all.length}</CountNumber>
+                    <CountText onClick={() => setArr(all)}>전체 공고</CountText>
                   </span>
-                </span>
+                </div>
               </ApplicationInfo>
               {mapArr}
             </ListSetting>
