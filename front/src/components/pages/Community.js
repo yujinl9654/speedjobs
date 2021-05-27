@@ -5,6 +5,7 @@ import { useCookies } from 'react-cookie';
 import { useHistory } from 'react-router';
 import Banner from '../components/banner/Banner';
 import {
+  FilterSelector,
   Order,
   SearchBox,
   SearchBoxContainer,
@@ -38,7 +39,6 @@ export default function Community(props) {
   const initialList = [
     { name: '제 목', state: false, target: 'title' },
     { name: '내 용', state: false, target: 'content' },
-    { name: '제목+내용', state: false, target: '' },
     { name: '작성자', state: false, target: 'author' },
   ];
   const history = useHistory();
@@ -237,14 +237,17 @@ export default function Community(props) {
                 )}
               </SearchBoxContainerM>
               <div style={{ marginLeft: '5px' }}>
-                <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
-                  <Order inOrder={OrderHandler} orderItem={postOrder} />
-                </div>
                 <div style={{ display: 'inline-block' }}>
                   <TagSelector tagList={taglist} setTagList={setTaglist}>
                     필터
                   </TagSelector>
                 </div>
+                <FilterSelector
+                  filterList={postOrder}
+                  filterHandler={OrderHandler}
+                >
+                  정 렬
+                </FilterSelector>
               </div>
               <SearchBoxContainer>
                 <SearchBox
@@ -270,7 +273,7 @@ export default function Community(props) {
             </div>
           </div>
           <Space></Space>
-          <div className={'text-left'}>
+          <div className={'text-left'} style={{ paddingTop: '8px' }}>
             <TagShower tagList={taglist} setTagList={setTaglist}></TagShower>
           </div>
           {mapPost}

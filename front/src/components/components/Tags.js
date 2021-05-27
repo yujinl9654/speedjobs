@@ -16,13 +16,15 @@ export const TagDrop = styled.div`
   font-weight: bold;
   text-align: left;
   overflow-y: scroll;
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: fit-content;
+  max-height: 150px;
   &::-webkit-scrollbar {
     display: none;
   }
   @media (max-width: 768px) {
-    top: 25px;
+    top: 30px;
+    width: 100px;
   }
 `;
 

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Plus } from '@styled-icons/octicons';
 import { Minus } from '@styled-icons/entypo/Minus';
 import { Search } from 'react-bootstrap-icons';
+import { TagDrop, TagsInDrop } from './Tags';
 
 export const ProfileDiv = styled.div`
   padding: 0 60px 0 30px;
@@ -338,6 +339,11 @@ const TagBodyInside = styled.div`
     css`
       display: flex;
     `}
+  ${(props) =>
+    props.filters &&
+    css`
+      letter-spacing: -1px;
+    `}
 `;
 
 export const TagText = styled.div`
@@ -391,9 +397,18 @@ export const StyledLike = styled.div`
     display: block;
   }
 `;
-export const TagBody = ({ sm, children, tagType, onClick, grey, style }) => (
+export const TagBody = ({
+  sm,
+  filters,
+  children,
+  tagType,
+  onClick,
+  grey,
+  style,
+}) => (
   <TagBodyInside
     sm={sm}
+    filters={filters}
     tagType={tagType}
     onClick={onClick}
     grey={grey}
@@ -809,10 +824,12 @@ export const SearchBox = ({ initial, onKeyPress, onInput, setForm }) => {
         onClick={() => {
           i.state = true;
           setForm((p) => ({
+            ...p,
             size: p.size,
             page: p.page,
             [i.target]: keyword,
           }));
+          setShow(false);
         }}
       >
         {i.name}
@@ -850,7 +867,7 @@ export const SearchBox = ({ initial, onKeyPress, onInput, setForm }) => {
           onInput(e, dropTop[0]);
         }}
         onKeyPress={(e) => onKeyPress(e)}
-        maxLength="8"
+        maxLength="10"
       />
       {show && <CategoryDrop>{DropList}</CategoryDrop>}
     </SearchOutline>
@@ -935,30 +952,43 @@ const SearchOutline = styled.div`
 
 // 게시물 조회순서
 export const Order = ({ inOrder, orderItem }) => {
+  const [show, setShow] = useState(false);
   const [items, setItems] = useState([...orderItem]);
+
   const itemList = items.map((i, index) => (
     <Type
       key={index}
       onClick={() => {
-        inOrder(i.sort);
-        setItems((p) => {
-          const temp = items[0];
-          p[0] = i;
-          p[index] = temp;
-          return p;
-        });
+        console.log('showBefore= ', show);
+        console.log('itemsBefore= ', items);
+        if (show) {
+          setItems((p) => {
+            // const p = items;
+            console.log('before= ', p);
+            const temp = p[0];
+            console.log('p[0]= ', p[0]);
+            p[0] = i;
+            p[index] = temp;
+            console.log('p[', index, ']= ', p[index]);
+            console.log('after= ', p);
+            return p;
+          });
+          //   inOrder(i.sort);
+          console.log('show!!!!');
+        }
+        console.log('itemsAfter= ', items);
+        setShow(!show);
       }}
     >
       {i.name}
     </Type>
   ));
 
-  return <OrderList>{itemList}</OrderList>;
+  return <OrderList show={show}>{itemList}</OrderList>;
 };
 
 const OrderList = styled.div`
   display: inline-block;
-  overflow: hidden;
   flex-direction: row;
   margin-right: 10px;
   margin-bottom: 10px;
@@ -966,7 +996,6 @@ const OrderList = styled.div`
   vertical-align: top;
   width: fit-content;
   padding: 7px 13px 0;
-  height: 38px;
   font-size: 15px;
   user-select: none;
   cursor: pointer;
@@ -975,22 +1004,73 @@ const OrderList = styled.div`
   background-color: white;
   border-radius: 5px;
   position: relative;
+  ${(props) =>
+    props.show
+      ? css`
+          z-index: 2;
+          overflow: visible;
+          height: fit-content;
+        `
+      : css`
+          overflow: hidden;
+          height: 38px;
+        `}
   //z-index: 2;
   @media (max-width: 768px) {
     font-size: 11px;
-    height: 28px;
-    margin-top: 0px;
-    padding: 5px 7px 0px;
-  }
-
-  &:hover {
-    z-index: 2;
-    overflow: visible;
-    height: fit-content;
+    margin-top: 0;
+    padding: 5px 5px 0;
+    ${(props) =>
+      props.show
+        ? css`
+            height: fit-content;
+          `
+        : css`
+            height: 28px;
+          `}
   }
 `;
 
 const Type = styled.div`
-  border-bottom: #d3d3d3;
   margin-bottom: 7px;
 `;
+
+export const FilterSelector = ({ filterList, filterHandler, children }) => {
+  const [show, setShow] = useState(false);
+  const [title, setTitle] = useState(children);
+  const showRef = useRef();
+  const ClickHandler = (e) => {
+    if (showRef.current) {
+      if (show && !showRef.current.contains(e.target)) {
+        setShow(false);
+      }
+    }
+  };
+  useEffect(() => {
+    addEventListener('click', ClickHandler, true);
+    return () => {
+      removeEventListener('click', ClickHandler, true);
+    };
+  });
+
+  // 공고검색태그
+  const filterDrop = filterList.map((i, index) => (
+    <TagsInDrop
+      key={index}
+      onClick={() => {
+        filterHandler(i.sort);
+        setTitle(i.name);
+      }}
+    >
+      {i.name}
+    </TagsInDrop>
+  ));
+  return (
+    <span ref={showRef} style={{ display: 'inline-block' }}>
+      <TagBody filters tagType onClick={() => setShow(!show)}>
+        {title}
+        {show && <TagDrop>{filterDrop}</TagDrop>}
+      </TagBody>
+    </span>
+  );
+};

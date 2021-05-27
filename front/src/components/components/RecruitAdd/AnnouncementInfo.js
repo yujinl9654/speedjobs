@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Order, SpanToDiv } from '../Styled';
+import { FilterSelector, Order, SpanToDiv } from '../Styled';
 import TagSelector from '../tag/TagSelector';
 import TagShower from '../tag/TagShower';
 import { InfoText } from './CompanySummaryInfo';
@@ -25,30 +25,11 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
   const experienceHandler = (sort) => {
     setForm((p) => ({ ...p, experience: sort }));
   };
-  // const [exTags, setExTags] = useState([]);
-  // useEffect(() => {
-  //   console.log('experience= ', form.experience);
-  //   console.log('experienceTags1= ', experienceTags);
-  //   if (form.experience !== '-1') {
-  //     const num = form.experience + 1;
-  //     const tmp = experienceTags[0];
-  //     experienceTags[0] = experienceTags[num];
-  //     experienceTags[num] = tmp;
-  //     console.log('experienceTag2= ', experienceTags);
-  //     setExTags(experienceTags);
-  //   } else {
-  //     setExTags(experienceTags);
-  //   }
-  // }, [form.experience]);
 
   // position 태그
-  const positionTags1 = [
+  const positionTags = [
     { name: '정규직', sort: 'PERMANENT' },
     { name: '계약직', sort: 'TEMPORARY' },
-  ];
-  const positionTags2 = [
-    { name: '계약직', sort: 'TEMPORARY' },
-    { name: '정규직', sort: 'PERMANENT' },
   ];
   const positionHandler = (sort) => {
     setForm((p) => ({ ...p, position: sort }));
@@ -146,21 +127,18 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
               verticalAlign: 'top',
             }}
           >
-            <Order
-              orderItem={
-                form.position === 'PERMANENT' ? positionTags1 : positionTags2
-              }
-              inOrder={positionHandler}
-            />
-          </div>
-          <div
-            style={{
-              display: 'inline-block',
-              height: '38px',
-              verticalAlign: 'top',
-            }}
-          >
-            <Order orderItem={experienceTags} inOrder={experienceHandler} />
+            <FilterSelector
+              filterList={positionTags}
+              filterHandler={positionHandler}
+            >
+              정규직
+            </FilterSelector>
+            <FilterSelector
+              filterList={experienceTags}
+              filterHandler={experienceHandler}
+            >
+              요구 경력
+            </FilterSelector>
           </div>
           <SpanToDiv style={{ color: '#a1a1a1' }}>
             현재 설정값 : {form.position === 'PERMANENT' ? '정규직' : '계약직'}{' '}
