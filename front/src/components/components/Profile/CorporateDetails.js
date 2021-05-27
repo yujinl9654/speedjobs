@@ -36,6 +36,13 @@ export default function CorporateDetails() {
         profileTemp.picture =
           'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png';
       }
+      if (
+        profile.profileGetData.address === null ||
+        profile.profileGetData.detailedAddress === null
+      ) {
+        profileTemp.address = '';
+        profileTemp.detailedAddress = '';
+      }
       setItem((p) => ({ ...p, ...profileTemp }));
     }
   }, [profile.profileGetData]);
@@ -81,7 +88,7 @@ export default function CorporateDetails() {
       <ProfileInputs name={'회사 주소'} />
       <StyledInputText
         type="text"
-        value={item.address + ', ' + item.detailedAddress || ''}
+        value={item.address + '  ' + item.detailedAddress || ''}
         disabled
       />
       {/* 회사 소개*/}
