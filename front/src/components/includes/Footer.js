@@ -5,11 +5,14 @@ const FooterDiv = styled.div`
   margin: 20px auto;
 `;
 
-export default function Footer(props) {
+export default function Footer() {
   return (
     <div>
       <FooterDiv>
-        <h5>speedjobs</h5>@JobSeek<p>ProtoType v1</p>
+        @JobSeek
+        <p style={{ fontWeight: 'lighter', fontSize: '13px' }}>
+          enoch1118 jeeneee lsb530 swchae516 yujinl9654
+        </p>
       </FooterDiv>
     </div>
   );
