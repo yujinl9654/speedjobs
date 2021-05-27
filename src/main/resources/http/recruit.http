@@ -68,7 +68,7 @@ Authorization: Bearer {{accessToken}}
 #GET http://{{host}}/recruit?sort=id,DESC
 #GET http://{{host}}/recruit?page=1&size=4&sort=viewCount,DESC
 #GET http://{{host}}/recruit?title=엔지니어
-GET http://{{host}}/recruit?experience=-1
+GET http://{{host}}/recruit?status=
 #GET http://{{host}}/recruit?title=엔지니어&page=0&size=10&sort=id,DESC
 Accept: application/json
 
