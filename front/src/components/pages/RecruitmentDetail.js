@@ -335,17 +335,28 @@ export default function RecruitmentDetail(props) {
               }}
             >
               <p style={{ fontSize: '1.5em' }}>요약</p>
-              <p>직무 : {tags !== {} && tags?.map((i) => i.name).join(', ')}</p>
               <p>
-                고용 형태 :{' '}
+                <strong>직무 :</strong>{' '}
+                {tags !== {} && tags?.map((i) => i.name).join(', ')}
+              </p>
+              <p>
+                <strong>고용 형태 :</strong>{' '}
                 {content.position === 'PERMANENT' ? '정규직' : '계약직'}
               </p>
-              <p>경력 : {experience}</p>
-              <p>평균 연봉 : {content.avgSalary}만 원</p>
-              <p>회사 규모 : {content.scale}명</p>
-              <p>주요 서비스 : {content.description}</p>
               <p>
-                채용 기간 : {content.openDate?.join('-')} ~{' '}
+                <strong>경력 :</strong> {experience}
+              </p>
+              <p>
+                <strong>평균 연봉 :</strong> {content.avgSalary}만 원
+              </p>
+              <p>
+                <strong>회사 규모 :</strong> {content.scale}명
+              </p>
+              <p>
+                <strong>주요 서비스 :</strong> {content.description}
+              </p>
+              <p>
+                <strong>채용 기간 :</strong> {content.openDate?.join('-')} ~{' '}
                 {content.closeDate?.join('-')}
               </p>
             </div>

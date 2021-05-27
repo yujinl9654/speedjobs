@@ -316,7 +316,7 @@ const TagBodyInside = styled.div`
   cursor: pointer;
   display: inline-flex;
   flex-direction: row;
-  margin-right: 10px;
+  margin-right: 8px;
   margin-bottom: 10px;
   text-align: center;
   vertical-align: middle;
