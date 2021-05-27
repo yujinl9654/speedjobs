@@ -23,7 +23,7 @@ export default function ResumeItem({ resume }) {
     >
       <h6
         style={{ margin: '0' }}
-        onClick={() => history.push(`../resume/resume/${id}`)}
+        onClick={() => history.push(`../resume/${id}`)}
       >
         {resume.title}
       </h6>

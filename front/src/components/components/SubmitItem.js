@@ -7,7 +7,9 @@ import { APPLY_LIST_DONE, APPLY_LIST_REQUEST } from '../../reducers/company';
 import ResumeItem from './ResumeItem';
 
 const ResumeTitle = styled.h5`
+  font-size: 19px;
   @media (max-width: 768px) {
+    font-size: 16px;
     width: 65%;
   }
 `;
@@ -16,10 +18,11 @@ export const Applicant = styled.div`
   position: absolute;
   right: 180px;
   top: 10px;
+  font-size: 14px;
   @media (max-width: 768px) {
     right: 20px;
+    font-size: 12px;
   }
-
   ${(props) =>
     props.sm &&
     css`
@@ -31,10 +34,11 @@ export const SubmitDate = styled.div`
   position: absolute;
   right: 20px;
   top: 10px;
+  font-size: 14px;
   @media (max-width: 768px) {
     top: 40px;
+    font-size: 12px;
   }
-
   ${(props) =>
     props.sm &&
     css`
@@ -53,6 +57,7 @@ export default function SubmitItem({
   tags,
   status,
 }) {
+  const media = matchMedia('screen and (max-width: 768px)');
   const { company } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [arr, setArr] = useState([]);
@@ -95,7 +100,9 @@ export default function SubmitItem({
     <ResumeItem resume={resume} key={index} />
   ));
 
-  const mapTags = tags.POSITION.map((tag, index) => (
+  const mapTags = (
+    media.matches ? tags.POSITION.slice(0, 1) : tags.POSITION.slice(0, 5)
+  ).map((tag, index) => (
     <TagBody grey sm key={index}>
       {tag.name}
     </TagBody>
@@ -108,6 +115,7 @@ export default function SubmitItem({
         style={{
           position: 'relative',
           padding: '10px',
+          paddingBottom: '0',
           width: '95%',
         }}
       >
@@ -116,6 +124,13 @@ export default function SubmitItem({
         </ResumeTitle>
         <Blank />
         {mapTags}
+        {tags.POSITION.length > 1 && media.matches ? (
+          <TagBody sm grey>
+            +{tags.POSITION.length - 1}
+          </TagBody>
+        ) : (
+          ''
+        )}
         <Applicant>{position === 'PERMANENT' ? '정규직' : '계약직'}</Applicant>
         <SubmitDate>
           {date[0]}-{date[1]}-{date[2]}

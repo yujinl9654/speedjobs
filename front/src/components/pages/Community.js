@@ -6,7 +6,6 @@ import { useHistory } from 'react-router';
 import Banner from '../components/banner/Banner';
 import {
   FilterSelector,
-  Order,
   SearchBox,
   SearchBoxContainer,
   SearchBoxContainerM,
