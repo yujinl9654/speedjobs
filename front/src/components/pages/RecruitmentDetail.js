@@ -53,6 +53,9 @@ const Choice = styled.div`
   text-align: left;
   border: 1px solid #eee;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  @media (max-width: 768px) {
+    width: 80%;
+  }
 `;
 const ResumeInfo = styled.div`
   font-size: 12px;

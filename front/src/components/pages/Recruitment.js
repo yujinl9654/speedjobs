@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import { useCookies } from 'react-cookie';
 import Banner from '../components/banner/Banner';
 import {
-  Order,
+  FilterSelector,
   SearchBox,
   SearchBoxContainer,
   SearchBoxContainerM,
@@ -26,7 +26,8 @@ export default function Recruitment() {
     page: 0,
   });
   const experienceList = [
-    { name: '경력무관', sort: '-1' },
+    { name: '경력 전체', sort: '' },
+    { name: '경력 무관', sort: '-1' },
     { name: '신 입', sort: '0' },
     { name: '1년 이상', sort: '1' },
     { name: '2년 이상', sort: '2' },
@@ -39,7 +40,7 @@ export default function Recruitment() {
     { name: '9년 이상', sort: '9' },
   ];
   const salaryList = [
-    { name: '연봉 전체', sort: '0' },
+    { name: '연봉 전체', sort: '' },
     { name: '3,000 이상', sort: '3000' },
     { name: '4,000 이상', sort: '4000' },
     { name: '5,000 이상', sort: '5000' },
@@ -48,8 +49,8 @@ export default function Recruitment() {
     { name: '8,000 이상', sort: '8000' },
     { name: '9,000 이상', sort: '9000' },
   ];
-
   const statusList = [
+    { name: '채용 전체', sort: '' },
     { name: '채용전', sort: 'STANDBY' },
     { name: '채용중', sort: 'PROCESS' },
     { name: '채용마감', sort: 'END' },
@@ -219,25 +220,27 @@ export default function Recruitment() {
 
   // 게시물 검색하기
   const InputHandler = (e, i) => {
-    setForm((p) => ({
-      size: p.size,
-      page: 0,
-      [i.target]: e.target.value,
-    }));
-  };
-  const SearchHandler = () => {
-    dispatch({
-      type: RECRUIT_LIST_REQUEST,
-      data: form,
+    setForm((p) => {
+      // eslint-disable-next-line
+      const { title, content, companyName, ...res } = p;
+      return {
+        ...res,
+        size: p.size,
+        page: 0,
+        [i.target]: e.target.value,
+      };
     });
-    paging.current = false;
-    isLast.current = false;
-    prevY.current = 99999;
-    observe.current.unobserve(targetRef.current);
   };
   const EnterHandler = (e) => {
     if (e.key === 'Enter') {
-      SearchHandler();
+      dispatch({
+        type: RECRUIT_LIST_REQUEST,
+        data: form,
+      });
+      paging.current = false;
+      isLast.current = false;
+      prevY.current = 99999;
+      observe.current.unobserve(targetRef.current);
     }
   };
 
@@ -260,7 +263,6 @@ export default function Recruitment() {
               <SearchBoxContainerM>
                 <SearchBox
                   onInput={InputHandler}
-                  onClick={SearchHandler}
                   onKeyPress={EnterHandler}
                   setForm={setForm}
                   initial={initialList}
@@ -288,20 +290,34 @@ export default function Recruitment() {
                     필터
                   </TagSelector>
                 </div>
-                <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
-                  <Order inOrder={OrderHandler} orderItem={recruitOrder} />
-                  <Order inOrder={StatusHandler} orderItem={statusList} />
-                  <Order
-                    inOrder={ExperienceHandler}
-                    orderItem={experienceList}
-                  />
-                  <Order inOrder={SalaryHandler} orderItem={salaryList} />
-                </div>
+                <FilterSelector
+                  filterList={statusList}
+                  filterHandler={StatusHandler}
+                >
+                  상태 검색
+                </FilterSelector>
+                <FilterSelector
+                  filterList={experienceList}
+                  filterHandler={ExperienceHandler}
+                >
+                  경력 검색
+                </FilterSelector>
+                <FilterSelector
+                  filterList={salaryList}
+                  filterHandler={SalaryHandler}
+                >
+                  연봉 검색
+                </FilterSelector>
+                <FilterSelector
+                  filterList={recruitOrder}
+                  filterHandler={OrderHandler}
+                >
+                  정 렬
+                </FilterSelector>
               </div>
               <SearchBoxContainer>
                 <SearchBox
                   onInput={InputHandler}
-                  onClick={SearchHandler}
                   onKeyPress={EnterHandler}
                   setForm={setForm}
                   initial={initialList}
