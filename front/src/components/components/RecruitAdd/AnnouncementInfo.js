@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { FilterSelector, Order, SpanToDiv } from '../Styled';
+import { FilterSelector, SpanToDiv } from '../Styled';
 import TagSelector from '../tag/TagSelector';
 import TagShower from '../tag/TagShower';
 import { InfoText } from './CompanySummaryInfo';
@@ -62,6 +62,7 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
   }, [taglist, setForm]);
 
   // thumbnail 입력
+  const inputRef = useRef();
   const [src, setSrc] = useState('');
   useEffect(() => {
     if (form.thumbnail !== null) {
@@ -70,10 +71,16 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
   }, [form.thumbnail]);
   const dropHandler = async (e) => {
     e.preventDefault();
-    if (e.dataTransfer.files.length !== 1) {
+    // e.type이 change 또는 drop
+    if (e.type === 'drop' && e.dataTransfer.files.length !== 1) {
       alert('한개의 파일만 가능합니다.');
     } else {
-      const f = e.dataTransfer.files[0];
+      let f = '';
+      if (e.type === 'drop') {
+        f = e.dataTransfer.files[0];
+      } else {
+        f = e.target.files[0];
+      }
       const data = new FormData();
       data.append('files', f);
       const url = await axios
@@ -109,6 +116,10 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
   };
   const dragLeave = (e) => {
     e.preventDefault();
+  };
+  const onButtonClick = (e) => {
+    e.preventDefault();
+    inputRef.current.click();
   };
 
   return (
@@ -171,11 +182,13 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
             textAlign: 'center',
             fontSize: 'small',
             backgroundColor: '#eee',
+            cursor: 'pointer',
           }}
           onDragOver={dragOver}
           onDragEnter={dragEnter}
           onDragLeave={dragLeave}
           onDrop={dropHandler}
+          onClick={onButtonClick}
         >
           {src === '' ? (
             '공고에 필요한 썸네일사진을 드래그해주세요.'
@@ -187,6 +200,12 @@ export default function AnnouncementInfo({ onChange, form, setForm }) {
             />
           )}
         </div>
+        <input
+          type="file"
+          ref={inputRef}
+          style={{ display: 'none' }}
+          onChange={dropHandler}
+        />
       </div>
     </>
   );
