@@ -11,6 +11,9 @@ const ResumeTitle = styled.h5`
   @media (max-width: 768px) {
     font-size: 16px;
     width: 65%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 

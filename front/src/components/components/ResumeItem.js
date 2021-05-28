@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import styled from 'styled-components';
 import { Applicant, SubmitDate } from './SubmitItem';
+
+const Title = styled.p`
+  margin-bottom: 5px;
+  @media (max-width: 768px) {
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 42%;
+    height: 15px;
+  }
+`;
 
 export default function ResumeItem({ resume }) {
   const history = useHistory();
@@ -21,12 +34,12 @@ export default function ResumeItem({ resume }) {
         width: '95%',
       }}
     >
-      <h6
+      <div
         style={{ margin: '0' }}
         onClick={() => history.push(`../resume/${id}`)}
       >
-        {resume.title}
-      </h6>
+        <Title>{resume.title}</Title>
+      </div>
       <Applicant sm>{resume.email}</Applicant>
       <SubmitDate sm>{resume.name}</SubmitDate>
     </div>
