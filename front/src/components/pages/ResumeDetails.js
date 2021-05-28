@@ -143,8 +143,8 @@ export default function ResumeDetails() {
       const highOutDate = resumeTemp.scholars[0].outDate?.join('-');
       const universityInDate = resumeTemp.scholars[1].inDate?.join('-');
       const universityOutDate = resumeTemp.scholars[1].outDate?.join('-');
-      const graduateInDate = resumeTemp.scholars[2].inDate?.join('-');
-      const graduateOutDate = resumeTemp.scholars[2].outDate?.join('-');
+      const graduateInDate = resumeTemp.scholars[2]?.inDate?.join('-');
+      const graduateOutDate = resumeTemp.scholars[2]?.outDate?.join('-');
 
       setContent((p) => ({
         ...p,
@@ -332,7 +332,13 @@ export default function ResumeDetails() {
             </span>
           </div>
         ) : (
-          <div style={{ height: '20px' }} />
+          <div
+            style={{
+              textAlign: 'right',
+              marginTop: '60px',
+              height: '30px',
+            }}
+          ></div>
         )}
         <div className="container">
           <div className="row justify-content-center">
