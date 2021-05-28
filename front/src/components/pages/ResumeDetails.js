@@ -332,7 +332,7 @@ export default function ResumeDetails() {
             </span>
           </div>
         ) : (
-          ''
+          <div style={{ height: '20px' }} />
         )}
         <div className="container">
           <div className="row justify-content-center">
