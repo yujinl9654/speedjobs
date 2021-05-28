@@ -31,6 +31,7 @@ export const Space = styled.div`
 
 export default function Community(props) {
   const postOrder = [
+    { name: '최신순', sort: 'id' },
     { name: '조회순', sort: 'viewCount' },
     { name: '추천순', sort: 'favoriteCount' },
     { name: '댓글순', sort: 'commentCount' },
@@ -72,7 +73,6 @@ export default function Community(props) {
   };
 
   // 게시물 목록 불러오기
-
   const rootRef = useRef();
   const { post, user } = useSelector((state) => state);
 
@@ -245,7 +245,7 @@ export default function Community(props) {
                   filterList={postOrder}
                   filterHandler={OrderHandler}
                 >
-                  정 렬
+                  최신순
                 </FilterSelector>
               </div>
               <SearchBoxContainer>

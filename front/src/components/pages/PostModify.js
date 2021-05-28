@@ -90,7 +90,6 @@ export default function PostModify() {
   useEffect(() => {
     if (post.postGetDone) {
       if (tagss.tagGetData) {
-        console.log('tag');
         const temp = Array.from(tagss.tagGetData.tags.POSITION);
         const temp2 = Array.from(tagss.tagGetData.tags.SKILL);
         const tempFromPost = [

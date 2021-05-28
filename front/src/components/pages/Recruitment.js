@@ -57,6 +57,7 @@ export default function Recruitment() {
     { name: '상시채용', sort: 'REGULAR' },
   ];
   const recruitOrder = [
+    { name: '최신순', sort: 'id' },
     { name: '조회순', sort: 'viewCount' },
     { name: '추천순', sort: 'favoriteCount' },
   ];
@@ -312,7 +313,7 @@ export default function Recruitment() {
                   filterList={recruitOrder}
                   filterHandler={OrderHandler}
                 >
-                  정 렬
+                  최신순
                 </FilterSelector>
               </div>
               <SearchBoxContainer>
@@ -355,7 +356,6 @@ export default function Recruitment() {
         style={{ top: '50px', position: 'relative', marginBottom: '100px' }}
         ref={targetRef}
       />
-      ;
     </>
   );
 }

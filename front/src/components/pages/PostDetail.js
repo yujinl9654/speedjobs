@@ -50,6 +50,7 @@ export default function PostDetail(props) {
   const [content, setContent] = useState({
     title: '',
     content: '',
+    createdDate: [0, 0, 0],
     tags: [],
   });
   const dispatch = useDispatch();
@@ -204,7 +205,8 @@ export default function PostDetail(props) {
               margin: '10px 0px 20px 0px',
             }}
           >
-            {content.author} {content.createdDate}
+            {content.author} {content?.createdDate[0]}-{content?.createdDate[1]}
+            -{content?.createdDate[2]}
           </div>
         </div>
         {/* 태그*/}
