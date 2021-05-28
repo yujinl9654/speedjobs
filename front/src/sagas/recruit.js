@@ -88,7 +88,6 @@ function* getRecruit(action) {
 
 // 공고 추가하기
 function recruitAddApi(action) {
-  console.log(action.data);
   return axios.post(`/recruit`, action.data).catch((err) => {
     throw err;
   });
@@ -133,7 +132,6 @@ function* getChat(action) {
 function modifyRecruitAPI(action) {
   const form = action.data;
   const recruitId = action.recruitId;
-  console.log('form= ', form, 'recruitId= ', recruitId);
   return axios.put(`/recruit/${recruitId}`, form).catch((error) => {
     throw error;
   });

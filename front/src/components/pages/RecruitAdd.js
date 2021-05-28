@@ -27,7 +27,6 @@ export default function RecruitAdd() {
   const history = useHistory();
   const onChangHandler = useCallback((e) => {
     if (e.target.name.endsWith('Date')) {
-      console.log('hi');
       setForm((prev) => ({
         ...prev,
         [e.target.name]: moment(e.target.value).format('YYYY-MM-DD 00:00:00'),
@@ -39,7 +38,6 @@ export default function RecruitAdd() {
   const onSubmitHandler = useCallback(
     (e) => {
       e.preventDefault();
-      console.log(form);
       if (form.title === '' || form.content === '') {
         if (form.title === '') {
           alert('제목을 입력하세요');

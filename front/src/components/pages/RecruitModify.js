@@ -52,7 +52,6 @@ export default function RecruitModify() {
   // 공고정보 바꿔끼우기
   const onChangHandler = useCallback((e) => {
     if (e.target.name.endsWith('Date')) {
-      console.log('hi');
       setForm((prev) => ({
         ...prev,
         [e.target.name]: moment(e.target.value).format('YYYY-MM-DD 00:00:00'),

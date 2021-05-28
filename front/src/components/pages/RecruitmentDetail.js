@@ -80,7 +80,10 @@ export default function RecruitmentDetail(props) {
   const { id } = useParams();
   const history = useHistory();
   const [pop, setPop] = useState('none');
-  const [content, setContent] = useState({});
+  const [content, setContent] = useState({
+    openDate: [0, 0, 0],
+    closeDate: [0, 0, 0],
+  });
   const [tags, setTags] = useState([]);
   const [isFav, setIsFav] = useState(false);
   const [choice, setChoice] = useState(false);
@@ -356,8 +359,10 @@ export default function RecruitmentDetail(props) {
                 <strong>주요 서비스 :</strong> {content.description}
               </p>
               <p>
-                <strong>채용 기간 :</strong> {content.openDate?.join('-')} ~{' '}
-                {content.closeDate?.join('-')}
+                <strong>채용 기간 :</strong> {content.openDate[0]}-
+                {content.openDate[1]}-{content.openDate[2]} ~{' '}
+                {content.closeDate[0]}-{content.closeDate[1]}-
+                {content.closeDate[2]}
               </p>
             </div>
             {/* 업무소개*/}
