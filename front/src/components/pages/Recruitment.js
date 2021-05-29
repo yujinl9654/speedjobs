@@ -190,6 +190,7 @@ export default function Recruitment() {
       tags={[...(pl.tags.POSITION ?? [])]}
       type={'recruit'}
       title={pl.title}
+      status={pl.status}
       writer={pl.companyName}
       date={`${pl.openDate[0]}/${pl.openDate[1]}/${pl.openDate[2]}`}
       fav={pl.favorite}
