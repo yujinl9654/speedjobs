@@ -1,7 +1,7 @@
 import { ChatSquareQuote, Heart, HeartFill } from 'react-bootstrap-icons';
 import { EyeShow } from '@styled-icons/fluentui-system-filled/EyeShow';
 import { useHistory } from 'react-router';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TagBody } from './Styled';
@@ -11,11 +11,22 @@ import {
   UN_LIKE_REQUEST,
 } from '../../reducers/like';
 
+const PostBack = styled.div`
+  border-bottom: 1px solid #eee;
+  position: relative;
+  padding: 10px;
+  ${(props) =>
+    props.status === 'END' &&
+    css`
+      background-color: white;
+      opacity: 40%;
+    `}
+`;
+
 const PostTitle = styled.div`
   margin-bottom: 30px;
   margin-top: 10px;
   font-size: 19px;
-  //font-weight: lighter;
   width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -70,6 +81,7 @@ const PostInfoIcons = styled.div``;
 
 export default function Post({
   title,
+  status,
   tags,
   writer,
   commentCount,
@@ -87,6 +99,16 @@ export default function Post({
   const history = useHistory();
   const dispatch = useDispatch();
   const like = useSelector((state) => state.like);
+
+  // 공고상태 text 수정
+  const [statusText, setStatusText] = useState('');
+  useEffect(() => {
+    if (status === 'REGULAR') setStatusText('상시모집');
+    else if (status === 'PROCESS') setStatusText('채용중');
+    else if (status === 'END') setStatusText('채용마감');
+    else setStatusText('채용전');
+  }, [status]);
+
   // 태그 맵
   const mapTags = (media.matches ? tags?.slice(0, 1) : tags?.slice(0, 5)).map(
     (tag) => (
@@ -152,15 +174,10 @@ export default function Post({
   );
   return (
     <>
-      <div
-        className={'container-fluid text-left'}
-        style={{
-          borderBottom: '1px solid #eee',
-          position: 'relative',
-          padding: '10px',
-        }}
-      >
-        <PostTitle onClick={onClickHandler}>{title}</PostTitle>
+      <PostBack className={'container-fluid text-left'} status={status}>
+        <PostTitle onClick={onClickHandler}>
+          [{statusText}] {title}
+        </PostTitle>
         <Space />
         {mapTags}
         {tags.length > 1 && media.matches ? (
@@ -204,7 +221,7 @@ export default function Post({
             </div>
           </PostInfoIcons>
         </PostInfo>
-      </div>
+      </PostBack>
     </>
   );
 }

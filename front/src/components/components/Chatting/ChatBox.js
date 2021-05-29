@@ -132,7 +132,13 @@ export default function ChatBox({ recruitId, ...props }) {
     [setMsgHistory, user.me?.id]
   );
   const mapMsgHistory = msgHistory.map((m) => (
-    <Message income={m.income} out={m.out} key={m.id} date={m.createdDate}>
+    <Message
+      income={m.income}
+      out={m.out}
+      key={m.id}
+      date={m.createdDate}
+      author={m.author}
+    >
       {m.content}
     </Message>
   ));

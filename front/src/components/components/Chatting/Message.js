@@ -77,15 +77,17 @@ export default function Message({ income, out, author, children, date }) {
           ' | ' +
           date[1].toString(10).padStart(2, '0') +
           '/' +
-          date[2].toString(10).padStart(2, '0')
+          date[2].toString(10).padStart(2, '0') +
+          ' | ' +
+          author
       );
     } else {
       const split = date.split('T');
       const dates = split[0].split('-');
       const times = split[1].split(':');
-      set(`${times[0]}:${times[1]} | ${dates[1]}/${dates[2]}`);
+      set(`${times[0]}:${times[1]} | ${dates[1]}/${dates[2]} | ${author}`);
     }
-  }, [date]);
+  }, [date, author]);
   return (
     <>
       {income && (
@@ -103,9 +105,7 @@ export default function Message({ income, out, author, children, date }) {
         <OutgoingMsg>
           <SentWithdMsg>
             <SentMsg>
-              <p>
-                {author} {children}
-              </p>
+              <p>{children}</p>
             </SentMsg>
             <TimeDate>{inDate}</TimeDate>
           </SentWithdMsg>
